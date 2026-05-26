@@ -46,6 +46,46 @@ No `deixis` functionality can be used before applying this setup show rule:
 
 ### Examples
 
+#### Inline Mark and Inline Note
+
+<div align="center">
+<img src="assets/gallery/footnote.svg" width="500px" alt="Inline mark and note example">
+</div>
+
+<details>
+<summary><b>Show Typst Source Code</b></summary>
+
+```typst
+#set par(justify: true)
+
+Enfin, le chercheur a ressenti un immense
+#deixis-inline-mark(id: <soulagement>,
+  stroke: red,
+  fill: red.transparentize(95%),
+)[soulagement]
+en découvrant enfin la
+#deixis-inline-mark(id: <cle-de-voute>,
+  stroke: teal,
+  fill: teal.transparentize(95%),
+)[clé de voûte]
+de son argumentation.
+
+#deixis-inline-note-body(id: <soulagement>)[
+  *soulagement*: Relief.
+]
+#deixis-inline-note-body(id: <cle-de-voute>)[
+  *clé de voûte*: Keystone _(metaphorically: the cornerstone or central principle of an argument)_.
+]
+#deixis-inline-note-body(
+  stroke: gray,
+  fill: gray.transparentize(95%),
+)[
+  A celibate inline note.
+]
+```
+
+</details>
+
 #### Footnote
 
 <div align="center">
@@ -121,18 +161,18 @@ No `deixis` functionality can be used before applying this setup show rule:
 #lorem(10)
 #deixis-margin-note[A plain margin note.]
 #lorem(10)
+// use rect container for subsequent notes
+#deixis-set(container-func: (margin-note: rect))
 #deixis-margin-note(
   stroke: teal,
   fill: teal.transparentize(95%),
   link: "right-angle",
-  container-func: rect,
 )[][A colorful margin note.]
 #deixis-margin-note(
   stroke: green,
   fill: green.transparentize(95%),
   link: "right-angle",
   mark-align: (mark: horizon, body: horizon),
-  container-func: rect,
 )[This is a marked text][A left side note, aligned horizontally to its mark.].
 #lorem(10)
 #deixis-margin-note(
@@ -141,7 +181,6 @@ No `deixis` functionality can be used before applying this setup show rule:
   fill: (mark: orange.transparentize(80%), body: orange.transparentize(95%)),
   side: right,
   link: "curve",
-  container-func: rect,
 )[Another highlighted text][A note with different styling.].
 
 #import "@preview/colorful-boxes:1.4.3": stickybox
@@ -158,7 +197,6 @@ No `deixis` functionality can be used before applying this setup show rule:
   stroke: red,
   fill: red.transparentize(95%),
   link: "right-angle",
-  container-func: rect,
 )[A note with empty marker.]
 #lorem(5)
 ```
@@ -224,6 +262,46 @@ No `deixis` functionality can be used before applying this setup show rule:
     #lorem(18)
   ]
 })
+```
+
+</details>
+
+#### Note Outline
+
+<div align="center">
+<img src="assets/gallery/note-outline.svg" width="500px" alt="Note outline example">
+</div>
+
+<details>
+<summary><b>Show Typst Source Code</b></summary>
+
+```typst
+#deixis-inline-mark(
+  id: <celibate>,  // linked to no note body
+)[A celibate marked text]
+#deixis-footnote(
+  stroke: gray,
+)[A footnote.]
+#deixis-endnote(
+  stroke: green,
+  fill: green.transparentize(95%),
+  numbering: "i",
+)[An endnote.]
+#deixis-margin-note(
+  stroke: orange,
+  fill: orange.transparentize(95%),
+  container-func: rect,
+)[A margin note.]
+#deixis-inset-note(
+  stroke: blue,
+  fill: blue.transparentize(95%),
+  placement: body => deixis-absolute-place(top + left, dx: 5pt, dy: 5pt, body),
+)[An inset note.]
+
+#deixis-note-outline(
+  fill: repeat[.],
+  include-celibates: "mark",
+)
 ```
 
 </details>
