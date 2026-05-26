@@ -67,7 +67,7 @@ No `deixis` functionality can be used before applying this setup show rule:
 
   </sub>
   </td>
-  <td>
+  <td width="50%">
   <img src="assets/gallery/footnote.svg" width="100%" alt="Inline mark and footnote example">
   </td>
 </tr>
@@ -104,7 +104,7 @@ No `deixis` functionality can be used before applying this setup show rule:
 
   </sub>
   </td>
-  <td>
+  <td width="50%">
   <img src="assets/gallery/endnote.svg" width="100%" alt="Endnote example">
   </td>
 </tr>
@@ -151,7 +151,7 @@ No `deixis` functionality can be used before applying this setup show rule:
 
   </sub>
   </td>
-  <td>
+  <td width="50%">
   <img src="assets/gallery/margin-note.svg" width="100%" alt="Endnote example">
   </td>
 </tr>
