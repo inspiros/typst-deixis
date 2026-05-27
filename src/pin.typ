@@ -86,7 +86,7 @@
     bottom: deixis-utils.resolve-len(pad.bottom),
   )
 
-  [#sym.wj#metadata((
+  box[#metadata((
     name: name,
     padding: abs-pad,
     ..extra-data,

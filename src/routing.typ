@@ -745,6 +745,19 @@
   let D_top_x = D_candidates.first().x
   let D_top_y = D_candidates.first().y
 
+  let extract-box(candidates) = {
+    let xs = candidates.map(c => c.x)
+    let ys = candidates.map(c => c.y)
+    let min-x = calc.min(..xs); let max-x = calc.max(..xs)
+    let min-y = calc.min(..ys); let max-y = calc.max(..ys)
+    return (
+      left: min-x, right: max-x, top: min-y, bottom: max-y,
+      center-x: (min-x + max-x) / 2.0, center-y: (min-y + max-y) / 2.0
+    )
+  }
+  let m-box = extract-box(S_candidates)
+  let b-box = extract-box(D_candidates)
+
   let raw_waypoints = data.at("link-waypoints", default: auto)
   if raw_waypoints == auto {
     raw_waypoints = if synthetic-waypoints != auto { synthetic-waypoints } else { none }
@@ -763,25 +776,6 @@
 
   let explicit_config = if type(split_item) == array and split_item.len() > 1 { split_item.at(1) } else { auto }
   let split_idx = raw_wps.position(x => x == split_item)
-
-  let extract-box(candidates) = {
-    let xs = candidates.map(c => c.x)
-    let ys = candidates.map(c => c.y)
-    let min-x = calc.min(..xs)
-    let max-x = calc.max(..xs)
-    let min-y = calc.min(..ys)
-    let max-y = calc.max(..ys)
-    return (
-      left: min-x,
-      right: max-x,
-      top: min-y,
-      bottom: max-y,
-      center-x: (min-x + max-x) / 2.0,
-      center-y: (min-y + max-y) / 2.0,
-    )
-  }
-  let m-box = extract-box(S_candidates)
-  let b-box = extract-box(D_candidates)
 
   // spill mark coordinates
   let current_x = if split-default == "source" { m-box.center-x } else {
@@ -842,12 +836,20 @@
 
   let virtual_y_in = if goes-forward { top-bound } else { bottom-bound }
   let virtual_y_out = if goes-forward { bottom-bound } else { top-bound }
+  if goes-forward {
+    virtual_y_out = calc.max(virtual_y_out, m-box.bottom)
+    virtual_y_in = calc.min(virtual_y_in, b-box.top)
+  } else {
+    virtual_y_out = calc.min(virtual_y_out, m-box.top)
+    virtual_y_in = calc.max(virtual_y_in, b-box.bottom)
+  }
+
   let virtual_id_in = if goes-forward { "top" } else { "bottom" }
   let virtual_id_out = if goes-forward { "bottom" } else { "top" }
 
   if is-margin {
-    virtual_y_in = top-bound
-    virtual_y_out = bottom-bound
+    virtual_y_in = calc.min(top-bound, b-box.top)
+    virtual_y_out = calc.max(bottom-bound, m-box.bottom)
     virtual_id_in = "top"
     virtual_id_out = "bottom"
   }
@@ -869,26 +871,6 @@
       wps_start_y = virtual_y_in
     }
   }
-
-  let extract-box(candidates) = {
-    let xs = candidates.map(c => c.x)
-    let ys = candidates.map(c => c.y)
-    let min-x = calc.min(..xs)
-    let max-x = calc.max(..xs)
-    let min-y = calc.min(..ys)
-    let max-y = calc.max(..ys)
-    return (
-      left: min-x,
-      right: max-x,
-      top: min-y,
-      bottom: max-y,
-      center-x: (min-x + max-x) / 2.0,
-      center-y: (min-y + max-y) / 2.0,
-    )
-  }
-
-  let m-box = extract-box(S_candidates)
-  let b-box = extract-box(D_candidates)
 
   let resolved_wps = _deixis-resolve-waypoints(active_raw_wps, wps_start_x, wps_start_y, m-box, b-box)
 

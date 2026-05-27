@@ -136,8 +136,8 @@
     let c-spacing = par.spacing
     let c-justify = par.justify
 
+    let meta = [#metadata(note-data)<deixis-footnote>]
     if target-is-page {
-      let meta = [#metadata(note-data)<deixis-footnote>]
       let exact-rendered = active-renderer(note-data + (disable-links: use-reserver), gap: c-gap)
 
       let reserver = {
@@ -159,7 +159,7 @@
       }
       [#meta#reserver]
     } else {
-      [#metadata(note-data)<deixis-footnote>]
+      [#meta]
     }
   }
 
@@ -293,13 +293,13 @@
       render-group: active-group-renderer,
     )
 
+    let meta = [#metadata(note-data)<deixis-footnote>]
     if target-is-page {
       let c-size = text.size
       let c-leading = par.leading
       let c-spacing = par.spacing
       let c-justify = par.justify
 
-      let meta = [#metadata(note-data)<deixis-footnote>]
       let exact-rendered = active-renderer(note-data + (disable-links: use-reserver), gap: c-gap)
 
       let reserver = {
@@ -319,7 +319,7 @@
 
       [#meta#reserver]
     } else {
-      [#metadata(note-data)<deixis-footnote>]
+      [#meta]
     }
   }
 }
@@ -537,7 +537,13 @@
 
   let m = render-mark(deixis-auto-id)
   let b = render-body(deixis-auto-id)
-  [#m#b]
+  
+  let is-block-region = mark-type == "region" and inline == false
+  if is-block-region {
+    [#m#place(b)]
+  } else {
+    [#m#b]
+  }
 }
 
 // Footnote overlay

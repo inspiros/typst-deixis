@@ -53,20 +53,11 @@
     return new-body
   }
 
-  let internal-id = if mark-lbl != none { str(mark-lbl).replace("deixis-mark-", "") } else { none }
-  let mm = if internal-id != none {
-    [#metadata((
-        marker-width: if marker-str != none { measure(marker-style(marker-str)).width } else { 0pt },
-        text-size: text.size,
-        marker-str: marker-str,
-      ))#std.label("deixis-marker-meta-" + internal-id)#sym.wj]
-  } else { none }
-
-  let safe-lbl = if mark-lbl != none { [#sym.wj#box(width: 0pt)#mark-lbl] } else { none }
+  let safe-lbl = if mark-lbl != none { [#metadata(none)#mark-lbl] } else { none }
 
   let inline-marker = if mark-lbl != none and body-lbl != none {
     if marker-str == none {
-      [#safe-lbl#metadata(none)]
+      [#safe-lbl]
     } else {
       let body-exists = query(selector(body-lbl)).len() > 0
       let raw-m = marker-style(marker-str)
@@ -514,7 +505,7 @@
         styles: m-styles,
       )
 
-      [#visual-mark#metadata(meta-payload)<deixis-inline-mark>#sym.wj]
+      [#visual-mark#metadata(meta-payload)<deixis-inline-mark>]
     }
   }
 
@@ -670,7 +661,7 @@
       styles: m-styles,
     )
 
-    [#visual-mark#metadata(meta-payload)<deixis-inline-mark>#sym.wj]
+    [#visual-mark#metadata(meta-payload)<deixis-inline-mark>]
   }
 }
 

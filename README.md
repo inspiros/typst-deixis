@@ -21,6 +21,7 @@ Decoupled annotations for [Typst](https://typst.app/).
   - [Inset note](#inset-note)
 - [Cross-reference & bi-directional backlinks](#cross-reference-and-backlink)
 - [Note outline](#note-outline)
+- Minipage
 
 ## Installation
 
@@ -53,11 +54,58 @@ Once installed, you can import the package with:
 
 For detailed information, please see the [manual (PDF)][manual].
 
+### Quick Start
+
 No `deixis` functionality can be used before applying this setup show rule:
 
 ```typst
 #show: deixis-setup-notes
 ```
+
+`deixis` notes are decoupled by nature.
+To create a complete note, you need to put a mark with `-mark` functions, and a note body with `-body` functions. They are linked together via `id`.
+
+Alternatively, you can call wrapper functions, which internally generate a unique `id` and delegate the tasks to appropriate mark-only and body-only functions.
+Note that not all notes have a wrapper function.
+
+<div align="center">
+<table>
+<tr>
+  <td width="50%">
+
+```typst
+#deixis-inline-mark(
+  id: <note1>,
+)
+#deixis-footnote-body(
+  id: <note1>,
+)[Body]
+```
+
+  </td>
+  <td width="50%">
+
+```typst
+#deixis-footnote(
+  // auto-inferred
+  mark-type: "inline",
+)[Body]
+```
+
+  </td>
+</tr>
+<tr>
+  <td align="center">
+  Decoupled approach
+  </td>
+  <td align="center">
+  Wrapper approach
+  </td>
+</tr>
+</table>
+</div>
+
+---
 
 ### Inline Mark and Inline Note
 
@@ -248,7 +296,7 @@ is added after the label ```typst #box()<split>```.
 <summary><b>Show Typst Source Code</b></summary>
 
 ````typst
-#lorem(12)
+Inset notes can be placed
 #deixis-inset-note(
   stroke: orange,
   fill: yellow.transparentize(90%),
@@ -256,7 +304,7 @@ is added after the label ```typst #box()<split>```.
   link-ports: (mark: right, body: bottom),
   link-marks: "both",
   placement: body => deixis-absolute-place(top + right, dx: -5pt, dy: 5pt, body),
-)[A marked text][A placed note].
+)[anywhere][A manually placed note.]
 
 - #lorem(2)
 - #lorem(3)#deixis-inset-note(
@@ -271,16 +319,17 @@ is added after the label ```typst #box()<split>```.
   anchor: (mark: right + horizon, body: left + horizon),
   layer: "flow",
 )[Alternatively, use `dx`, `dy`, and `anchor` to align the body.]
+- #lorem(2)
 
 #import "@preview/meander:0.4.2"
 #import "@preview/colorful-boxes:1.4.3": outline-colorbox
 
 #let note-body = deixis-inset-note-body(
   id: <meander>,
-  layer: "flow",  // important !!!
-  width: 60%,
+  width: 50%,
   stroke: purple,
   fill: purple.transparentize(95%),
+  layer: "flow",  // important !!!
   container-func: (body, ..args) => outline-colorbox(body,
     color: (stroke: args.at("stroke").paint, fill: args.at("fill")),
     stroke: args.at("stroke").thickness,
@@ -294,9 +343,10 @@ is added after the label ```typst #box()<split>```.
   container()
   content[
     #set par(justify: true)
-    #lorem(21)
-    #deixis-inline-mark(id: <meander>)  // linked via id
-    #lorem(21)
+    Text will wrap around this note
+    #deixis-inline-mark(id: <meander>).
+    Note that you must set ```typc layer: "flow"``` (render immediately) for this to work.
+    #lorem(29)
   ]
 })
 ````
@@ -322,14 +372,18 @@ is added after the label ```typst #box()<split>```.
 
   </td>
 </tr>
+<tr>
+  <td align="center">
+  Cat
+  </td>
+  <td align="center">
+  Sigmoid
+  </td>
+</tr>
 </table>
 
 <details>
-<summary><b>Show Typst Source Code</b></summary>
-
-<table>
-<tr>
-  <td width="50%">
+<summary><b>Show Typst Source Code for Cat</b></summary>
 
 ````typst
 #align(center,
@@ -355,8 +409,10 @@ is added after the label ```typst #box()<split>```.
 )[A loading cat.]
 ````
 
-  </td>
-  <td width="50%">
+</details>
+
+<details>
+<summary><b>Show Typst Source Code for Sigmoid</b></summary>
 
 ````typst
 The Sigmoid function
@@ -419,6 +475,7 @@ Python code:
 z = np.array([-np.inf, -1.5, 0, 1.5, np.inf])
 # this computes 1 / (1 + exp(-z))
 probability = deixispine0deixisexpitdeixispine1deixis(z)
+print(f"Logit:\n{z}")
 print(f"Probability:\n{probability}")
 ```
 )
@@ -429,10 +486,6 @@ print(f"Probability:\n{probability}")
   fill: teal.transparentize(95%),
 )[```python from scipy.special import expit```]
 ````
-
-  </td>
-</tr>
-</table>
 
 </details>
 

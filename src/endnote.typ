@@ -476,7 +476,13 @@
 
   let m = render-mark(deixis-auto-id)
   let b = render-body(deixis-auto-id)
-  [#m#b]
+  
+  let is-block-region = mark-type == "region" and inline == false
+  if is-block-region {
+    [#m#place(b)]
+  } else {
+    [#m#b]
+  }
 }
 
 #let deixis-printed-endnotes-state = std.state("deixis-printed-endnotes", (:))
