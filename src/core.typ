@@ -38,7 +38,7 @@
   mark-align-strictness: "none",
   spillover: true,
   region-shape: deixis-rect-region,
-  layer: "flow",
+  layer: "foreground",
   // 5. Engines
   render-single: (
     footnote: deixis-default-render-single,

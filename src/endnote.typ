@@ -132,7 +132,7 @@
       container-func: active-container,
     )
 
-    [#metadata(note-data)<deixis-endnote>#sym.wj]
+    [#metadata(note-data)<deixis-endnote>]
   }
 
   if id == none {
@@ -249,7 +249,7 @@
       render-group: active-group-renderer,
     )
 
-    [#metadata(note-data)<deixis-endnote>#sym.wj]
+    [#metadata(note-data)<deixis-endnote>]
   }
 }
 
@@ -474,16 +474,9 @@
     )
   }
 
-  let is-block-region = mark-type == "region" and inline == false
-
   let m = render-mark(deixis-auto-id)
   let b = render-body(deixis-auto-id)
-
-  if is-block-region {
-    [#m#place(b)]
-  } else {
-    [#m#b]
-  }
+  [#m#b]
 }
 
 #let deixis-printed-endnotes-state = std.state("deixis-printed-endnotes", (:))

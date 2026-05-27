@@ -304,7 +304,7 @@ This is just a non-exhaustive list of known limitations that might not have a fi
 == Conclusion
 
 #conclusion[
-  The whole package is experimental, a proof of concept that can do the job most of the time.
+  The whole package is experimental, a proof of concept.
   Do not expect much, as there are always limits to what a hacky Typst package can do.
 
   Plus, having a strong opinion on using native features whenever possible, I hope future Typst versions will provide a more powerful noting mechanism.

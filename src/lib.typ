@@ -81,14 +81,18 @@
     let fg-layers = sys.at("fg-layers", default: (:))
     let bg-layers = sys.at("bg-layers", default: (:))
 
+    // region-mark
     bg-layers.insert("region-marks", place(top + left, context { _deixis-region-marks-overlay(layer: "background") }))
     fg-layers.insert("region-marks", place(top + left, context { _deixis-region-marks-overlay(layer: "foreground") }))
-
+    // footnote
     sys.insert("override-page-footnotes", override-page-footnotes)
     if override-page-footnotes {
       fg-layers.insert("footnotes", context { _deixis-page-footnotes-overlay() })
     }
-    fg-layers.insert("inset-notes", place(top + left, context { _deixis-inset-notes-overlay() }))
+    // inset-note
+    bg-layers.insert("inset-notes", place(top + left, context { _deixis-inset-notes-overlay(layer: "background") }))
+    fg-layers.insert("inset-notes", place(top + left, context { _deixis-inset-notes-overlay(layer: "foreground") }))
+    // margin-note
     fg-layers.insert("margin-notes", place(top + left, context { _deixis-margin-notes-overlay() }))
 
     if native-fg != none { fg-layers.insert("native-fg", native-fg) }
@@ -165,7 +169,7 @@
 /// - mark-align-strictness (auto, str): How strictly to align margin notes to their marks. Choices: `"strict"` | `"loose"` | `"none"`.
 /// - spillover (auto, bool): Allow margin notes to spill over page boundaries.
 /// - region-shape (auto, function): Shape drawing function for region marks.
-/// - layer (auto, str): The rendering layer for region marks. Choices: `"flow"` | `"foreground"` | `"background"`.
+/// - layer (auto, str): The rendering layer for region marks and inset notes. Choices: `"flow"` | `"foreground"` | `"background"`.
 /// - render-single (auto, function, dictionary): Note body rendering function.
 /// - render-group (auto, function, dictionary): Group rendering function for grouped notes (footnote and endnote).
 /// - container-func (auto, function, dictionary): Note body container function with signature `(content, ..args) => content`.
@@ -448,7 +452,7 @@
   ///
   /// -> auto | function
   region-shape: auto,
-  /// The rendering layer for region marks. Choices: `"flow"` | `"foreground"` | `"background"`.
+  /// The rendering layer for region marks and inset notes. Choices: `"flow"` | `"foreground"` | `"background"`.
   ///
   /// See @deixis-region-mark.layer.
   ///

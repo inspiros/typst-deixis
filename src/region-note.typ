@@ -371,7 +371,7 @@
           radius: radius,
         )
         let c-shape = _deixis-resolve-typed-param(sys, region-shape, "region-shape", "region-mark")
-        let c-layer = _deixis-resolve-typed-param(sys, layer, "layer", "region-mark")
+        let c-layer = _deixis-resolve-typed-param(sys, layer, "layer", "region-mark", component: "mark")
 
         let c-pins = pins
         let rendered-body = none
@@ -427,8 +427,6 @@
           )
         }
 
-        let anchor = if not has-body { metadata(none) + sym.wj } else { none }
-
         let meta-payload = (
           internal-id: none,
           mark-lbl: none,
@@ -441,7 +439,7 @@
           styles: m-styles + (padding: c-padding),
         )
 
-        let drawing-output = none
+        let rendered-region = none
         if c-layer == "flow" {
           let drawing-context = context {
             let all-pins = query(<deixis-pin>)
@@ -454,13 +452,18 @@
             )
           }
           if inline {
-            drawing-output = box(width: 0pt, height: 0pt, drawing-context)
+            rendered-region = box(width: 0pt, height: 0pt, drawing-context)
           } else {
-            drawing-output = block(width: 0pt, height: 0pt, above: 0pt, below: 0pt, drawing-context)
+            rendered-region = place(drawing-context)
           }
         }
 
-        [#rendered-body#drawing-output#metadata(meta-payload)<deixis-region-mark>#anchor]
+        let mark-body = if inline {
+          [#rendered-region#rendered-body]
+        } else {
+          [#rendered-body#rendered-region]
+        }
+        [#mark-body#metadata(meta-payload)<deixis-region-mark>]
       }
     ]
   }
@@ -551,7 +554,7 @@
     )
 
     let c-shape = _deixis-resolve-typed-param(sys, region-shape, "region-shape", "region-mark")
-    let c-layer = _deixis-resolve-typed-param(sys, layer, "layer", "region-mark")
+    let c-layer = _deixis-resolve-typed-param(sys, layer, "layer", "region-mark", component: "mark")
 
     let c-pins = pins
     let rendered-body = none
@@ -607,8 +610,6 @@
       )
     }
 
-    let anchor = if not has-body { metadata(none) + sym.wj } else { none }
-
     if reg == none {
       let meta-payload = (
         internal-id: none,
@@ -659,7 +660,7 @@
       styles: m-styles + (padding: c-padding),
     )
 
-    let drawing-output = none
+    let rendered-region = none
     if c-layer == "flow" {
       let drawing-context = context {
         let all-pins = query(<deixis-pin>)
@@ -672,13 +673,18 @@
         )
       }
       if inline {
-        drawing-output = box(width: 0pt, height: 0pt, drawing-context)
+        rendered-region = box(width: 0pt, height: 0pt, drawing-context)
       } else {
-        drawing-output = block(width: 0pt, height: 0pt, above: 0pt, below: 0pt, drawing-context)
+        rendered-region = place(drawing-context)
       }
     }
 
-    [#rendered-body#drawing-output#metadata(meta-payload)<deixis-region-mark>#anchor]
+    let mark-body = if inline {
+      [#rendered-region#rendered-body]
+    } else {
+      [#rendered-body#rendered-region]
+    }
+    [#mark-body#metadata(meta-payload)<deixis-region-mark>]
   }
 }
 

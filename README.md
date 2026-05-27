@@ -5,6 +5,23 @@ Decoupled annotations for [Typst](https://typst.app/).
 
 `deixis` is a unified layout engine for footnotes, endnotes, margin notes, inset notes, inline highlights, and spatial annotations.
 
+> _under development, expect bugs_
+
+## Main Features
+
+- **Marks:**
+  - [Inline mark](#inline-mark-and-inline-note)
+  - Phantom mark
+  - [Region mark](#pin-and-region-mark)
+- **Notes:**
+  - [Inline note](#inline-mark-and-inline-note)
+  - [Footnote](#footnote)
+  - [Endnote](#endnote)
+  - [Margin note](#margin-note)
+  - [Inset note](#inset-note)
+- [Cross-reference & bi-directional backlinks](#cross-reference-and-backlink)
+- [Note outline](#note-outline)
+
 ## Installation
 
 ### From Typst Universe
@@ -32,11 +49,9 @@ Once installed, you can import the package with:
 #import "@local/deixis:0.1.0": *
 ```
 
-## Usage
+## Usage and Examples
 
 For detailed information, please see the [manual (PDF)][manual].
-
-### Setup
 
 No `deixis` functionality can be used before applying this setup show rule:
 
@@ -44,9 +59,7 @@ No `deixis` functionality can be used before applying this setup show rule:
 #show: deixis-setup-notes
 ```
 
-### Examples
-
-#### Inline Mark and Inline Note
+### Inline Mark and Inline Note
 
 <div align="center">
 <img src="assets/gallery/inline-note.svg" width="500px" alt="Inline mark and note example">
@@ -55,10 +68,16 @@ No `deixis` functionality can be used before applying this setup show rule:
 <details>
 <summary><b>Show Typst Source Code</b></summary>
 
-```typst
+````typst
 #set par(justify: true)
 
-Enfin, le chercheur a ressenti un immense
+Le
+#deixis-inline-mark(  // celibate mark
+  inline-mode: "underline",
+  stroke: gray,
+  fill: gray.transparentize(90%),
+)[chercheur]
+a ressenti un immense
 #deixis-inline-mark(id: <soulagement>,
   stroke: red,
   fill: red.transparentize(95%),
@@ -76,17 +95,17 @@ de son argumentation.
 #deixis-inline-note-body(id: <cle-de-voute>)[
   *clé de voûte*: Keystone _(metaphorically: the cornerstone or central principle of an argument)_.
 ]
-#deixis-inline-note-body(
+#deixis-inline-note-body(  // celibate note
   stroke: gray,
   fill: gray.transparentize(95%),
 )[
-  A celibate inline note.
+  Without an unique `id`, standalone bodies become celibate (no marker) like this one.
 ]
-```
+````
 
 </details>
 
-#### Footnote
+### Footnote
 
 <div align="center">
 <img src="assets/gallery/footnote.svg" width="500px" alt="Footnote example">
@@ -95,11 +114,17 @@ de son argumentation.
 <details>
 <summary><b>Show Typst Source Code</b></summary>
 
-```typst
+````typst
 #lorem(10)
 #deixis-footnote[A plain footnote.]
 #lorem(10)
-#deixis-footnote(marker: lorem(2))[A note with long marker and body content.]
+#deixis-footnote(marker: lorem(2))[
+  A footnote with very long marker, aligned with other notes.
+]
+#deixis-footnote-body[
+  A celibate footnote body without linked mark.
+]
+
 #lorem(10)
 #deixis-footnote(
   marker-style: (body: it => text(fill: orange, super(it))),
@@ -107,11 +132,11 @@ de son argumentation.
   fill: red.transparentize(95%),
   container-func: deixis-alert-container,
 )[A marked text][A colorful footnote.].
-```
+````
 
 </details>
 
-#### Endnote
+### Endnote
 
 <div align="center">
 <img src="assets/gallery/endnote.svg" width="500px" alt="Endnote example">
@@ -120,7 +145,7 @@ de son argumentation.
 <details>
 <summary><b>Show Typst Source Code</b></summary>
 
-```typst
+````typst
 #lorem(10)
 #deixis-endnote[A plain endnote.]
 #lorem(10)
@@ -133,19 +158,31 @@ de son argumentation.
   They default to the `"endnote"` series.
 ].
 #lorem(10)
-// print endnote bodies
+// print all previous notes
 #deixis-print-endnotes()
 
 #lorem(5)
 #deixis-endnote[
-  ```typst #deixis-print-endnotes()``` flushes out unprinted notes _(and it can do more than that)_.
+  ```typst #deixis-print-endnotes()``` flushes out unprinted notes by default, but it can do more than that.
 ]
-#deixis-print-endnotes()
-```
+#box()<split>
+This
+#deixis-endnote(
+  stroke: gray,
+  fill: none,
+)[
+  invisible note
+][
+  This note is not supposed to be printed.
+]
+is added after the label ```typst #box()<split>```.
+// print with filter
+#deixis-print-endnotes(before: <split>)
+````
 
 </details>
 
-#### Margin Note
+### Margin Note
 
 <div align="center">
 <img src="assets/gallery/margin-note.svg" width="500px" alt="Margin note example">
@@ -155,9 +192,7 @@ de son argumentation.
 <details>
 <summary><b>Show Typst Source Code</b></summary>
 
-```typst
-#deixis-set(margin-layout: "adaptive")
-
+````typst
 #lorem(10)
 #deixis-margin-note[A plain margin note.]
 #lorem(10)
@@ -199,11 +234,11 @@ de son argumentation.
   link: "right-angle",
 )[A note with empty marker.]
 #lorem(5)
-```
+````
 
 </details>
 
-#### Inset Note
+### Inset Note
 
 <div align="center">
 <img src="assets/gallery/inset-note.svg" width="500px" alt="Inset note example">
@@ -212,12 +247,12 @@ de son argumentation.
 <details>
 <summary><b>Show Typst Source Code</b></summary>
 
-```typst
-#lorem(10)
+````typst
+#lorem(12)
 #deixis-inset-note(
   stroke: orange,
   fill: yellow.transparentize(90%),
-  link: "curve",
+  link: "right-angle",
   link-ports: (mark: right, body: bottom),
   link-marks: "both",
   placement: body => deixis-absolute-place(top + right, dx: -5pt, dy: 5pt, body),
@@ -233,7 +268,8 @@ de son argumentation.
   width: 4.5cm,
   dx: 1em,
   dy: 0pt,
-  anchor: (mark: right + horizon, body: left + horizon)
+  anchor: (mark: right + horizon, body: left + horizon),
+  layer: "flow",
 )[Alternatively, use `dx`, `dy`, and `anchor` to align the body.]
 
 #import "@preview/meander:0.4.2"
@@ -241,6 +277,7 @@ de son argumentation.
 
 #let note-body = deixis-inset-note-body(
   id: <meander>,
+  layer: "flow",  // important !!!
   width: 60%,
   stroke: purple,
   fill: purple.transparentize(95%),
@@ -248,7 +285,7 @@ de son argumentation.
     color: (stroke: args.at("stroke").paint, fill: args.at("fill")),
     stroke: args.at("stroke").thickness,
     title: args.at("title", default: [Note])),
-  title: [Inset Note],
+  title: [`meander` note],
 )[A _true_ inset note.]
 #meander.reflow({
   import meander: *
@@ -257,16 +294,197 @@ de son argumentation.
   container()
   content[
     #set par(justify: true)
-    #lorem(15)
+    #lorem(21)
     #deixis-inline-mark(id: <meander>)  // linked via id
-    #lorem(18)
+    #lorem(21)
   ]
 })
-```
+````
 
 </details>
 
-#### Note Outline
+### Pin and Region Mark
+
+<table>
+<tr>
+  <td width="50%">
+
+<div align="center">
+<img src="assets/gallery/region-mark-cat.svg" width="500px" alt="Region mark on equation and raw example">
+</div>
+
+  </td>
+  <td width="50%">
+
+<div align="center">
+<img src="assets/gallery/region-mark-sigmoid.svg" width="500px" alt="Region mark on image example">
+</div>
+
+  </td>
+</tr>
+</table>
+
+<details>
+<summary><b>Show Typst Source Code</b></summary>
+
+<table>
+<tr>
+  <td width="50%">
+
+````typst
+#align(center,
+  deixis-attach(
+  pins: (
+    cat-top-left: (dx: 40%, dy: 35%),
+    cat-bottom-right: (dx: 62%, dy: 63%),
+  )
+)[
+  #image("assets/loading-cat.jpg", width: 80%)
+])
+
+#deixis-region-mark(
+  id: <cat>,
+  pins: ("cat-top-left", "cat-bottom-right"),
+  marker-style: (mark: it => text(fill: white, super(it))),
+  marker-position: top + center,
+  stroke: red,
+  fill: red.transparentize(90%),
+)
+#deixis-footnote-body(
+  id: <cat>,
+)[A loading cat.]
+````
+
+  </td>
+  <td width="50%">
+
+````typst
+The Sigmoid function
+#deixis-region-mark(
+  stroke: yellow,
+  fill: yellow.transparentize(95%),
+  inline: true,
+  layer: "background",
+)[$sigma(dot)$]
+maps any value into a probability in $[0, 1]$:
+
+#align(center,  // wrapped equations cannot auto align center
+  deixis-region-mark(
+  stroke: blue,
+  fill: blue.transparentize(95%),
+  padding: "text",
+  layer: "background",
+)[
+$ sigma(z) = frac(1, 1 + #deixis-pin("e-left")e#deixis-pin("e-right")^(-#deixis-pin("z-left")z#deixis-pin("z-right"))) $
+])
+#deixis-set(
+  body-style: it => text(size: 0.6em, it),
+  side-strategy: "strict",
+  container-func: (margin-note: rect),
+)
+#deixis-inset-note(
+  pins: ("z-left", "z-right"),
+  marker-style: it => text(fill: green, super(it)),
+  stroke: (rest: green, link: stroke(paint: green, thickness: 0.5pt, dash: "dashed")),
+  fill: green.transparentize(95%),
+  link: "curve",
+  link-ports: (body: bottom),
+  link-marks: "body",
+  dx: 1em,
+  dy: -2em,
+)[
+  $z$: input value (the "logit").
+]
+#deixis-inset-note(
+  pins: ("e-left", "e-right"),
+  marker-style: it => text(fill: red, super(it)),
+  stroke: (rest: red, link: stroke(paint: red, thickness: 0.5pt, dash: "dashed")),
+  fill: red.transparentize(95%),
+  link: "curve",
+  link-ports: (mark: bottom, body: left),
+  link-marks: "body",
+  dx: 2em,
+  dy: 2em,
+)[
+  $e$: Euler's constant.
+]
+Python code:
+
+#deixis-set-pin-pattern(
+  prefix: "deixispin",
+  postfix: "deixis",
+)
+#deixis-attach(
+```python
+z = np.array([-np.inf, -1.5, 0, 1.5, np.inf])
+# this computes 1 / (1 + exp(-z))
+probability = deixispine0deixisexpitdeixispine1deixis(z)
+print(f"Probability:\n{probability}")
+```
+)
+#deixis-footnote(
+  pins: ("e0", "e1"),
+  marker-style: it => text(fill: teal, super(it)),
+  stroke: teal,
+  fill: teal.transparentize(95%),
+)[```python from scipy.special import expit```]
+````
+
+  </td>
+</tr>
+</table>
+
+</details>
+
+---
+
+### Cross-reference and Backlink
+
+<div align="center">
+<img src="assets/gallery/cross-ref.svg" width="500px" alt="Cross-reference and backlink example">
+</div>
+
+<details>
+<summary><b>Show Typst Source Code</b></summary>
+
+````typst
+Test notes:
+#deixis-footnote(
+  label: <note-1>,
+  backlink: true,
+  marker-style: (mark: it => text(fill: red, super(it))),
+)[Note 1.]
+#deixis-footnote(
+  label: <note-2>,
+  backlink: "always",  // equivalent to true
+  marker-style: (mark: it => text(fill: blue, super(it))),
+)[Note 2.]
+#deixis-footnote(
+  label: <note-3>,
+  backlink: "none",  // equivalent to false
+)[Note 3.]
+#deixis-footnote(
+  label: <note-4>,
+  backlink: "multiple",  // only if they are ref-ed at least once
+)[Note 4.]
+
+*Cross-reference features supported by `deixis`:*
+#grid(
+  align: left,
+  columns: (3fr, 1fr),
+  row-gutter: 0.8em,
+  stroke: none,
+  [Ref using ```typst @label```], [#deixis-ref(<note-1>)],
+  [Ref using ```typst #deixis-ref(<label>)```], [#deixis-ref(<note-1>, <note-2>)],
+  [Ref with supplement], [@note-1[Note]],
+  [Ref 3 or more consecutive notes], [#deixis-ref(<note-1>, <note-2>, <note-3>)],
+  [Ref 2 or 3+ non-consecutive notes], [#deixis-ref(<note-1>, <note-2>, <note-4>)]
+)
+````
+
+</details>
+
+### Note Outline
 
 <div align="center">
 <img src="assets/gallery/note-outline.svg" width="500px" alt="Note outline example">
@@ -275,7 +493,7 @@ de son argumentation.
 <details>
 <summary><b>Show Typst Source Code</b></summary>
 
-```typst
+````typst
 #deixis-inline-mark(
   id: <celibate>,  // linked to no note body
 )[A celibate marked text]
@@ -302,7 +520,7 @@ de son argumentation.
   fill: repeat[.],
   include-celibates: "mark",
 )
-```
+````
 
 </details>
 

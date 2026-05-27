@@ -287,7 +287,7 @@
         )
     )
 
-    [#metadata(note-data)<deixis-margin-note>#sym.wj]
+    [#metadata(note-data)<deixis-margin-note>]
   }
 
   if id == none {
@@ -466,7 +466,7 @@
         )
     )
 
-    [#metadata(note-data)<deixis-margin-note>#sym.wj]
+    [#metadata(note-data)<deixis-margin-note>]
   }
 }
 
@@ -790,16 +790,9 @@
     )
   }
 
-  let is-block-region = mark-type == "region" and inline == false
-
   let m = render-mark(deixis-auto-id)
   let b = render-body(deixis-auto-id)
-
-  if is-block-region {
-    [#m#place(b)]
-  } else {
-    [#m#b]
-  }
+  [#m#b]
 }
 
 // Margin note overlay

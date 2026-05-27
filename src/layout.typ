@@ -1254,7 +1254,7 @@
 
   if b-bottom { offset_y -= size.height } else if b-horizon { offset_y -= size.height / 2.0 }
 
-  box(place(top + left, dx: offset_x, dy: offset_y, body))
+  place(box(place(top + left, dx: offset_x, dy: offset_y, body)))
 }
 
 /// Places content at a specific exact absolute coordinate on the page ignoring page margins.

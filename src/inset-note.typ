@@ -8,12 +8,16 @@
 /// They are perfect for callouts.
 ///
 /// ```example
-/// The research team used an #deixis-inline-mark(id: <drone>)[aerial drone to map the exact migration paths of the caribou herd].
+/// The artist spent months wandering the dense pine forests, completely captivated by the local #deixis-inline-mark(id: <apricharity>)[apricharity].
 ///
 /// #deixis-inset-note-body(
-///   id: <drone>,
-///   link: "right-angle")[
-///   First time AI-driven flight paths allowed drones to track wildlife completely silently!
+///   id: <apricharity>,
+///   dx: 2.5em,
+///   dy: 2em,
+///   link: "curve",
+///   link-marks: "body",
+/// )[
+///   warmth of the sun in winter.
 /// ]
 /// ```
 ///
@@ -37,6 +41,7 @@
 /// - dy (none, length): Absolute vertical offset for placing the note.
 /// - anchor (dictionary): A dictionary defining how the note aligns to its anchor point (e.g., `(mark: horizon + right, body: horizon + left)`).
 /// - anchor-pin (none, str): A specific `#deixis-pin` name to anchor the inset note to.
+/// - layer (auto, str): The rendering layer context. Choices: `"flow"` | `"foreground"`.
 /// - render-single (auto, function): A custom render function for the inner layout of the body.
 /// - container-func (auto, function): A custom container wrapper for the body block.
 /// - ..args (arguments): Only accepts named arguments, which are forwarded to `container-func`.
@@ -138,6 +143,9 @@
   ///
   /// -> none | str
   anchor-pin: none,
+  /// The rendering layer context. Choices: `"flow"` | `"foreground"`.
+  /// -> auto | str
+  layer: auto,
   /// A custom render function for the inner layout of the body.
   /// -> auto | function
   render-single: auto,
@@ -153,6 +161,10 @@
 
   let series = if series == auto { "default" } else { series }
 
+  if placement != none and layer != auto and (layer != "flow" or (type(layer) == dictionary and _deixis-resolve-typed-param(sys, layer, "layer", "inset-note", component: "body") != "flow")) {
+    panic("deixis: custom 'placement' can only be used with layer: 'flow'.")
+  }
+
   let render-celibate(sys, celibate-id) = {
     let body = deixis-utils._deixis-trim-content(body)
     let resolved = _deixis-resolve-target(sys, target)
@@ -165,6 +177,12 @@
     let c-indent = _deixis-resolve-typed-param(sys, auto, "indent", "inset-note")
     let c-gap = _deixis-resolve-typed-param(sys, auto, "gap", "inset-note")
     let c-marker-gap = _deixis-resolve-typed-param(sys, auto, "marker-gap", "inset-note")
+
+    let c-layer = if placement == none {
+      _deixis-resolve-typed-param(sys, layer, "layer", "inset-note", component: "body")
+    } else {
+      "flow"
+    }
 
     let active-renderer = _deixis-resolve-typed-param(sys, render-single, "render-single", "inset-note")
     let active-container = _deixis-resolve-typed-param(sys, container-func, "container-func", "inset-note")
@@ -195,32 +213,46 @@
           mark-type: none,
           text-size: text.size,
           marker-width: 0pt,
+          layer: c-layer,
+          placement: placement,
+          dx: dx,
+          dy: dy,
+          anchor: anchor,
+          anchor-pin: anchor-pin,
+          render-single: active-renderer,
+          width: width,
         )
     )
 
-    let meta = [#metadata(note-data)<deixis-inset-note>]
+    if c-layer == "flow" {
+      let meta = [#metadata(note-data)<deixis-inset-note>]
+      let c-inner-width = if width == auto { auto } else { 100% }
+      let rendered-content = active-renderer(note-data, inner-width: c-inner-width, gap: c-gap)
 
-    let c-inner-width = if width == auto { auto } else { 100% }
-    let rendered-content = active-renderer(note-data, inner-width: c-inner-width, gap: c-gap)
+      let final-rendered = block(width: width, {
+        place(top + left, meta)
+        rendered-content
+      })
 
-    let final-rendered = block(width: width, {
-      place(top + left, meta)
-      rendered-content
-    })
-
-    if type(placement) == function {
-      box(placement(final-rendered))
-    } else if dx != none and dy != none {
-      deixis-place-anchored(
-        final-rendered,
-        dx: dx,
-        dy: dy,
-        anchor: anchor,
-        internal-id: none,
-        pin: anchor-pin,
-      )
+      if type(placement) == function {
+        placement(final-rendered)
+      } else if dx != none or dy != none {
+        let dx = if dx in (none, auto) { 0pt } else { dx }
+        let dy = if dy in (none, auto) { 0pt } else { dy }
+        deixis-place-anchored(
+          final-rendered,
+          dx: dx, dy: dy,
+          anchor: anchor,
+          internal-id: none,
+          pin: anchor-pin,
+        )
+      } else {
+        final-rendered
+      }
     } else {
-      final-rendered
+      let dummy-lbl = std.label("deixis-mark-" + str(celibate-id))
+      note-data.insert("mark-lbl", dummy-lbl)
+      [#metadata(none)#dummy-lbl#metadata(note-data)<deixis-inset-note>]
     }
   }
 
@@ -339,6 +371,12 @@
       if link == auto { c-link = "none" }
     }
 
+    let c-layer =  if placement == none {
+      _deixis-resolve-typed-param(sys, layer, "layer", "inset-note", component: "body")
+    } else {
+      "flow"
+    }
+
     let active-renderer = _deixis-resolve-typed-param(sys, render-single, "render-single", "inset-note")
     let active-container = _deixis-resolve-typed-param(sys, container-func, "container-func", "inset-note")
 
@@ -383,36 +421,47 @@
           text-size: text.size,
           marker-width: if marker-str != none { measure(mark-marker-style(marker-str)).width } else { 0pt },
           marker-position: marker-position,
+          layer: c-layer,
+          placement: placement,
+          dx: dx,
+          dy: dy,
+          anchor: anchor,
+          anchor-pin: anchor-pin,
+          render-single: active-renderer,
+          width: width,
         )
     )
 
     let meta = [#metadata(note-data)<deixis-inset-note>]
 
-    let rendered-content = active-renderer(note-data, inner-width: if width == auto { auto } else { 100% })
+    if c-layer == "flow" {
+      let rendered-content = active-renderer(note-data, inner-width: if width == auto { auto } else { 100% })
+      let final-rendered = block(width: width, {
+        place(top + left, meta)
+        place(top + center, [#metadata(none)#dest-top-lbl])
+        place(bottom + center, [#metadata(none)#dest-bot-lbl])
+        place(horizon + left, [#metadata(none)#dest-left-lbl])
+        place(horizon + right, [#metadata(none)#dest-right-lbl])
+        rendered-content
+      })
 
-    let final-rendered = block(width: width, {
-      place(top + left, meta)
-      place(top + center, [#metadata(none)#dest-top-lbl])
-      place(bottom + center, [#metadata(none)#dest-bot-lbl])
-      place(horizon + left, [#metadata(none)#dest-left-lbl])
-      place(horizon + right, [#metadata(none)#dest-right-lbl])
-
-      rendered-content
-    })
-
-    if type(placement) == function {
-      box[#placement(final-rendered)]
-    } else if dx != none and dy != none {
-      [#deixis-place-anchored(
-        final-rendered,
-        dx: dx,
-        dy: dy,
-        anchor: anchor,
-        internal-id: internal-id,
-        pin: anchor-pin,
-      )]
+      if type(placement) == function {
+        placement(final-rendered)
+      } else if dx != none or dy != none {
+        let dx = if dx in (none, auto) { 0pt } else { dx }
+        let dy = if dy in (none, auto) { 0pt } else { dy }
+        deixis-place-anchored(
+          final-rendered,
+          dx: dx, dy: dy,
+          anchor: anchor,
+          internal-id: internal-id,
+          pin: anchor-pin,
+        )
+      } else {
+        [#final-rendered]
+      }
     } else {
-      [#final-rendered]
+      [#meta]
     }
   }
 }
@@ -447,7 +496,6 @@
 /// - pins (array): Array of pin names for the region mark.
 /// - padding (auto, length, str, dictionary): Internal padding for the region mark.
 /// - region-shape (auto, function): Shape drawing function for the region mark.
-/// - layer (auto, str): Rendering layer for the region mark. Choices: `"flow"` | `"foreground"` | `"background"`.
 /// - inline (bool): If `true`, force the region mark into an inline box.
 /// - backlink (auto, bool, str): Whether to generate a clickable backlink returning the reader to the mark. Choices: `bool` | `"always"` | `"none"` | `"never"` | `"multiple"`.
 /// - link (auto, str): The type of connector line. Choices: `"none"` | `"straight-line"` | `"right-angle"` | `"chamfer"` | `"curve"` | `"ucr"` | `"ccr"`.
@@ -460,6 +508,7 @@
 /// - dy (none, length): Absolute vertical offset for placing the note.
 /// - anchor (dictionary): A dictionary defining how the note aligns to its anchor point (e.g., `(mark: horizon + right, body: horizon + left)`).
 /// - anchor-pin (none, str): A specific `#deixis-pin` name to anchor the inset note to.
+/// - layer (auto, str, dictionary): Rendering layer for the region mark and/or the body. Choices: `"flow"` | `"foreground"` | `"background"`.
 /// - render-single (auto, function): A custom render function for the inner layout of the body.
 /// - container-func (auto, function): A custom container wrapper for the body block.
 ///
@@ -532,12 +581,6 @@
   ///
   /// -> auto | function
   region-shape: auto,
-  /// Rendering layer for the region mark. Choices: `"flow"` | `"foreground"` | `"background"`.
-  ///
-  /// See @deixis-region-mark.layer.
-  ///
-  /// -> auto | str
-  layer: auto,
   /// If `true`, force the region mark into an inline box.
   ///
   /// See @deixis-region-mark.inline.
@@ -592,6 +635,16 @@
   ///
   /// -> none | str
   anchor-pin: none,
+  /// Rendering layer for the region mark and/or the body. Choices: `"flow"` | `"foreground"` | `"background"`.
+  ///
+  /// See @deixis-region-mark.layer and @deixis-inset-note-body.layer.
+  /// 
+  /// ```tip
+  /// Since both @deixis-region-mark and @deixis-inset-note-body shares this parameter, you can pass `layer: (mark: "flow", body: "foreground")` to assign different layer to each component.
+  /// ```
+  ///
+  /// -> auto | str | dictionary
+  layer: auto,
   /// A custom render function for the inner layout of the body.
   /// -> auto | function
   render-single: auto,
@@ -627,6 +680,7 @@
       dy: dy,
       anchor: anchor,
       anchor-pin: anchor-pin,
+      layer: layer,
       render-single: render-single,
       container-func: container-func,
       ..args.named(),
@@ -700,6 +754,7 @@
       dy: dy,
       anchor: anchor,
       anchor-pin: anchor-pin,
+      layer: layer,
       render-single: render-single,
       container-func: container-func,
       ..args.named(),
@@ -711,15 +766,72 @@
   [#m#b]
 }
 
-#let _deixis-inset-notes-overlay() = context {
+// Inset note overlay
+#let _deixis-inset-notes-overlay(layer: "foreground") = context {
   let notes = query(<deixis-inset-note>).filter(it => (
     type(it.value) == dictionary and it.value.at("mark-lbl", default: none) != none
   ))
   let paths = ()
+  let sys = deixis-system.get()
+  
+  let current-page = here().page()
+  let all-pins = query(<deixis-pin>)
 
   for n in notes {
     let data = n.value
-    let sys = deixis-system.get()
+    let n-layer = data.at("layer", default: "foreground")
+
+    let target_page = n.location().page()
+    if data.anchor-pin != none {
+      let pin-elems = all-pins.filter(x => x.value.name == data.anchor-pin)
+      if pin-elems.len() > 0 {
+        target_page = pin-elems.first().location().page()
+      }
+    }
+
+    // body
+    if n-layer == layer and current-page == target_page {
+      let active-renderer = data.render-single
+      let rendered-content = active-renderer(data, inner-width: if data.width == auto { auto } else { 100% })
+
+      let dest-top-lbl = data.at("dest-top-lbl", default: none)
+      
+      let final-rendered = block(width: data.width, {
+        // Only generate connection labels if it's not a celibate note
+        if dest-top-lbl != none {
+          place(top + center, [#metadata(none)#dest-top-lbl])
+          place(bottom + center, [#metadata(none)#data.dest-bot-lbl])
+          place(horizon + left, [#metadata(none)#data.dest-left-lbl])
+          place(horizon + right, [#metadata(none)#data.dest-right-lbl])
+        }
+        rendered-content
+      })
+
+      if type(data.placement) == function {
+        paths.push(box(data.placement(final-rendered)))
+      } else if data.dx != none or data.dy != none {
+        paths.push(deixis-place-anchored(
+          final-rendered,
+          dx: if data.dx == none { 0pt } else { data.dx },
+          dy: if data.dy == none { 0pt } else { data.dy },
+          anchor: data.anchor,
+          internal-id: data.internal-id,
+          pin: data.anchor-pin,
+        ))
+      } else {
+        // Default: anchor directly to the mark if no dx/dy is provided
+        paths.push(deixis-place-anchored(
+          final-rendered,
+          dx: 0pt, dy: 0pt,
+          anchor: data.anchor,
+          internal-id: data.internal-id,
+          pin: data.anchor-pin,
+        ))
+      }
+    }
+
+    // link
+    if layer != "foreground" { continue }
 
     let c-link = _deixis-resolve-typed-param(sys, data.at("link", default: auto), "link", "inset-note")
     if c-link in (none, "none", false) { continue }

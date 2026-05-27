@@ -86,12 +86,11 @@
     bottom: deixis-utils.resolve-len(pad.bottom),
   )
 
-  // [#metadata((name: name, padding: abs-pad, ..extra-data))<deixis-pin>#sym.wj]
-  [#box(width: 0pt, height: 0pt, inset: 0pt, outset: 0pt)[#metadata((
+  [#sym.wj#metadata((
     name: name,
     padding: abs-pad,
     ..extra-data,
-  ))<deixis-pin>]]
+  ))<deixis-pin>]
 }
 
 /// A wrapper that attaches pins to a block of content.
