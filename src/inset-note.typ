@@ -145,7 +145,7 @@
   anchor-pin: none,
   /// The rendering layer context. Choices: `"flow"` | `"foreground"`.
   /// -> auto | str
-  layer: auto,
+  layer: "flow",
   /// A custom render function for the inner layout of the body.
   /// -> auto | function
   render-single: auto,
@@ -161,8 +161,11 @@
 
   let series = if series == auto { "default" } else { series }
 
+  if placement != none and anchor-pin != none {
+    panic("deixis: `placement` cannot be used in combination with `anchor-pin`.")
+  }
   if placement != none and layer != auto and (layer != "flow" or (type(layer) == dictionary and _deixis-resolve-typed-param(sys, layer, "layer", "inset-note", component: "body") != "flow")) {
-    panic("deixis: custom 'placement' can only be used with layer: 'flow'.")
+    panic("deixis: custom `placement` can only be used with layer: 'flow'.")
   }
 
   let render-celibate(sys, celibate-id) = {
@@ -236,7 +239,7 @@
 
       if type(placement) == function {
         placement(final-rendered)
-      } else if dx != none or dy != none {
+      } else if anchor-pin != none or dx != none or dy != none {
         let dx = if dx in (none, auto) { 0pt } else { dx }
         let dy = if dy in (none, auto) { 0pt } else { dy }
         deixis-place-anchored(
@@ -447,7 +450,7 @@
 
       if type(placement) == function {
         placement(final-rendered)
-      } else if dx != none or dy != none {
+      } else if anchor-pin != none or dx != none or dy != none {
         let dx = if dx in (none, auto) { 0pt } else { dx }
         let dy = if dy in (none, auto) { 0pt } else { dy }
         deixis-place-anchored(

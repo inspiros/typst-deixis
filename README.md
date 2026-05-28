@@ -16,7 +16,6 @@ Decoupled annotations for [Typst](https://typst.app/).
 
 - **Marks:**
   - [Inline mark](#inline-mark-and-inline-note)
-  - Phantom mark
   - [Region mark](#pin-and-region-mark)
 - **Notes:**
   - [Inline note](#inline-mark-and-inline-note)
@@ -115,7 +114,7 @@ Note that not all notes have a wrapper function.
 ### Inline Mark and Inline Note
 
 <div align="center">
-<img src="assets/gallery/inline-note.svg" width="500px" alt="Inline mark and note example">
+<img src="assets/gallery/inline-note-1.svg" width="500px" alt="Inline mark and note example">
 </div>
 
 <details>
@@ -161,7 +160,7 @@ de son argumentation.
 ### Footnote
 
 <div align="center">
-<img src="assets/gallery/footnote.svg" width="500px" alt="Footnote example">
+<img src="assets/gallery/footnote-1.svg" width="500px" alt="Footnote example">
 </div>
 
 <details>
@@ -192,7 +191,7 @@ de son argumentation.
 ### Endnote
 
 <div align="center">
-<img src="assets/gallery/endnote.svg" width="500px" alt="Endnote example">
+<img src="assets/gallery/endnote-1.svg" width="500px" alt="Endnote example">
 </div>
 
 <details>
@@ -238,7 +237,7 @@ is added after the label ```typst #box()<split>```.
 ### Margin Note
 
 <div align="center">
-<img src="assets/gallery/margin-note.svg" width="500px" alt="Margin note example">
+<img src="assets/gallery/margin-note-1.svg" width="500px" alt="Margin note example">
 </div>
 
 
@@ -291,10 +290,67 @@ is added after the label ```typst #box()<split>```.
 
 </details>
 
+#### Spillover
+
+<div align="center">
+<table>
+<tr>
+  <td align="center">
+<img src="assets/gallery/margin-note-spillover-1.svg" width="500px" alt="Margin note spillover example - page 1">
+  </td>
+</tr>
+<tr>
+  <td align="center">
+<img src="assets/gallery/margin-note-spillover-2.svg" width="500px" alt="Margin note spillover example - page 2">
+  </td>
+</tr>
+</table>
+</div>
+
+
+<details>
+<summary><b>Show Typst Source Code</b></summary>
+
+````typst
+If ```typc spillover: true```, and both margins
+#deixis-margin-note(
+  stroke: red,
+  link: "right-angle",
+  container-func: rect,
+)[
+  #lorem(20)
+]
+in one page has been filled
+#deixis-margin-note[
+  #lorem(28)
+].
+
+Subsequent notes
+#deixis-margin-note[
+  A spilled note.
+]
+will be _spilled_ to the next page
+#deixis-margin-note[
+  Margin notes cannot create new pages, one needs to use ```typst #pagebreak()``` manually.
+]
+if possible
+#deixis-margin-note(
+  stroke: orange,
+  link: "right-angle",
+  container-func: rect,
+)[
+  A spilled note with link crossing page border.
+].
+
+#pagebreak()
+````
+
+</details>
+
 ### Inset Note
 
 <div align="center">
-<img src="assets/gallery/inset-note.svg" width="500px" alt="Inset note example">
+<img src="assets/gallery/inset-note-1.svg" width="500px" alt="Inset note example">
 </div>
 
 <details>
@@ -365,14 +421,14 @@ Inset notes can be placed
   <td width="50%">
 
 <div align="center">
-<img src="assets/gallery/region-mark-cat.svg" width="500px" alt="Region mark on equation and raw example">
+<img src="assets/gallery/region-mark-cat-1.svg" width="500px" alt="Region mark on equation and raw example">
 </div>
 
   </td>
   <td width="50%">
 
 <div align="center">
-<img src="assets/gallery/region-mark-sigmoid.svg" width="500px" alt="Region mark on image example">
+<img src="assets/gallery/region-mark-sigmoid-1.svg" width="500px" alt="Region mark on image example">
 </div>
 
   </td>
@@ -496,10 +552,40 @@ print(f"Probability:\n{probability}")
 
 ---
 
+### Update Default Parameters
+
+<div align="center">
+<img src="assets/gallery/update-params-1.svg" width="500px" alt="Update parameters example">
+</div>
+
+<details>
+<summary><b>Show Typst Source Code</b></summary>
+
+````typst
+#deixis-set(container-func: (margin-note: rect))
+
+Update default parameters with ```typst #deixis-set```:
+#deixis-margin-note[A simple margin note.]
+- ```typc stroke: green```
+  #deixis-set(stroke: green)
+  #deixis-margin-note[This affects all subsequent notes.]
+- ```typc stroke: (margin-note: blue)```
+  #deixis-set(stroke: (margin-note: blue))
+  #deixis-margin-note[This affects only margin notes.]
+- ```typc stroke: (body: teal)```
+  #deixis-set(stroke: (body: teal))
+  #deixis-margin-note[][This affects all notes' bodies.]
+- ```typc stroke: (margin-note: (body: maroon))```
+  #deixis-set(stroke: (margin-note: (body: maroon)))
+  #deixis-margin-note[][This affects only margin notes' bodies.]
+````
+
+</details>
+
 ### Cross-reference and Backlink
 
 <div align="center">
-<img src="assets/gallery/cross-ref.svg" width="500px" alt="Cross-reference and backlink example">
+<img src="assets/gallery/cross-ref-1.svg" width="500px" alt="Cross-reference and backlink example">
 </div>
 
 <details>
@@ -545,7 +631,7 @@ Test notes:
 ### Counter and Series
 
 <div align="center">
-<img src="assets/gallery/counter.svg" width="500px" alt="Counter and series example">
+<img src="assets/gallery/counter-1.svg" width="500px" alt="Counter and series example">
 </div>
 
 <details>
@@ -610,7 +696,7 @@ Counter: \
 ### Note Outline
 
 <div align="center">
-<img src="assets/gallery/note-outline.svg" width="500px" alt="Note outline example">
+<img src="assets/gallery/note-outline-1.svg" width="500px" alt="Note outline example">
 </div>
 
 <details>
@@ -652,7 +738,7 @@ Counter: \
 ### Minipage
 
 <div align="center">
-<img src="assets/gallery/minipage.svg" width="500px" alt="Minipage example">
+<img src="assets/gallery/minipage-1.svg" width="500px" alt="Minipage example">
 </div>
 
 <details>

@@ -101,8 +101,10 @@
   if r-valid { return right }
   if l-valid { return left }
 
-  if l-space-abs > r-space-abs { return left }
-  return right
+  if l-space-abs > r-space-abs + 1pt { return left }
+  if r-space-abs > l-space-abs + 1pt { return right }
+  
+  return preferred-side
 }
 
 /// A lightweight margin layout engine that places each note exactly aligned with its marker.

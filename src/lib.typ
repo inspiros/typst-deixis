@@ -577,6 +577,18 @@
 
     let _deep-merge(old, new) = {
       if type(old) == dictionary and type(new) == dictionary {
+        
+        let old-has-note = old.keys().any(k => k in deixis-note-types)
+        let old-has-comp = old.keys().any(k => k in deixis-note-components)
+        let new-has-note = new.keys().any(k => k in deixis-note-types)
+        let new-has-comp = new.keys().any(k => k in deixis-note-components)
+
+        // If the new dictionary introduces a conflicting scope level
+        // override the old structure to prevent ambiguous nesting
+        if (old-has-note and new-has-comp) or (old-has-comp and new-has-note) {
+          return new
+        }
+
         let res = old
         for (k, v) in new {
           res.insert(k, _deep-merge(old.at(k, default: auto), v))

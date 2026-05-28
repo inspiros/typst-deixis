@@ -1,6 +1,6 @@
 #set page(width: 300pt, height: 240pt, margin: (x: 1cm, rest: 1cm))
 
-#import "../../src/lib.typ": *
+#import "../src/lib.typ": *
 #show: deixis-setup-notes
 #show raw: set text(size: 0.85em)
 
@@ -11,7 +11,7 @@
     cat-bottom-right: (dx: 62%, dy: 63%),
   )
 )[
-  #image("../loading-cat.jpg", width: 80%)
+  #image("../assets/loading-cat.jpg", width: 80%)
 ])
 
 #deixis-region-mark(
