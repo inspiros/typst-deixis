@@ -102,11 +102,10 @@
   panic("deixis: You must wrap your document with #show: deixis-setup-notes(..) before declaring any notes!")
 }
 
-#let _deixis-validate-target(target) = {
-  assert(
-    type(target) in (str, label, int) and (type(target) != int or target <= 0),
-    message: "deixis: Target must be a string ID, a label, 0, or a negative integer.",
-  )
+#let _deixis-validate-target(target) = if not (
+  type(target) in (str, label, int) and (type(target) != int or target <= 0)
+) {
+  panic("deixis: Target must be a string ID, a label, 0, or a negative integer.")
 }
 
 // Centralized helper to resolve target strings, labels, or integers.

@@ -102,7 +102,7 @@
 
   if l-space-abs > r-space-abs + 1pt { return left }
   if r-space-abs > l-space-abs + 1pt { return right }
-  
+
   return preferred-side
 }
 
@@ -1294,8 +1294,8 @@
           place(dx: dx, dy: dy, content)
         } else {
           place(align-val, dx: dx, dy: dy, content)
-        }
-      )
+        },
+      ),
     )
   })
 }

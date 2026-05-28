@@ -585,7 +585,6 @@
 
     let _deep-merge(old, new) = {
       if type(old) == dictionary and type(new) == dictionary {
-        
         let old-has-note = old.keys().any(k => k in deixis-note-types)
         let old-has-comp = old.keys().any(k => k in deixis-note-components)
         let new-has-note = new.keys().any(k => k in deixis-note-types)

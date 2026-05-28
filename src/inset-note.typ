@@ -143,12 +143,12 @@
   /// -> none | str
   anchor-pin: none,
   /// The rendering layer context. Choices: `"flow"` | `"foreground"` | `"background"`.
-  /// 
+  ///
   /// ```warning
   /// Similar to @deixis-region-mark.layer, the `"flow"` layer will trigger a `#parbreak` and disrupt your paragraph.
   /// However, it is still recommended to use `layer: "flow"` whenever possible for stability.
   /// ```
-  /// 
+  ///
   /// -> auto | str
   layer: "flow",
   /// A custom render function for the inner layout of the body.
@@ -169,7 +169,17 @@
   if placement != none and anchor-pin != none {
     panic("deixis: `placement` cannot be used in combination with `anchor-pin`.")
   }
-  if placement != none and layer != auto and (layer != "flow" or (type(layer) == dictionary and _deixis-resolve-typed-param(sys, layer, "layer", "inset-note", component: "body") != "flow")) {
+  if (
+    placement != none
+      and layer != auto
+      and (
+        layer != "flow"
+          or (
+            type(layer) == dictionary
+              and _deixis-resolve-typed-param(sys, layer, "layer", "inset-note", component: "body") != "flow"
+          )
+      )
+  ) {
     panic("deixis: custom `placement` can only be used with layer: 'flow'.")
   }
 
@@ -249,7 +259,8 @@
         let dy = if dy in (none, auto) { 0pt } else { dy }
         deixis-place-anchored(
           final-rendered,
-          dx: dx, dy: dy,
+          dx: dx,
+          dy: dy,
           anchor: anchor,
           internal-id: none,
           pin: anchor-pin,
@@ -379,7 +390,7 @@
       if link == auto { c-link = "none" }
     }
 
-    let c-layer =  if placement == none {
+    let c-layer = if placement == none {
       _deixis-resolve-typed-param(sys, layer, "layer", "inset-note", component: "body")
     } else {
       "flow"
@@ -460,7 +471,8 @@
         let dy = if dy in (none, auto) { 0pt } else { dy }
         deixis-place-anchored(
           final-rendered,
-          dx: dx, dy: dy,
+          dx: dx,
+          dy: dy,
           anchor: anchor,
           internal-id: internal-id,
           pin: anchor-pin,
@@ -646,7 +658,7 @@
   /// Rendering layer for the region mark and/or the body. Choices: `"flow"` | `"foreground"` | `"background"`.
   ///
   /// See @deixis-region-mark.layer and @deixis-inset-note-body.layer.
-  /// 
+  ///
   /// ```tip
   /// Since both @deixis-region-mark and @deixis-inset-note-body shares this parameter, you can pass `layer: (mark: "flow", body: "foreground")` to assign different layer to each component.
   /// ```
@@ -782,7 +794,6 @@
 
 // Inset note overlay
 #let _deixis-inset-notes-overlay(layer: "foreground") = {
-  
   let draw-bodies = context {
     let notes = query(<deixis-inset-note>).filter(it => (
       type(it.value) == dictionary and it.value.at("mark-lbl", default: none) != none
@@ -807,7 +818,7 @@
         let active-renderer = data.render-single
         let rendered-content = active-renderer(data, inner-width: if data.width == auto { auto } else { 100% })
         let dest-top-lbl = data.at("dest-top-lbl", default: none)
-        
+
         let final-rendered = block(width: data.width, {
           if dest-top-lbl != none {
             place(top + center, [#metadata(none)#dest-top-lbl])
@@ -832,7 +843,8 @@
         } else {
           paths.push(deixis-place-anchored(
             final-rendered,
-            dx: 0pt, dy: 0pt,
+            dx: 0pt,
+            dy: 0pt,
             anchor: data.anchor,
             internal-id: data.internal-id,
             pin: data.anchor-pin,
@@ -845,7 +857,7 @@
 
   let draw-links = context {
     if layer != "foreground" { return none }
-    
+
     let notes = query(<deixis-inset-note>).filter(it => (
       type(it.value) == dictionary and it.value.at("mark-lbl", default: none) != none
     ))
@@ -854,18 +866,29 @@
 
     for n in notes {
       let data = n.value
-      
+
       let c-link = _deixis-resolve-typed-param(sys, data.at("link", default: auto), "link", "inset-note")
       if c-link in (none, "none", false) { continue }
-      
+
       let c-link-stroke = data.at("link-stroke", default: _deixis-resolve-typed-param(
-        sys, auto, "stroke", "inset-note", component: "link",
+        sys,
+        auto,
+        "stroke",
+        "inset-note",
+        component: "link",
       ))
       let c-link-radius = data.at("link-radius", default: _deixis-resolve-typed-param(
-        sys, auto, "radius", "inset-note", component: "link",
+        sys,
+        auto,
+        "radius",
+        "inset-note",
+        component: "link",
       ))
       let c-link-marks = _deixis-resolve-typed-param(
-        sys, data.at("link-marks", default: auto), "link-marks", "inset-note",
+        sys,
+        data.at("link-marks", default: auto),
+        "link-marks",
+        "inset-note",
       )
 
       let start-elems = query(selector(data.mark-lbl))
@@ -911,9 +934,18 @@
         let D_top = d-top-elems.last().location().position()
 
         let link-paths = _deixis-render-inset-link(
-          data, current-page, S_page, E_page, S, D_top,
-          reg: reg, r-pins: r-pins, c-link: c-link, c-link-stroke: c-link-stroke,
-          c-link-radius: c-link-radius, c-link-marks: c-link-marks,
+          data,
+          current-page,
+          S_page,
+          E_page,
+          S,
+          D_top,
+          reg: reg,
+          r-pins: r-pins,
+          c-link: c-link,
+          c-link-stroke: c-link-stroke,
+          c-link-radius: c-link-radius,
+          c-link-marks: c-link-marks,
         )
 
         for el in link-paths { paths.push(el) }

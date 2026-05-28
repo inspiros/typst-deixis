@@ -115,10 +115,10 @@
   if b == "multiple" {
     if data.at("mark-lbl", default: none) == none { return false }
 
-    let label = str(data.at("label", default: none))
+    let label = data.at("label", default: none)
     if label == none { return false }
 
-    return query(<deixis-ref-marker>).filter(m => m.value.target == label).len() > 0
+    return query(<deixis-ref-marker>).filter(m => m.value.target == str(label)).len() > 0
   }
   return true
 }

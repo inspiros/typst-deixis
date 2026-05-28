@@ -65,6 +65,13 @@ No `deixis` functionality can be used before applying this setup show rule:
 #show: deixis-setup-notes
 ```
 
+> [!WARNING]
+>
+> `deixis` uses the page foreground/background for rendering notes.
+> If you have your custom foreground/background, it need to be set before `#show: deixis-setup-notes`.
+
+#### Anatomy of a Note
+
 `deixis` notes are decoupled by nature.
 To create a complete note, you need to put a mark with `-mark` functions, and a note body with `-body` functions. They are linked together via `id`.
 

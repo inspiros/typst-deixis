@@ -748,11 +748,17 @@
   let extract-box(candidates) = {
     let xs = candidates.map(c => c.x)
     let ys = candidates.map(c => c.y)
-    let min-x = calc.min(..xs); let max-x = calc.max(..xs)
-    let min-y = calc.min(..ys); let max-y = calc.max(..ys)
+    let min-x = calc.min(..xs)
+    let max-x = calc.max(..xs)
+    let min-y = calc.min(..ys)
+    let max-y = calc.max(..ys)
     return (
-      left: min-x, right: max-x, top: min-y, bottom: max-y,
-      center-x: (min-x + max-x) / 2.0, center-y: (min-y + max-y) / 2.0
+      left: min-x,
+      right: max-x,
+      top: min-y,
+      bottom: max-y,
+      center-x: (min-x + max-x) / 2.0,
+      center-y: (min-y + max-y) / 2.0,
     )
   }
   let m-box = extract-box(S-candidates)
