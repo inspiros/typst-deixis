@@ -486,6 +486,9 @@ Breakdown of standard #deixis-pin("feline-l")feline#deixis-pin("feline-r") archi
 `#deixis-attach` allows you to attach pins on a wrapped content by:
 - Providing a dictionary of pins and their attributes.
 - If no pins provided, it automatically attaches two pins, one on the top-left corner and one on the bottom-right corner, both with `0pt` padding.
+- Alternatively, pins can be placed with pattern matching `[prefix]pinname[postfix]`.
+  The prefix and postfix patterns can be set using `#deixis-set-pin-pattern`.
+  This is very useful for highlighting code.
 
 <table>
 <tr>
@@ -628,7 +631,7 @@ print(f"Probability:\n{probability}")
 You can use `link-waypoints`, `link-ports`, and `link-marks` to configure the link.
 
 <div align="center">
-<img src="assets/gallery/link-1.svg" width="500px" alt="Update parameters example">
+<img src="assets/gallery/link-1.svg" width="500px" alt="Routing link example">
 </div>
 
 <details>
