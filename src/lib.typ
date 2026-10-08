@@ -6,6 +6,7 @@
 #import "region-note.typ": *
 #import "footnote.typ": *
 #import "endnote.typ": *
+#import "chicago.typ": *
 #import "margin-note.typ": *
 #import "inset-note.typ": *
 
