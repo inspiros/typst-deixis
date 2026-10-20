@@ -119,9 +119,31 @@ See [footnote/rendering limits](rendering.md#footnote-ownership),
 ## Output Formats
 
 Deixis targets paged output: PDF, PNG and SVG. Typst 0.15's HTML export is
-experimental and ignores page layers, so Deixis does not support it yet. Native
-footnotes still reach the HTML footnote section, but margin, inset and comment
-bodies, collected endnotes and connectors are missing, and markers do not link.
+experimental and has no pages or page layers. With `--features html --format
+html`, Deixis keeps every annotation body and its navigation, and drops geometry:
+
+- Page footnotes, including overlay layers, print in Typst's footnote section.
+- Margin, inset and comment bodies follow the document as one list,
+  `<aside class="deixis-notes">`, in declaration order.
+- Endnote printers and block-local footnotes print `<ol class="deixis-notes">`
+  lists where they run, without separators or spacing.
+- Markers link to their bodies, and body markers and backlinks return to the
+  marks through `deixis-mark-*`/`deixis-body-*` ids. References and note
+  outlines link the same way; outlines omit page numbers.
+- Inline decorations keep native underline and highlight. Box and parenthesis
+  edges, region shapes, pins, connectors and other page paint are omitted
+  without diagnostics.
+
+Built-in renderers and containers emit plain inline text. Custom renderers,
+containers and margin layouts, and direct drawing calls such as
+`deixis-render-connector` or `deixis-absolute-place`, run as written; Typst
+warns about layout elements in them that HTML ignores, as it does for the
+document's own `set page` rules. Typst also drops placed content (`place`,
+floating figures) from HTML, including annotations declared inside it. Page
+references (`form: "page"`), page-local numbering and Touying slides have no
+HTML equivalent. HTML footnotes cost Typst another layout pass, so documents near
+the convergence budget (long forward-attachment chains, or notes declared inside
+footnotes) can fail to converge in HTML even when paged output converges.
 
 Tagged PDF output, including `--pdf-standard ua-1`, compiles without
 diagnostics. Native footnotes are tagged as notes beside their marks, and

@@ -256,7 +256,10 @@
           )
       )
 
-      if c-layer == "flow" {
+      // HTML export lists inset bodies after the document instead.
+      if c-layer == "flow" and std.target() == "html" {
+        [#_deixis-metadata(note-data, <deixis-inset-note>)]
+      } else if c-layer == "flow" {
         let meta = [#_deixis-metadata(note-data, <deixis-inset-note>)]
         let c-inner-width = if width == auto { auto } else { 100% }
         let rendered-content = _deixis-render-single(note-data, inner-width: c-inner-width, gap: c-gap)
@@ -465,7 +468,7 @@
       note-data += _deixis-capture-routing(connector-data + (route: c-link))
       let meta = [#_deixis-metadata(note-data, <deixis-inset-note>)]
 
-      if c-layer == "flow" {
+      if c-layer == "flow" and std.target() != "html" {
         let rendered-content = _deixis-render-single(note-data, inner-width: if width == auto { auto } else { 100% })
         let measured-size = measure(block(width: width,
           _deixis-render-single(note-data + (disable-links: true), inner-width: if width == auto { auto } else { 100% })))
@@ -831,7 +834,8 @@
     let emit(owner) = {
       let m = render-mark(owner)
       let b = render-body(owner)
-      if mark-type == "region" and inline == false { [#m#place(b)] } else { [#m#b] }
+      // HTML export has no floating placement; the body lists after the document.
+      if mark-type == "region" and inline == false and std.target() != "html" { [#m#place(b)] } else { [#m#b] }
     }
     if id == none { _deixis-with-auto-id(emit) } else { context emit(id) }
   }

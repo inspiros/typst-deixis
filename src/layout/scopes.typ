@@ -257,7 +257,10 @@
           sync-target: sync-counters-with,
           parents: sys.stack.map(s => s.inst-id),
         ))<deixis-scope>]
-        place(top + right, box(width: 0pt, height: 0pt)[#metadata((id: inst-id))<deixis-block-right>])
+        // HTML export has no block geometry for overlay bodies to follow.
+        if std.target() != "html" {
+          place(top + right, box(width: 0pt, height: 0pt)[#metadata((id: inst-id))<deixis-block-right>])
+        }
       })
 
       body
@@ -268,7 +271,7 @@
             and not _deixis-is-hidden(x.value))
           .map(x => x.value)
         if block-fn-data.len() > 0 {
-          if height != auto {
+          if height != auto and std.target() != "html" {
             colbreak()
             v(1e-10fr)
           }

@@ -2080,6 +2080,8 @@ def main():
                 assert len(result["notes"]) == 8, result
                 assert all(n["type"] is not None for n in result["notes"]), result
                 assert len(result["labels"]) == 5, result
+            elif source.stem == "html-export":
+                check_html_export(base, source, out)
             elif source.stem == "page-notes":
                 assert values(source) == [["endnote", "footnote"]]
             elif source.stem == "overlay-invisibility":
@@ -2451,6 +2453,48 @@ def check_touying_visibility(typst, source, default_pdf, out):
                               for page in shown_pages] if kind in ("margin", "inset") else []
             assert data["edges"] == expected_edges, (name, data)
     check_touying_cover_controls(typst, source, out)
+
+
+def check_html_export(base, source, out):
+    # HTML has no page layers: every body must still print once, in its
+    # section, with mark/body links resolving both ways. Typst's experimental
+    # HTML notice is the only accepted diagnostic.
+    target = out / "html-export.html"
+    result = subprocess.run([base[0], "compile", *base[1:], "--features", "html", "--format", "html",
+                             str(source), str(target)], cwd=ROOT, text=True, capture_output=True, timeout=120)
+    diagnostics = [line for line in result.stderr.splitlines() if line.startswith(("warning", "error"))]
+    assert result.returncode == 0 and diagnostics == [
+        "warning: html export is under active development and incomplete"], result.stderr
+    page = target.read_text()
+    ids = re.findall(r' id="([^"]+)"', page)
+    links = re.findall(r' href="#([^"]+)"', page)
+    assert len(ids) == len(set(ids)), sorted(i for i in set(ids) if ids.count(i) > 1)
+    assert links and not set(links) - set(ids), sorted(set(links) - set(ids))
+    text = lambda html: re.sub(r"<[^>]+>", "", html)
+    body = re.sub(r'<ul class="deixis-outline".*?</ul>', "", page, flags=re.S)
+    aside = "".join(re.findall(r'<aside class="deixis-notes">(.*?)</aside>', body, re.S))
+    flow = re.sub(r'<aside class="deixis-notes">.*?</aside>', "", body, flags=re.S)
+    placements = {
+        "".join(re.findall(r'<section role="doc-endnotes">(.*?)</section>', flow, re.S)): (
+            "Flow footnote body.", "Overlay footnote body."),
+        aside: ("Margin body.", "Sidenote body.", "Immediate margin body.", "Inset body.", "Flow inset body.",
+                "Comment body.", "Region margin body.", "Attached inset body.", "Standalone margin body."),
+        "".join(re.findall(r'<ol class="deixis-notes"[^>]*>(.*?)</ol>', flow, re.S)): (
+            "Local block footnote body.", "Endnote body."),
+    }
+    for container, expected in placements.items():
+        for snippet in expected:
+            assert text(body).count(snippet) == 1 and snippet in text(container), snippet
+    assert text(body).count("Inline note body.") == 1
+    # Visible markers link to their bodies; every body marker links back.
+    marks = {i[len("deixis-mark-"):] for i in ids if i.startswith("deixis-mark-")}
+    bodies = {i[len("deixis-body-"):] for i in ids if i.startswith("deixis-body-")}
+    assert len(marks & bodies) == 13, (marks, bodies)
+    for uid in marks & bodies:
+        assert "deixis-mark-" + uid in links, uid
+        assert uid == "id-phantom" or "deixis-body-" + uid in links, uid
+    outline = "".join(re.findall(r'<ul class="deixis-outline"[^>]*>(.*?)</ul>', page, re.S))
+    assert "Comment body." in text(outline), outline
 
 
 def check_touying_cover_controls(typst, source, out):

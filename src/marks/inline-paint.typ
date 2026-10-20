@@ -1,4 +1,5 @@
 #import "../core/internal.typ": *
+#import "../core/html.typ": _deixis-html-anchor, _deixis-html-link
 
 #let _deixis-render-inline-mark(
   body,
@@ -108,12 +109,24 @@
     return new-body
   }
 
+  // HTML has no boxes with outsets or negative spacing: keep native text
+  // decorations on the passage and attach the marker after/before it.
+  let render-html(content, inline-marker: none, is-left: false) = {
+    let decorated = if content == none { none } else if inline-mode == "text-fill" { render-formatting(content) } else {
+      let it = content
+      if inline-mode in ("box", "underline") and stroke != none { it = std.underline(it) }
+      if fill not in (auto, none) { it = highlight(fill: fill, it) }
+      it
+    }
+    if inline-marker == none { decorated } else if is-left { [#inline-marker#decorated] } else { [#decorated#inline-marker] }
+  }
+
   // Native show-rule scope distinguishes live output from detached sizing.
   // Keep the visible marker/style in measurement without publishing destinations
   // or resolving a link to a body that may not have been laid out yet.
   let emit(detached) = {
     let safe-lbl = if detached { none } else if origin != none { origin }
-      else if mark-lbl != none { [#metadata((internal-id: str(mark-lbl).slice("deixis-mark-".len())))<deixis-mark-destination>#metadata(none)#mark-lbl] } else { none }
+      else if mark-lbl != none { [#metadata((internal-id: str(mark-lbl).slice("deixis-mark-".len())))<deixis-mark-destination>#metadata(none)#mark-lbl#_deixis-html-anchor(mark-lbl)] } else { none }
 
     let inline-marker = if detached and (origin != none or mark-lbl != none) and body-lbl != none {
       if marker-str != none { marker-style(marker-str) }
@@ -124,7 +137,7 @@
         let body-exists = query(selector(body-lbl)).len() > 0
         let raw-m = marker-style(marker-str)
         if body-exists {
-          [#safe-lbl#std.link(body-lbl, raw-m)]
+          [#safe-lbl#_deixis-html-link(body-lbl, raw-m)]
         } else {
           [#safe-lbl#raw-m]
         }
@@ -134,8 +147,11 @@
     }
 
     let is-left = marker-position in ("left", left)
+    let glue = [#h(0pt, weak: true)#sym.wj]
+    if std.target() == "html" {
+      return [#if body == none { glue }#render-html(body, inline-marker: inline-marker, is-left: is-left)]
+    }
     if body == none {
-      let glue = [#h(0pt, weak: true)#sym.wj]
       if inline-marker != none {
         return [#glue#inline-marker]
       } else {

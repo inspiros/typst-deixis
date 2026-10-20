@@ -1,4 +1,5 @@
 #import "../layout/geometry.typ": _deixis-region-bounds
+#import "../core/html.typ": _deixis-html-anchor, _deixis-html-link
 #import "../core/internal.typ": *
 #import "pin.typ": *
 
@@ -8,6 +9,24 @@
 #let _deixis-immediate-region(content, inline) = {
   if inline { [#box(width: 0pt, height: 0pt, content)<deixis-immediate-region>] }
   else { [#place(content)<deixis-immediate-region>] }
+}
+
+// HTML export has no page geometry or layers: keep the passage, followed by
+// its return destinations and a marker linked to the body, like an inline mark.
+#let _deixis-html-region-marker(sys, reg) = {
+  let anchor = if reg.mark-lbl != none {
+    [#metadata((internal-id: reg.internal-id))<deixis-mark-destination>#metadata(none)#reg.mark-lbl#_deixis-html-anchor(reg.mark-lbl)]
+  }
+  let origin = if reg.at("occurrence-owner", default: none) != none {
+    [#metadata((owner: reg.occurrence-owner))<deixis-occurrence-destination>]
+  }
+  let marker = if _deixis-is-hidden(reg) or reg.marker-str == none { none } else {
+    let style = _deixis-resolve-typed-param(sys, reg.at("marker-style", default: auto),
+      "marker-style", "region-mark", component: "mark")
+    let body-exists = reg.body-lbl != none and query(reg.body-lbl).len() > 0
+    if body-exists { _deixis-html-link(reg.body-lbl, style(reg.marker-str)) } else { style(reg.marker-str) }
+  }
+  [#origin#anchor#marker]
 }
 
 // Shared Region Rendering Engine

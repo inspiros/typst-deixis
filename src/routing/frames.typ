@@ -7,6 +7,8 @@
 
 // Probes surround only the real painted body frame, never its measurement.
 #let _deixis-body-corners(identity) = {
+  // HTML export has no geometry for connections to select.
+  if std.target() == "html" { return }
   let probe(corner) = [#metadata((identity: str(identity), corner: corner))<deixis-body-corner>]
   place(top + left, probe("tl"))
   place(top + right, probe("tr"))

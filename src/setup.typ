@@ -5,7 +5,7 @@
 #import "marks/region.typ": *
 #import "reference.typ": *
 #import "routing/overlay.typ": _deixis-validate-note-connection-pins
-#import "render/overlay.typ": _deixis-paint-page-overlay
+#import "render/overlay.typ": _deixis-paint-page-overlay, _deixis-html-overlay-bodies
 #import "core/occurrences.typ": _deixis-validate-occurrences
 #import "routing/explicit.typ": _deixis-validate-connections
 #import "core/references.typ": _deixis-validate-reference-identities
@@ -160,10 +160,20 @@
   }
 
   show: content => {
-    if page-overlays {
+    if not page-overlays { return content }
+    // HTML export has no pages. Typst defines std.html only with the html
+    // feature, so ordinary paged builds keep the undeferred page rule. With
+    // the feature, the target needs context around the setup-owned layers;
+    // host themes (page-overlays: false) still see the undeferred body.
+    if "html" not in dictionary(std) {
       set page(background: deixis-page-overlay(layer: "background"), foreground: deixis-page-overlay())
       content
-    } else { content }
+    } else {
+      context if std.target() == "html" { content } else {
+        set page(background: deixis-page-overlay(layer: "background"), foreground: deixis-page-overlay())
+        content
+      }
+    }
   }
 
   show: deixis-show-refs
@@ -171,9 +181,11 @@
   show metadata.where(label: <deixis-declaration>): _deixis-live-declaration
   show metadata.where(label: <deixis-omission-evidence>): _deixis-live-omission-evidence
   body
+  context if std.target() == "html" { _deixis-html-overlay-bodies() }
   context _deixis-validate-scope-graph()
   context _deixis-validate-occurrences()
-  context _deixis-validate-connections()
+  // HTML export draws no connectors, so endpoints have no painted frames.
+  context if std.target() != "html" { _deixis-validate-connections() }
   context _deixis-validate-attached-nodes()
   context _deixis-validate-note-connection-pins()
   context _deixis-validate-reference-identities()

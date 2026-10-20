@@ -104,12 +104,14 @@
   if key in (mark, body) and key in index.locations {
     dest = index.locations.at(key, default: dest)
   }
-  let resolved = (uid: uid, data: data, dest: dest)
-  if not index.details { return resolved }
   let dest-key = if key in (mark, body) and key in index.locations { key }
     else if body in index.locations { body } else if mark in index.locations { mark } else { none }
+  let dest-label = if dest-key == none { none } else { label(dest-key) }
+  // HTML links use the internal label's explicit id at the same destination.
+  let resolved = (uid: uid, data: data, dest: dest, html-dest: dest-label)
+  if not index.details { return resolved }
   resolved + (
-    dest-label: if dest-key == none { none } else { label(dest-key) },
+    dest-label: dest-label,
     element: if dest-key == none { metadata(data) } else { index.elements.at(dest-key) })
 }
 

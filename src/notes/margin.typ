@@ -5,7 +5,9 @@
 #import "../routing/document-policy.typ": _deixis-capture-routing
 
 // Immediate notes are painted once at their declaration, on that physical page.
+// HTML export lists margin bodies after the document instead.
 #let _deixis-immediate-margin(data) = context {
+  if std.target() == "html" { return }
   let origin = here().position()
   let p = here().page()
   let page-size = deixis-utils.get-page-size(p)
@@ -920,7 +922,8 @@
     let emit(owner) = {
       let m = render-mark(owner)
       let b = render-body(owner)
-      if mark-type == "region" and inline == false { [#m#place(b)] } else { [#m#b] }
+      // HTML export has no floating placement; the body lists after the document.
+      if mark-type == "region" and inline == false and std.target() != "html" { [#m#place(b)] } else { [#m#b] }
     }
     if id == none { _deixis-with-auto-id(emit) } else { context emit(id) }
   }

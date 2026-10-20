@@ -1,4 +1,5 @@
 #import "../core/internal.typ": *
+#import "../core/html.typ": _deixis-html-anchor
 
 #import "inline-paint.typ": *
 #import "repeat.typ": _deixis-repeat-mark
@@ -409,7 +410,7 @@
         styles: (:),
       )
 
-      [#_deixis-metadata(meta-payload, <deixis-phantom-mark>)#metadata((internal-id: internal-id))<deixis-mark-destination>#metadata(none)#mark-lbl]
+      [#_deixis-metadata(meta-payload, <deixis-phantom-mark>)#metadata((internal-id: internal-id))<deixis-mark-destination>#metadata(none)#mark-lbl#_deixis-html-anchor(mark-lbl)]
     }
   }
   _deixis-replayable(none, [#_deixis-order-hints(z-index)#render-with-order-hints()], id: id, of: of, series: series)

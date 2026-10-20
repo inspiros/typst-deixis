@@ -1,4 +1,5 @@
 #import "query.typ": deixis-query-notes
+#import "core/html.typ": _deixis-html-link
 #import "core/declarations.typ": _deixis-replay
 
 /// Shows content again without its annotations.
@@ -188,6 +189,21 @@
   let c-gap = if gap == auto { 0.6em } else { gap }
   for (g-key, g-notes) in grouped {
     if grouped.len() > 1 and group-by != none { heading(level: heading-level + 1, g-key) }
+    // HTML has no pages: list each badge with its linked excerpt. Mark and
+    // body destinations link through their internal labels' explicit ids.
+    if std.target() == "html" {
+      let anchors = query(selector(<deixis-mark-destination>).or(<deixis-body-destination>)).map(elem => (
+        loc: elem.location(),
+        lbl: label((if elem.label == <deixis-body-destination> { "deixis-body-" } else { "deixis-mark-" })
+          + str(elem.value.internal-id)),
+      ))
+      html.elem("ul", attrs: (class: "deixis-outline", style: "list-style-type: none"), for note in g-notes {
+        let anchor = anchors.find(a => a.loc == note.dest)
+        let linked(body) = if anchor == none { link(note.dest, body) } else { _deixis-html-link(anchor.lbl, body) }
+        html.elem("li", [#linked(note.badge) #linked(if summary == auto { note.summary } else { summary(note) })])
+      })
+      continue
+    }
     let items = ()
     for note in g-notes {
       let excerpt = link(note.dest, if summary == auto { note.summary } else { summary(note) })

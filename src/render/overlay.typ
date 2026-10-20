@@ -4,6 +4,8 @@
 #import "../notes/footnote.typ": _deixis-footnote-paint-commands
 #import "../notes/inset.typ": _deixis-inset-paint-commands
 #import "../notes/margin.typ": _deixis-margin-paint-output
+#import "../core/visibility.typ": _deixis-is-hidden
+#import "body.typ": _deixis-html-render-group
 
 // Discover keys from declaration/configuration values only. Pages, endpoint
 // geometry, reservations, and packing are resolved independently inside bands.
@@ -72,3 +74,21 @@
   }
   _deixis-emit-paint-commands(bands)
 }
+
+// HTML export has no page layers. Margin and inset bodies (including comments)
+// follow the document as one list in declaration order, like their reading
+// order in tagged PDF. Markers and backlinks link both ways; connectors and
+// region shapes have no HTML form and are omitted.
+#let _deixis-html-overlay-bodies() = [#metadata(none)<deixis-html-notes>#context {
+  // Setup can be reapplied; only its last application lists the bodies.
+  if query(selector(<deixis-html-notes>).after(here())).len() > 0 { return }
+  let seen = (:)
+  let notes = ()
+  for note in query(selector(<deixis-margin-note>).or(<deixis-inset-note>)) {
+    let uid = str(note.value.internal-id)
+    if _deixis-is-hidden(note.value) or uid in seen { continue }
+    seen.insert(uid, true)
+    notes.push(note.value)
+  }
+  if notes.len() > 0 { html.elem("aside", attrs: (class: "deixis-notes"), _deixis-html-render-group(notes)) }
+}]
