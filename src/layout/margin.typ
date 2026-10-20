@@ -34,13 +34,16 @@
   let c-clearance = if clearance == auto {
     _deixis-note-length(notes-data.first(), notes-data.first().at("clearance", default: 1em))
   } else { clearance }
+  let html = _std-target() == "html"
   let c-separator = if separator == auto { notes-data.first().at("separator", default: none) } else { separator }
   for (i, series-notes) in _deixis-series-groups(notes-data).enumerate() {
     let c-render-group = if render-group == auto {
       series-notes.first().at("render-group", default: deixis-aligned-render-group)
     } else { render-group }
 
-    if i == 0 {
+    // HTML lists carry their own spacing; drawn separators have no HTML form.
+    if html {
+    } else if i == 0 {
       v(c-clearance, weak: true)
       c-separator
     } else {

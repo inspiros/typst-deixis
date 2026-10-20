@@ -1,3 +1,4 @@
+#import "native.typ": _std-target
 #import "visibility.typ": _deixis-metadata
 #import "state.typ": deixis-system, _deixis-registry
 
@@ -69,6 +70,8 @@
 // A named repeat has one native inline frame, including its marker and passage.
 // Four corner probes preserve its page-space envelope under native transforms.
 #let _deixis-occurrence-frame(body, target, name) = {
+  // HTML export has no geometry for connections to select.
+  if _std-target() == "html" { return body }
   let corner(which) = [#_deixis-metadata((target: str(target), name: name, corner: which), <deixis-occurrence-corner>)]
   box({
     place(top + left, corner("tl"))

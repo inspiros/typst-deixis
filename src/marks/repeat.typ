@@ -1,6 +1,6 @@
 #import "../core/internal.typ": *
 #import "inline-paint.typ": _deixis-render-inline-mark
-#import "region-paint.typ": _deixis-region-content, _deixis-render-region-shape, _deixis-immediate-region
+#import "region-paint.typ": _deixis-region-content, _deixis-render-region-shape, _deixis-immediate-region, _deixis-html-region-marker
 #import "../core/occurrences.typ": _deixis-occurrence-name, _deixis-occurrence-frame
 #import "../core/native.typ": *
 
@@ -40,6 +40,9 @@
     styles: styles + (padding: prepared.padding),
     occurrence-target: str(target), occurrence-name: name, occurrence-owner: owner,
   )
+  if _std-target() == "html" {
+    return [#prepared.body#_deixis-html-region-marker(sys, record)#_deixis-metadata(record, <deixis-region-occurrence>)]
+  }
   let drawing = if layer == "flow" {
     let content = context _deixis-render-region-shape(deixis-system.get(), record,
       _deixis-pin-index(), here().page(), base-pos: here().position())

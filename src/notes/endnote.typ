@@ -534,7 +534,8 @@
     let emit(owner) = {
       let m = render-mark(owner)
       let b = render-body(owner)
-      if mark-type == "region" and inline == false { [#m#place(b)] } else { [#m#b] }
+      // HTML export has no floating placement; the body lists after the document.
+      if mark-type == "region" and inline == false and _std-target() != "html" { [#m#place(b)] } else { [#m#b] }
     }
     if id == none { _deixis-with-auto-id(emit) } else { context emit(id) }
   }

@@ -13,11 +13,13 @@
 
   let abs-pad = deixis-utils.resolve-padding(actual-padding)
 
-  box[#_deixis-metadata(extra-data + (
+  let record = _deixis-metadata(extra-data + (
     name: name,
     scope: scope,
     padding: abs-pad,
-  ), <deixis-pin>)]
+  ), <deixis-pin>)
+  // HTML export has no geometry; the record still marks the source position.
+  if _std-target() == "html" { record } else { box[#record] }
 }
 
 /// Manually drops an invisible, named geometric anchor (a `"pin"`) into the document flow.
@@ -153,6 +155,10 @@
         let dy = pin-args.dy
         let padding = pin-args.padding
         let extra-data = pin-args.extra-data
+        if _std-target() == "html" {
+          return _deixis-pin(pin-name, scope: scope, padding: padding,
+            extra-data: (type: "overlay", dx: dx, dy: dy) + extra-data)
+        }
 
         place((if bottom-pin { bottom } else { top }) + left,
           dx: dx, dy: if bottom-pin { bottom-offset(pin-args) } else { dy }, _deixis-pin(

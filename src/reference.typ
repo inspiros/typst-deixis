@@ -1,4 +1,5 @@
 #import "core/internal.typ": *
+#import "core/html.typ": _deixis-html-link
 #import "core/references.typ": *
 #import "core/native.typ": *
 
@@ -137,7 +138,7 @@
           marker-str = str(marker-str)
         }
       }
-      results.push((dest: resolved.dest, marker-str: marker-str, int-val: int-val,
+      results.push((dest: resolved.dest, html-dest: resolved.html-dest, marker-str: marker-str, int-val: int-val,
         m-style: m-style, element: resolved.at("element", default: none), count-id: data.at("count-id", default: none),
         series: data.at("series", default: none), numbering: data.at("numbering", default: none)))
     }
@@ -163,7 +164,9 @@
       }
     }
 
-    let linked(res, body) = if res.dest == none { body } else { _std-link(res.dest, body) }
+    let linked(res, body) = if res.dest == none { body }
+      else if _std-target() == "html" and res.html-dest != none { _deixis-html-link(res.html-dest, body) }
+      else { _std-link(res.dest, body) }
 
     // Sorting/ranges apply only to a single compatible counter and style. Mixed
     // streams retain the caller's order and each note's own marker formatting.

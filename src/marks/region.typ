@@ -274,7 +274,7 @@
         )
 
         let rendered-region = none
-        if c-layer == "flow" {
+        if c-layer == "flow" and _std-target() != "html" {
           let drawing-context = context {
             let pin-index = _deixis-pin-index()
             _deixis-render-region-shape(
@@ -408,6 +408,9 @@
         styles: m-styles + (padding: prepared.padding),
       )
 
+      if _std-target() == "html" {
+        return [#prepared.body#_deixis-html-region-marker(sys, meta-payload)#_deixis-metadata(meta-payload, <deixis-region-mark>)]
+      }
       let rendered-region = none
       if c-layer == "flow" {
         let drawing-context = context {

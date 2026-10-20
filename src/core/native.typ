@@ -11,4 +11,5 @@
 #let _std-link = std.link
 #let _std-numbering = std.numbering
 #let _std-stroke = std.stroke
+#let _std-target = std.target
 #let _std-underline = std.underline

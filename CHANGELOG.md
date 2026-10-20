@@ -87,6 +87,9 @@ from 0.1.1 or an earlier development snapshot.
   critical apparatus, author/status review lists and first-use glossaries.
 - A scripted README hero and focused reading, equation and editorial-review
   showcases replace the legacy gallery.
+- Experimental HTML export keeps every note body with linked markers and
+  backlinks; margin, inset and comment bodies follow the document as one list,
+  while connectors and other page paint are omitted.
 
 ### Changed
 

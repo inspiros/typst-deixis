@@ -27,6 +27,9 @@
   // style would scale it a second time. Custom body styles still apply.
   let footer-style(n) = if n.body-style == _deixis-default-footnote-style { n + (body-style: it => it) } else { n }
   let entry = block(width: 100%, above: 0pt, below: 0pt, spacing: 0pt, _deixis-visible-root(context {
+    // HTML export has no page layers: overlay bodies print like flow bodies
+    // in the native footnote section.
+    let overlay = overlay and _std-target() != "html"
     let data = footer-style(data) + (render-context: _deixis-render-context())
     let rendered = if overlay and data.render-single == deixis-aligned-render-single and data.render-group == deixis-aligned-render-group {
       // Reserve with a shared marker column. Measuring each short marker alone
@@ -77,7 +80,7 @@
   // drop an empty marker at a paragraph boundary; setup diagnoses missing slots
   // rather than silently omitting the body. A zero-size inline box retains flow
   // allocation at trailing boundaries without collapsing neighboring spaces.
-  show _std-footnote: it => if overlay { [] } else { box(width: 0pt, height: 0pt, baseline: 0pt) }
+  show _std-footnote: it => if overlay or _std-target() == "html" { [] } else { box(width: 0pt, height: 0pt, baseline: 0pt) }
   [#_std-footnote(entry, numbering: _ => none)<deixis-native-footnote>]
   restore-counter
 }
@@ -647,7 +650,8 @@
     let emit(owner) = {
       let m = render-mark(owner)
       let b = render-body(owner)
-      if mark-type == "region" and inline == false { [#m#place(b)] } else { [#m#b] }
+      // HTML export has no floating placement; the body lists after the document.
+      if mark-type == "region" and inline == false and _std-target() != "html" { [#m#place(b)] } else { [#m#b] }
     }
     if id == none { _deixis-with-auto-id(emit) } else { context emit(id) }
   }

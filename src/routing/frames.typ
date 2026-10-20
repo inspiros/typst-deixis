@@ -1,3 +1,4 @@
+#import "../core/native.typ": _std-target
 #import "../layout/geometry.typ": _deixis-box-bounds, _deixis-box-port
 #import "connections.typ": _deixis-connection-node
 
@@ -7,6 +8,8 @@
 
 // Probes surround only the real painted body frame, never its measurement.
 #let _deixis-body-corners(identity) = {
+  // HTML export has no geometry for connections to select.
+  if _std-target() == "html" { return }
   let probe(corner) = [#metadata((identity: str(identity), corner: corner))<deixis-body-corner>]
   place(top + left, probe("tl"))
   place(top + right, probe("tr"))

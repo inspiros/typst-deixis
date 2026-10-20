@@ -1,4 +1,5 @@
 #import "../core/palette.typ": _deixis-live-palette-output
+#import "../core/html.typ": _deixis-html-anchor, _deixis-html-link
 #import "../core/references.typ": _deixis-reference-sites
 #import "../core/styles.typ": _deixis-edge-stroke, _deixis-normalize-stroke
 #import "../core/visibility.typ": _deixis-body-visibility
@@ -148,7 +149,7 @@
   let disabled = data.at("disable-links", default: false)
   if disabled and not data.at("measure-backlinks", default: false) { return [] }
   // Measurement needs the hook's dimensions, without active links/identities.
-  let linked(dest, body) = if disabled { body } else { _std-link(dest, body) }
+  let linked(dest, body) = if disabled { body } else if type(dest) == label { _deixis-html-link(dest, body) } else { _std-link(dest, body) }
   let base-lbl = _deixis-backlink-mark(data)
   let backlink-hook = emoji.arrow.l.hook
 
@@ -163,11 +164,13 @@
 
   let links = ()
   let counter = 1
+  // HTML has no horizontal spacing primitive; the hook follows the body text.
+  let lead = if _std-target() == "html" { none } else { h(0.05em) }
 
   // mark link
   if base-lbl != none {
     if extra-refs.len() == 0 {
-      return [#h(0.05em)#linked(base-lbl)[#backlink-hook]]
+      return [#lead#linked(base-lbl)[#backlink-hook]]
     } else {
       links.push(linked(base-lbl)[#backlink-hook#super(str(counter))])
       counter += 1
@@ -184,7 +187,7 @@
     }
   }
 
-  [#h(0.05em)#links.join(" ")]
+  [#lead#links.join(" ")]
 }
 
 /// Publishes the invisible body destination, without a marker or content span.
@@ -213,7 +216,7 @@
 
   let ref-meta = if c-lbl != none { [#metadata(meta.value)#c-lbl] } else { none }
 
-  return [#metadata(data)<deixis-body-destination>#meta#body-lbl#ref-meta]
+  return [#metadata(data)<deixis-body-destination>#meta#body-lbl#ref-meta#_deixis-html-anchor(body-lbl)]
 }
 
 /// Formats the body marker and publishes its destination through
@@ -235,7 +238,7 @@
   } else if data.at("disable-links", default: false) or data.at("mark-lbl", default: none) == none {
     [#meta#body-marker-style(data.marker-str)]
   } else {
-    [#meta#_std-link(data.mark-lbl, body-marker-style(data.marker-str))]
+    [#meta#_deixis-html-link(data.mark-lbl, body-marker-style(data.marker-str))]
   }
   return body-marker
 }
@@ -275,9 +278,29 @@
 /// Render Single
 /// --------------------
 
+// HTML export has no page layers or native layout primitives (box, align, h,
+// grid). Built-in renderers emit the same live marker, span and backlinks as
+// inline text; the body's metadata destinations become HTML anchors.
+#let _deixis-html-body-content(data) = {
+  let backlinks = if _deixis-should-render-backlinks(data) { deixis-generate-backlinks(data) }
+  let backlinks = if backlinks not in (none, []) { super(backlinks) }
+  let space = if data.at("marker-str", default: none) not in (none, "") [ ]
+  [#deixis-generate-body-marker(data)#space#deixis-generate-body-content(data)#backlinks]
+}
+
+#let _deixis-html-render-single(data) = {
+  let body-style = data.at("body-style", default: it => it)
+  let container = data.at("container-func", default: deixis-plain-container)
+  let body = body-style(_deixis-html-body-content(data))
+  // Built-in containers only draw frames. Custom containers own their output.
+  if container in (deixis-plain-container, deixis-rect-container, deixis-alert-container) { body }
+  else { container(body, ..(data.at("styles", default: (:)) + data.at("container-args", default: (:)))) }
+}
+
 // The shared native inline run must remain unboxed: decorated inline bodies
 // need to wrap in their caller's paragraph and across native pages too.
 #let _deixis-native-body-content(data) = {
+  if _std-target() == "html" { return _deixis-html-body-content(data) }
   let body-style = data.at("body-style", default: it => it)
 
   let body-marker = deixis-generate-body-marker(data)
@@ -304,6 +327,7 @@
 ///
 /// -> content
 #let deixis-native-render-single(data, inner-width: auto, ..args) = {
+  if _std-target() == "html" { return _deixis-html-render-single(data) }
   let body-style = data.at("body-style", default: it => it)
   let container = data.at("container-func", default: deixis-plain-container)
   let final-note = body-style(block(width: inner-width, above: 0pt, below: 0pt, {
@@ -324,6 +348,7 @@
   max-marker-gap: auto,
   ..args,
 ) = {
+  if _std-target() == "html" { return _deixis-html-render-single(data) }
   let body-style = data.at("body-style", default: it => it)
 
   let indent = data.at("indent", default: 0pt)
@@ -402,12 +427,23 @@
   groups.values()
 }
 
+// One HTML list per group. Each item keeps its note's renderer unless a
+// group renderer, like the grid, formats bodies itself.
+#let _deixis-html-render-group(notes-data, renderer: auto) = html.elem("ol",
+  attrs: (class: "deixis-notes", style: "list-style-type: none"),
+  for data in notes-data {
+    html.elem("li", _deixis-render-single(data, renderer: if renderer == auto {
+      data.at("render-single", default: deixis-native-render-single)
+    } else { renderer }))
+  })
+
 #let _deixis-note-length(data, value) = measure(_deixis-inherited-content(data, box(width: value))).width
 
 /// Render a group of notes by vertical stacking, similar to Typst's native footnote stacking.
 ///
 /// -> content
 #let deixis-native-render-group(notes-data, gap: auto, ..args) = {
+  if _std-target() == "html" { return _deixis-html-render-group(notes-data) }
   for (i, data) in notes-data.enumerate() {
     let local-gap = data.at("gap", default: 0.5em)
     let active-single = data.at("render-single", default: deixis-native-render-single)
@@ -423,6 +459,7 @@
 ///
 /// -> content
 #let deixis-aligned-render-group(notes-data, gap: auto, ..args) = {
+  if _std-target() == "html" { return _deixis-html-render-group(notes-data) }
   let max-marker-width = 0pt
   let max-marker-gap = 0pt
 
@@ -465,6 +502,7 @@
 /// -> content
 #let deixis-grid-render-group(notes-data, gap: auto, ..args) = {
   if notes-data.len() == 0 { return [] }
+  if _std-target() == "html" { return _deixis-html-render-group(notes-data, renderer: _deixis-html-render-single) }
   let gap = if gap == auto {
     let gaps = notes-data.slice(1).map(data => _deixis-note-length(data, data.at("gap", default: 0.5em)))
     if gaps.len() == 0 { 0pt } else { gaps }
