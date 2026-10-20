@@ -1,5 +1,6 @@
 #import "../core/utils.typ" as utils
 #import "../core/styles.typ": _deixis-edge-stroke
+#import "../core/native.typ": *
 
 /// Defines a reusable connector head. A custom render(request) returns
 /// (body: content, trim: length, bounds: (left:, top:, right:, bottom:)).
@@ -39,8 +40,8 @@
   if value == none { return none }
   assert(not _deixis-edge-stroke(value),
     message: "deixis: A connector or arrowhead needs a single stroke, not rectangular edge strokes.")
-  let s = std.stroke(value)
-  std.stroke(paint: if s.paint == auto { black } else { s.paint },
+  let s = _std-stroke(value)
+  _std-stroke(paint: if s.paint == auto { black } else { s.paint },
     thickness: if s.thickness == auto { 1pt } else { s.thickness },
     cap: s.cap, join: s.join, dash: s.dash, miter-limit: s.miter-limit)
 }

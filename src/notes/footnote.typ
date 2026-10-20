@@ -2,6 +2,7 @@
 #import "../render/commands.typ": _deixis-paint-command
 #import "../marks/inline.typ": *
 #import "../marks/region.typ": *
+#import "../core/native.typ": *
 
 // Native layout owns pagination. Overlays reserve numeric geometry and emit no
 // second live copy of a body, so nested notes/labels are registered only once.
@@ -71,13 +72,13 @@
   // settings; a local set rule here would be ignored. Setup renders labelled
   // entries without the native indent/number prefix, so the entry cannot leave
   // a prefix fragment and separator behind on the marker's page.
-  let restore-counter = counter(std.footnote).update(n => n - 1)
+  let restore-counter = counter(_std-footnote).update(n => n - 1)
   // Overlay declarations must not create an empty paragraph. Native layout can
   // drop an empty marker at a paragraph boundary; setup diagnoses missing slots
   // rather than silently omitting the body. A zero-size inline box retains flow
   // allocation at trailing boundaries without collapsing neighboring spaces.
-  show std.footnote: it => if overlay { [] } else { box(width: 0pt, height: 0pt, baseline: 0pt) }
-  [#std.footnote(entry, numbering: _ => none)<deixis-native-footnote>]
+  show _std-footnote: it => if overlay { [] } else { box(width: 0pt, height: 0pt, baseline: 0pt) }
+  [#_std-footnote(entry, numbering: _ => none)<deixis-native-footnote>]
   restore-counter
 }
 
@@ -281,10 +282,10 @@
       return {
         prepared.declarations
         if id != none { deixis-system.update(sys => _deixis-register-standalone(sys, id, body, "footnote", data: data)) }
-        std.counter("deixis-celibate-note").step()
+        _std-counter("deixis-celibate-note").step()
         context {
           _deixis-check-setup-state()
-          let uid = if id == none { "celibate-" + str(std.counter("deixis-celibate-note").get().first()) } else { "id-" + str(id) }
+          let uid = if id == none { "celibate-" + str(_std-counter("deixis-celibate-note").get().first()) } else { "id-" + str(id) }
           if id == none { _deixis-palette-anonymous(deixis-system.get(), sys => render-celibate(sys, uid)) }
           else { render-celibate(deixis-system.get(), uid) }
         }
@@ -295,7 +296,7 @@
     deixis-system.update(sys => _deixis-register-body(sys, of, body, "footnote"))
     // Step at the declaration, before final mark association is known. A missing
     // mark must not introduce another counter update during a later layout pass.
-    std.counter("deixis-celibate-note").step()
+    _std-counter("deixis-celibate-note").step()
     context {
       _deixis-check-setup-state()
 
@@ -305,7 +306,7 @@
       let reg = _deixis-resolve-note(final-sys, of)
 
       if reg == none {
-        return render-celibate(sys, "celibate-" + str(std.counter("deixis-celibate-note").get().first()))
+        return render-celibate(sys, "celibate-" + str(_std-counter("deixis-celibate-note").get().first()))
       }
 
       sys = _deixis-accent-context(sys, reg.at("accent", default: none))
@@ -316,8 +317,8 @@
       let count = reg.count
       let marker-str = _deixis-evaluate-marker-str(reg)
 
-      let mark-lbl = std.label("deixis-mark-" + str(internal-id))
-      let body-lbl = std.label("deixis-body-" + str(internal-id))
+      let mark-lbl = _std-label("deixis-mark-" + str(internal-id))
+      let body-lbl = _std-label("deixis-body-" + str(internal-id))
 
       let saved-styles = reg.at("styles", default: (:))
       let merged-styles = _deixis-merge-styles(saved-styles, local-styles)

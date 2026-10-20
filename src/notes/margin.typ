@@ -3,6 +3,7 @@
 #import "../marks/region.typ": *
 #import "../layout/geometry.typ": _deixis-block-segments
 #import "../routing/document-policy.typ": _deixis-capture-routing
+#import "../core/native.typ": *
 
 // Immediate notes are painted once at their declaration, on that physical page.
 #let _deixis-immediate-margin(data) = context {
@@ -385,10 +386,10 @@
       return {
         prepared.declarations
         if id != none { deixis-system.update(sys => _deixis-register-standalone(sys, id, body, "margin-note", data: data)) }
-        std.counter("deixis-celibate-note").step()
+        _std-counter("deixis-celibate-note").step()
         context {
           _deixis-check-setup-state()
-          let uid = if id == none { "celibate-" + str(std.counter("deixis-celibate-note").get().first()) } else { "id-" + str(id) }
+          let uid = if id == none { "celibate-" + str(_std-counter("deixis-celibate-note").get().first()) } else { "id-" + str(id) }
           if id == none { _deixis-palette-anonymous(deixis-system.get(), sys => render-celibate(sys, uid)) }
           else { render-celibate(deixis-system.get(), uid) }
         }
@@ -399,7 +400,7 @@
     deixis-system.update(sys => _deixis-register-body(sys, of, body, "margin-note"))
     // Step at the declaration, before final mark association is known. A missing
     // mark must not introduce another counter update during a later layout pass.
-    std.counter("deixis-celibate-note").step()
+    _std-counter("deixis-celibate-note").step()
     context {
       _deixis-check-setup-state()
 
@@ -409,7 +410,7 @@
       let reg = _deixis-resolve-note(final-sys, of)
 
       if reg == none {
-        return render-celibate(sys, "celibate-" + str(std.counter("deixis-celibate-note").get().first()))
+        return render-celibate(sys, "celibate-" + str(_std-counter("deixis-celibate-note").get().first()))
       }
 
       sys = _deixis-accent-context(sys, reg.at("accent", default: none))
@@ -421,8 +422,8 @@
       let count = reg.count
       let marker-str = _deixis-evaluate-marker-str(reg)
 
-      let mark-lbl = std.label("deixis-mark-" + str(internal-id))
-      let body-lbl = std.label("deixis-body-" + str(internal-id))
+      let mark-lbl = _std-label("deixis-mark-" + str(internal-id))
+      let body-lbl = _std-label("deixis-body-" + str(internal-id))
 
       let saved-styles = reg.at("styles", default: (:))
       let merged-styles = _deixis-merge-styles(saved-styles, local-styles)
@@ -942,6 +943,11 @@
 
   let anchors = _deixis-anchor-index()
   let processed-notes = ()
+  let measure-anchors = (:)
+  for n in notes {
+    let uid = n.value.at("internal-id", default: none)
+    if uid != none { measure-anchors.insert(str(uid), n) }
+  }
 
   // pre-processor
   for n in notes {
@@ -1123,6 +1129,7 @@
         c-margin-layout,
         min-margin-width: c-min-margin-width,
         cascade-breaker: true,
+        measure-anchors: measure-anchors,
       )
 
       active-notes = predicted-notes.filter(x => x.block-idx == current-page - 1)
@@ -1209,6 +1216,7 @@
         b-margin-layout,
         min-margin-width: b-min-margin-width,
         cascade-breaker: false,
+        measure-anchors: measure-anchors,
       )
 
       for (i, b-info) in blocks-info.enumerate() {

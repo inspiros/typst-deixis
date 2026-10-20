@@ -1,3 +1,4 @@
+#import "native.typ": *
 // Native rectangular values are distinct from component/type scope maps.
 #let _deixis-edge-stroke(value) = type(value) == dictionary and (
   value.len() == 0 or value.keys().any(k => k in ("top", "right", "bottom", "left", "x", "y", "rest"))
@@ -14,9 +15,9 @@
     for (side, stroke) in edges { normalized.insert(side, _deixis-normalize-stroke(stroke)) }
     return normalized
   }
-  let s = std.stroke(value)
+  let s = _std-stroke(value)
   if s.thickness != auto { return s }
-  std.stroke(cap: s.cap, dash: s.dash, join: s.join, miter-limit: s.miter-limit,
+  _std-stroke(cap: s.cap, dash: s.dash, join: s.join, miter-limit: s.miter-limit,
     paint: s.paint, thickness: 1pt)
 }
 

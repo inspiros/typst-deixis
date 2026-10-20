@@ -2,6 +2,7 @@
 #import "../core/state.typ": *
 #import "../core/query.typ": _deixis-pin-index, _deixis-pins-for
 #import "../core/utils.typ" as deixis-utils
+#import "../core/native.typ": *
 
 // Capture the declaration's stable location, then resolve anchors and the real
 // native place origin together. Capturing provisional numeric coordinates in
@@ -63,7 +64,7 @@
       target-y = max-y
       if in-top { target-y = min-y } else if in-horizon { target-y = (min-y + max-y) / 2.0 }
     } else if internal-id != none {
-      let mark-lbl = std.label("deixis-mark-" + str(internal-id))
+      let mark-lbl = _std-label("deixis-mark-" + str(internal-id))
       let elems = query(selector(mark-lbl))
       if elems.len() > 0 {
         let el = elems.first()

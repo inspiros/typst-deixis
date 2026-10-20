@@ -1,4 +1,5 @@
 #import "../core/internal.typ": *
+#import "../core/native.typ": *
 
 #let _deixis-render-inline-mark(
   body,
@@ -27,7 +28,7 @@
 
     let edges = if type(stroke) == dictionary { deixis-utils.get-stroke(stroke) } else { none }
 
-    let _underline(it, stroke: auto, ..args) = if stroke != none { std.underline(it, stroke: stroke, ..args) } else {
+    let _underline(it, stroke: auto, ..args) = if stroke != none { _std-underline(it, stroke: stroke, ..args) } else {
       it
     }
 
@@ -124,7 +125,7 @@
         let body-exists = query(selector(body-lbl)).len() > 0
         let raw-m = marker-style(marker-str)
         if body-exists {
-          [#safe-lbl#std.link(body-lbl, raw-m)]
+          [#safe-lbl#_std-link(body-lbl, raw-m)]
         } else {
           [#safe-lbl#raw-m]
         }

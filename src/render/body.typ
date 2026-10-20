@@ -2,6 +2,7 @@
 #import "../core/references.typ": _deixis-reference-sites
 #import "../core/styles.typ": _deixis-edge-stroke, _deixis-normalize-stroke
 #import "../core/visibility.typ": _deixis-body-visibility
+#import "../core/native.typ": *
 
 // Overlay bodies are evaluated away from their declaration. Preserve the
 // declaration's font/paragraph context for both custom and built-in renderers.
@@ -58,7 +59,7 @@
   let edges = _deixis-edge-stroke(stroke)
   if not edges and stroke not in (none, auto) {
     let s-obj = _deixis-normalize-stroke(stroke)
-    stroke = std.stroke(
+    stroke = _std-stroke(
       cap: s-obj.cap,
       dash: s-obj.dash,
       join: s-obj.join,
@@ -168,7 +169,7 @@
   let disabled = data.at("disable-links", default: false)
   if disabled and not data.at("measure-backlinks", default: false) { return [] }
   // Measurement needs the hook's dimensions, without active links/identities.
-  let linked(dest, body) = if disabled { body } else { std.link(dest, body) }
+  let linked(dest, body) = if disabled { body } else { _std-link(dest, body) }
   let base-lbl = _deixis-backlink-mark(data)
   let backlink-hook = emoji.arrow.l.hook
 
@@ -222,13 +223,13 @@
   if disable-links { return [] }
   let body-lbl = data.at("body-lbl", default: none)
   if body-lbl == none and data.at("internal-id", default: none) != none {
-    body-lbl = std.label("deixis-body-" + str(data.internal-id))
+    body-lbl = _std-label("deixis-body-" + str(data.internal-id))
   }
 
   let meta = metadata(data)
   let public-id = data.at("id", default: none)
   let c-lbl = if not disable-links and public-id != none {
-    if type(public-id) == str { std.label(public-id) } else { public-id }
+    if type(public-id) == str { _std-label(public-id) } else { public-id }
   } else { none }
 
   let ref-meta = if c-lbl != none { [#metadata(meta.value)#c-lbl] } else { none }
@@ -255,7 +256,7 @@
   } else if data.at("disable-links", default: false) or data.at("mark-lbl", default: none) == none {
     [#meta#body-marker-style(data.marker-str)]
   } else {
-    [#meta#std.link(data.mark-lbl, body-marker-style(data.marker-str))]
+    [#meta#_std-link(data.mark-lbl, body-marker-style(data.marker-str))]
   }
   return body-marker
 }

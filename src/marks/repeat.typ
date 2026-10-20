@@ -2,6 +2,7 @@
 #import "inline-paint.typ": _deixis-render-inline-mark
 #import "region-paint.typ": _deixis-region-content, _deixis-render-region-shape, _deixis-immediate-region
 #import "../core/occurrences.typ": _deixis-occurrence-name, _deixis-occurrence-frame
+#import "../core/native.typ": *
 
 // Reuse the region painter without publishing another primary mark. Its private
 // pins and return destination belong to this occurrence, not to the annotation.
@@ -32,7 +33,7 @@
     internal-id: str(data.internal-id), target-id: data.target-id, inst-id: data.inst-id,
     data: data.at("data", default: (:)), accent: data.at("accent", default: none),
     series: data.series, count: data.count, body: body,
-    mark-lbl: none, body-lbl: std.label("deixis-body-" + str(data.internal-id)),
+    mark-lbl: none, body-lbl: _std-label("deixis-body-" + str(data.internal-id)),
     marker-str: marker-str, marker-style: marker-style,
     pins: prepared.pins, shape-func: shape, layer: layer,
     z-index: _deixis-resolve-z-index(sys, options.z-index, "region-mark", "mark"),
@@ -131,7 +132,7 @@
         marker-position: marker-position, stroke: stroke, fill: fill, radius: radius)
       let marker-style = _deixis-resolve-typed-param(sys, marker-style, "marker-style", "inline-mark", component: "mark")
       let rendered = _deixis-render-inline-mark(body, marker-str: marker-str, marker-style: marker-style,
-        body-lbl: std.label("deixis-body-" + uid), origin: [], ..m-styles)
+        body-lbl: _std-label("deixis-body-" + uid), origin: [], ..m-styles)
       if name == none { rendered } else { _deixis-occurrence-frame(rendered, target, name) }
     }
     // Publish the call's origin before deferred marker/style resolution, just as

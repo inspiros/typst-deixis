@@ -1,6 +1,7 @@
 #import "geometry.typ": _deixis-add, _deixis-scale, _deixis-distance, _deixis-segment-tangent
 #import "heads.typ": _deixis-resolve-stroke
 #import "../core/utils.typ": resolve-signed-len
+#import "../core/native.typ": *
 
 // Gap decoration is independent from endpoint heads and page-continuation dots.
 #let _deixis-gap-mark-spec(value) = {
@@ -26,7 +27,7 @@
   let mark-stroke = if spec.stroke == auto { line-stroke } else { _deixis-resolve-stroke(spec.stroke) }
   if mark-stroke == none { return none }
   // Short continuation ticks stay solid, even on a dashed/dotted shaft.
-  mark-stroke = std.stroke(paint: mark-stroke.paint, thickness: mark-stroke.thickness,
+  mark-stroke = _std-stroke(paint: mark-stroke.paint, thickness: mark-stroke.thickness,
     cap: mark-stroke.cap, join: mark-stroke.join, dash: none, miter-limit: mark-stroke.miter-limit)
   let size = if spec.size == auto { calc.max(5pt, resolve-signed-len(mark-stroke.thickness) * 4) }
     else { resolve-signed-len(spec.size) }

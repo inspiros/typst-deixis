@@ -1,4 +1,4 @@
-#import "state.typ": deixis-system, _deixis-registry, _deixis-with-registry
+#import "state.typ": deixis-system, _deixis-registry
 #import "targets.typ": _deixis-check-setup-state, _deixis-validate-target, _deixis-resolve-target, _deixis-with-target-scopes
 
 #let _deixis-counter-series(series) = {
@@ -23,7 +23,7 @@
   let streams = registry.counters.at(count-id, default: (:))
   streams.insert(series, value)
   registry.counters.insert(count-id, streams)
-  _deixis-with-registry(sys, registry)
+  sys + (registry: metadata(registry))
 }
 
 /// Retrieves the current counter value for a target scope and series.

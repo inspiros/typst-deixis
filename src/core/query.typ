@@ -1,6 +1,7 @@
 #import "numbering.typ": _deixis-check-page-numbering, _deixis-page-ordinal
 #import "state.typ": *
 #import "pins.typ": _deixis-pin-selector
+#import "native.typ": *
 
 #let _deixis-pin-index() = {
   let named = (:)
@@ -147,9 +148,9 @@
     if type(c-numbering) == dictionary {
       _deixis-check-page-numbering(c-numbering)
       let pattern = c-numbering.at("pattern", default: "1")
-      return context std.numbering(pattern, _deixis-page-ordinal(reg))
+      return context _std-numbering(pattern, _deixis-page-ordinal(reg))
     }
-    return std.numbering(c-numbering, count)
+    return _std-numbering(c-numbering, count)
   }
 
   return none
