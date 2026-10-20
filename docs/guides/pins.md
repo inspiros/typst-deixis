@@ -187,7 +187,8 @@ Delimiter strings are now literal, so punctuation is safe:
 
 The default opening delimiter is `deixispin`, with no closing delimiter. Names
 captured by delimiter scanning contain ASCII letters, digits, `_`, and `-`.
-`deixis-set-pin-pattern(prefix: ..., postfix: ...)` changes inherited delimiters.
+Set `prefix:`/`postfix:` per call, or bind a reusable preset with
+`#let attach = deixis-attach.with(prefix: "[", postfix: "]")`.
 `prefix: none`/`""` disables delimiter scanning; coordinate pins still work.
 
 For intentional regex scanning, use `pattern` with exactly one capture for the

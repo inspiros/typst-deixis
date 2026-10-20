@@ -1,7 +1,8 @@
 # Notes in breakable blocks
 
 `deixis-block` gives notes a local rendering scope and, by default, independent
-counters. `deixis-minipage` uses the same engine. A block can span physical pages;
+counters. `deixis-minipage` uses the same engine, mapping `margin:` to internal
+`inset:` padding and fixing `outset: 0pt`, as in 0.1.1. A block can span physical pages;
 its notes do not need to be restricted to one page.
 
 See [scope names and targets](scopes.md) for unique string/label block names,

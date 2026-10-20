@@ -25,10 +25,10 @@
   // that captured context to the painter, so paint matches the reservation.
   // The native footer already sets footnote-size text; the default footnote
   // style would scale it a second time. Custom body styles still apply.
-  let footer-style(n) = if n.body-style == deixis-default-footnote-style { n + (body-style: it => it) } else { n }
+  let footer-style(n) = if n.body-style == _deixis-default-footnote-style { n + (body-style: it => it) } else { n }
   let entry = block(width: 100%, above: 0pt, below: 0pt, spacing: 0pt, _deixis-visible-root(context {
     let data = footer-style(data) + (render-context: _deixis-render-context())
-    let rendered = if overlay and data.render-single == deixis-default-render-single and data.render-group == deixis-default-render-group {
+    let rendered = if overlay and data.render-single == deixis-aligned-render-single and data.render-group == deixis-aligned-render-group {
       // Reserve with a shared marker column. Measuring each short marker alone
       // underestimates wrapping when the overlay later aligns it with a long one.
       // A document-wide maximum is conservative and independent of pagination.

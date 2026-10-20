@@ -20,7 +20,7 @@ captured.
 | Renderer | Behavior |
 | --- | --- |
 | `deixis-grid-render-group` | One marker/body grid; default endnote layout |
-| `deixis-default-render-group` | Stacked single renderers with a shared marker width |
+| `deixis-aligned-render-group` | Stacked single renderers with a shared marker width |
 | `deixis-native-render-group` | Stacked single renderers with independent marker widths |
 | Custom function | Receives the selected note records and the `gap` argument |
 

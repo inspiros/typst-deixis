@@ -227,14 +227,12 @@
 
 /// A show rule to automatically convert `@note-label` to `#deixis-ref(<note-label>)`.
 ///
-/// ```example
-/// #show: deixis-show-refs
-/// ```
+/// Installed by `deixis-setup-notes`.
 ///
 /// - body (content): The content of the document.
 ///
 /// -> content
-#let deixis-show-refs(body) = {
+#let _deixis-show-refs(body) = {
   show ref: it => if it.has("label") and it.label == <deixis-native-page-ref> { it } else {
     deixis-ref(it.target, supplement: it.supplement, form: it.form, _fallback: it)
   }

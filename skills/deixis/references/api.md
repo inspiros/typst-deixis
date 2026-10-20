@@ -298,16 +298,6 @@ Selected parameters: `id = none`; `behavior = auto`; `pins = (:)`; `scope = none
 
 id registers a routing frame with avoid behavior by default. Generated node ports are the four side midpoints. pins can define custom outlets. Explicit avoid/ignore/cut/cross also registers anonymous nodes. Pin-only attachments keep their native breakability.
 
-### `deixis-set-pin-pattern`
-
-Sets inherited literal delimiters for attachment scanning; can precede setup.
-
-Setup: **free**.
-
-Selected parameters: `prefix = auto`; `postfix = auto`.
-
-none/empty prefix disables delimiter scanning. Explicit attachment patterns use one capture. Configuration does not initialize pins or annotations.
-
 ## Scopes And Counters
 
 Scope names and note IDs are independent. Blocks own rendering instances and counter streams; thread shares a rendering domain, while counter synchronization only shares numbering.
@@ -320,7 +310,7 @@ Setup: **setup**.
 
 Selected parameters: `id = auto`; `thread = none`; `sync-counters-with = auto`; `breakable = auto`; `width = auto`; `height = auto`; `inset = auto`.
 
-Minipage uses margin instead of inset. Named IDs are unique; automatic scopes stay private. Breakable blocks use per-page margin frames and collect local footnotes at the block end.
+Minipage maps margin to internal inset and fixes outset at 0pt. Named IDs are unique; automatic scopes stay private. Breakable blocks use per-page margin frames and collect local footnotes at the block end.
 
 ### `deixis-note-counter`
 
@@ -356,16 +346,6 @@ Selected parameters: `..targets (required)`; `supplement = auto`; `form = "norma
 
 @detail uses the native bridge installed by setup. Repeated reference targets deduplicate; compatible numeric ranges can collapse. Explicit marker-style overrides formatting.
 
-### `deixis-show-refs`
-
-The native reference-conversion show wrapper installed by setup.
-
-Setup: **setup**.
-
-Selected parameters: `body (required)`.
-
-Normal documents only need deixis-setup-notes. This hook does not initialize the annotation registry.
-
 ### `deixis-query-notes`
 
 One safe structured record per selected annotation. Page queries follow native body order; the unfiltered catalogue follows source order. Call inside context.
@@ -400,17 +380,17 @@ Native outlines apply it to heading and caption entries automatically. Use it fo
 
 These hooks consume supplied records or content; they do not create a registered annotation. When used in live document annotations, keep setup active and preserve destination/content helpers. Relative typography and backlinks may require context.
 
-### `deixis-native-render-single` / `deixis-default-render-single`
+### `deixis-native-render-single` / `deixis-aligned-render-single`
 
-Built-in single-body layouts. Native keeps a natural text flow; default accepts a shared marker column.
+Built-in single-body layouts. Native keeps a natural text flow; aligned accepts a shared marker column.
 
 Setup: **conditional**.
 
 Selected parameters: `data (required)`; `inner-width = auto`.
 
-Use supplied data unchanged when delegating. Default additionally accepts max-marker-width/max-marker-gap. The container and body-style come from the body record.
+Use supplied data unchanged when delegating. Aligned additionally accepts max-marker-width/max-marker-gap. The container and body-style come from the body record.
 
-### `deixis-native-render-group` / `deixis-default-render-group` / `deixis-grid-render-group`
+### `deixis-native-render-group` / `deixis-aligned-render-group` / `deixis-grid-render-group`
 
 Stack bodies, align stacked markers, or lay markers/content directly in two grid columns.
 
@@ -440,39 +420,19 @@ Selected parameters: `body (required)`; `..args (required)`.
 
 rect-container has native rect parameters. Alert doubles scalar border thickness on the left; native edge maps remain literal. Configure via container-func and container-args.
 
-### `deixis-default-footnote-style`
+### `deixis-rect-region` / `deixis-ellipse-region`
 
-Body-style callback that scales inherited text to 0.85em.
-
-Setup: **free**.
-
-Selected parameters: `it (required)`.
-
-This is ordinary content styling; it creates no footnote or annotation.
-
-### `deixis-rect-region` / `deixis-highlight-rect-region` / `deixis-ellipse-region` / `deixis-highlight-ellipse-region`
-
-Region-shape callbacks for rectangular or elliptical bounds; highlight variants omit the outline.
+Region-shape callbacks for rectangular or elliptical bounds.
 
 Setup: **free**.
 
 Selected parameters: `..args (required)`.
 
-Shape records provide width, height, fill/stroke and rectangle radius. Region registration/fragment selection belongs to the calling mark, not these painters.
+Shape records provide width, height, fill/stroke and rectangle radius. Region registration/fragment selection belongs to the calling mark, not these painters. Use region marks with stroke: none for a highlight; add region-shape: deixis-ellipse-region for an ellipse.
 
 ## Low-Level Layout Hooks
 
 Advanced hooks use supplied measured records and geometry. Most documents should choose note adapters, container/render callbacks, or routing APIs instead. Native layout and document lookup are separate responsibilities.
-
-### `deixis-group-layout`
-
-Groups supplied note records by series, then delegates to their group renderer with separator/clearance policy.
-
-Setup: **conditional**.
-
-Selected parameters: `notes-data (required)`; `separator = auto`; `clearance = auto`; `gap = auto`; `render-group = auto`.
-
-Pure supplied content needs no initialization; registered live notes/visibility need setup. This helper does not collect notes or initialize identities.
 
 ### `deixis-margin-note-exact-layout` / `deixis-margin-note-adaptive-layout` / `deixis-margin-note-flow-layout`
 
@@ -486,13 +446,13 @@ All share min-margin-width, pushed-notes and extra arguments. Supply accepted pa
 
 ### `deixis-place-anchored`
 
-Immediate placement relative to selected pin bounds or a supplied private original ID.
+Immediate placement relative to selected pin bounds on the call's page.
 
 Setup: **setup**.
 
 Selected parameters: `body (required)`; `dx = 0pt`; `dy = 0pt`; `anchor = bottom + right`; `pin = none`; `body-size = auto`.
 
-Prefers a pin name/target for authored code; internal-id is an extension hook, not a public note ID. Pin lookup reads document geometry. Native placement can disturb flow.
+Pin lookup reads document geometry. Native placement can disturb flow.
 
 ### `deixis-absolute-place`
 

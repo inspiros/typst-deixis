@@ -17,6 +17,16 @@ The shape and marker preserve common declaration font/paragraph settings,
 including custom shape and marker callbacks. Arbitrary surrounding show rules
 are not captured.
 
+For a highlight without an outline, use `stroke: none`. Add
+`region-shape: deixis-ellipse-region` for an ellipse; `deixis-rect-region` is
+the default shape. Both presets use the mark's fill and stroke.
+
+```typst
+#deixis-region-mark(inline: true, stroke: none)[Rectangular highlight]
+#deixis-region-mark(inline: true, stroke: none,
+  region-shape: deixis-ellipse-region)[Elliptical highlight]
+```
+
 ## Choosing a layer
 
 - `"foreground"` paints over the page content, including opaque containers.

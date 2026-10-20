@@ -154,6 +154,14 @@ installer keeps the old `0.1.1` cache separate. See
 | Flat arbitrary container arguments on note calls | Put them in `container-args: (...)`; unknown note keywords are diagnosed. Keep style options on the note. |
 | Per-name scanned `padding` map | Use `pin-padding: (...)`, with `padding:` as the uniform fallback. Geometric pin padding remains separate from endpoint gaps. |
 | Outline `include-celibates` and old callback records | Use `include-unpaired`; callbacks receive semantic query records and structured body descriptions. Runtime identity is `note.id`; custom fields live in `note.data`. |
+| `deixis-default-render-single` / `deixis-default-render-group` | Use `deixis-aligned-render-single` / `deixis-aligned-render-group`; short aliases are `aligned-render-single` / `aligned-render-group`. No compatibility aliases. |
+| `deixis-set-pin-pattern(prefix:, postfix:)` | Set delimiters on `deixis-attach`, or bind `deixis-attach.with(prefix: "[", postfix: "]")`. Default scanning still uses `deixispin` and an empty postfix. |
+| `deixis-highlight-rect-region` / `deixis-highlight-ellipse-region` | Use `deixis-region-mark(stroke: none)`; add `region-shape: deixis-ellipse-region` for an ellipse. |
+| `deixis-group-layout` | Choose a public group renderer through `render-group:` on settings or a collection printer. |
+| `deixis-default-footnote-style` | Supply a `body-style` callback, such as `it => text(size: 0.85em, it)`. Page footnotes use native footer typography. |
+| `deixis-show-refs` | Use `#show: deixis-setup-notes`, which installs the reference bridge automatically. |
+| `deixis-place-anchored(internal-id: ...)` | Use public pin targets via `pin:`. Inset note adapters resolve original marks internally. |
+| `deixis-minipage(margin: ...)` | Preserved: `margin` supplies internal padding (`inset: margin`, `outset: 0pt`), as in 0.1.1. Earlier external-margin wording was incorrect. |
 | Internal module paths or underscore helpers | Import the public facade `src/lib.typ` (or the package). Internal source paths, mutable state and private record shapes may change. |
 
 There are no compatibility aliases for removed `label:` or repeat-only calls.

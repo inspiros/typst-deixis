@@ -25,7 +25,7 @@
         if cases.len() > 0 { pagebreak() }
         let name = kind + "-" + layer + "-" + form + "-" + repr(inline)
         cases.push(name)
-        let renderer = (deixis-native-render-single, deixis-default-render-single, custom).at(calc.rem(cases.len(), 3))
+        let renderer = (deixis-native-render-single, deixis-aligned-render-single, custom).at(calc.rem(cases.len(), 3))
         let region = deixis-region-mark.with(layer: "flow", inline: inline, padding: 2pt,
           region-shape: shape.with(name), marker: none)
         let atom = [#ticks.update(n => n + 1)#box(width: 28pt, height: 14pt)]

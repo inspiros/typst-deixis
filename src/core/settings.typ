@@ -338,8 +338,8 @@
   /// - `default`: Body markers are aligned, but the notes are still prose-printed.
   /// ```example
   /// #deixis-set(
-  ///   render-single: deixis-default-render-single,
-  ///   render-group: deixis-default-render-group,
+  ///   render-single: deixis-aligned-render-single,
+  ///   render-group: deixis-aligned-render-group,
   /// )
   /// #deixis-footnote[A normal note.]
   /// #deixis-footnote(marker: [long marker])[A note with very long marker, and also a long body.]

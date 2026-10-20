@@ -31,7 +31,7 @@
 #let column-group(notes, ..args) = columns(2, gutter: 16pt,
   deixis-native-render-group(notes, ..args.named()))
 #for (name, renderer) in (("native", deixis-native-render-group),
-  ("aligned", deixis-default-render-group), ("grid", deixis-grid-render-group),
+  ("aligned", deixis-aligned-render-group), ("grid", deixis-grid-render-group),
   ("columns", column-group)) {
   if cases.len() > 0 { pagebreak() }
   let long-id = name + "-long"

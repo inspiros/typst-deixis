@@ -30,7 +30,7 @@ Decoupled#deixis-inline-mark(id: <decoupled>).
 Collected#deixis-endnote(series: "kept", container-func: container, container-args: options("end-kept"), body("end-kept"))
 Override#deixis-endnote(series: "override", container-func: container, container-args: options("discarded"), body("end-override"))
 #deixis-print-endnotes(series: "kept", render-group: deixis-native-render-group)
-#deixis-print-endnotes(series: "override", render-group: deixis-default-render-group, container-args: options("printer"))
+#deixis-print-endnotes(series: "override", render-group: deixis-aligned-render-group, container-args: options("printer"))
 #deixis-print-endnotes()
 #context {
   assert.eq(ticks.final(), 13)

@@ -32,7 +32,7 @@
   ))<grid-record>]
 }
 #for (i, (name, renderer)) in (("grid", deixis-grid-render-group),
-  ("aligned", deixis-default-render-group), ("native", deixis-native-render-group)).enumerate() {
+  ("aligned", deixis-aligned-render-group), ("native", deixis-native-render-group)).enumerate() {
   if i > 0 { pagebreak() }
   context {
     assert.eq(deixis-grid-render-group(()), [])

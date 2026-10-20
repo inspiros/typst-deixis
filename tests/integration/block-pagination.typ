@@ -14,7 +14,7 @@
   }
   deixis-native-render-single(data, ..args.named())
 }
-#let renderer = (native: deixis-native-render-group, aligned: deixis-default-render-group,
+#let renderer = (native: deixis-native-render-group, aligned: deixis-aligned-render-group,
   grid: deixis-grid-render-group).at(group)
 #deixis-set(margin-layout: mode, min-margin-width: 30pt,
   render-single: (margin-note: tracked), render-group: (footnote: renderer))

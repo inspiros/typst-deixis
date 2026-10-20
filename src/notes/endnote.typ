@@ -715,7 +715,7 @@
 
       let final-separator = if separator != auto { separator } else { first-note.at("separator", default: none) }
 
-      deixis-group-layout(
+      _deixis-group-layout(
         final-notes,
         separator: final-separator,
         clearance: clearance,

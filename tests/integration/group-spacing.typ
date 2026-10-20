@@ -12,7 +12,7 @@
   context [#metadata(_deixis-render-context())<spacing-style>]
 }
 #for (i, (name, renderer)) in (("native", deixis-native-render-group),
-  ("aligned", deixis-default-render-group), ("grid", deixis-grid-render-group)).enumerate() {
+  ("aligned", deixis-aligned-render-group), ("grid", deixis-grid-render-group)).enumerate() {
   if i > 0 { pagebreak() }
   context {
     let contexts = query(<spacing-style>).map(m=>m.value)

@@ -21,7 +21,7 @@
   pagebreak(weak: true)
   let renderer(data, ..args) = {
     assert.eq(data.body, sample)
-    deixis-default-render-single(data, ..args)
+    deixis-aligned-render-single(data, ..args)
   }
   let options = (render-single: renderer, backlink: false)
   if kind == "margin" { [Passage#deixis-margin-note(..options, sample).] }

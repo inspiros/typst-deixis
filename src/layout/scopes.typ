@@ -274,7 +274,7 @@
             v(1e-10fr)
           }
 
-          deixis-group-layout(block-fn-data)
+          _deixis-group-layout(block-fn-data)
         }
       }
 
@@ -306,7 +306,7 @@
 /// - fill (auto, color, none): See #link("https://typst.app/docs/reference/layout/block/#parameters-fill")[`std.block.fill`].
 /// - stroke (auto, stroke, none): See #link("https://typst.app/docs/reference/layout/block/#parameters-stroke")[`std.block.stroke`].
 /// - radius (auto, length, dictionary): See #link("https://typst.app/docs/reference/layout/block/#parameters-radius")[`std.block.radius`].
-/// - margin (auto, length, dictionary): See ```ref #deixis-block.inset```.
+/// - margin (auto, length, dictionary): Internal padding, forwarded to ```ref #deixis-block.inset```; reserves space for local margin notes.
 /// - spacing (auto, length): See #link("https://typst.app/docs/reference/layout/block/#parameters-spacing")[`std.block.spacing`].
 /// - above (auto, length): See #link("https://typst.app/docs/reference/layout/block/#parameters-above")[`std.block.above`].
 /// - below (auto, length): See #link("https://typst.app/docs/reference/layout/block/#parameters-below")[`std.block.below`].
@@ -325,7 +325,9 @@
   fill: auto,
   stroke: auto,
   radius: auto,
-  /// External margin pushing the block outward from surrounding content.
+  /// Internal padding between the block boundary and its content.
+  /// Forwarded to `deixis-block(inset: margin, outset: 0pt)`; its left and right
+  /// padding also provide space for local margin notes.
   /// -> auto | length | dictionary
   margin: auto,
   spacing: auto,

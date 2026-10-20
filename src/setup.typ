@@ -166,7 +166,7 @@
     } else { content }
   }
 
-  show: deixis-show-refs
+  show: _deixis-show-refs
   show metadata.where(label: <deixis-palette-output>): _deixis-live-palette-output
   show metadata.where(label: <deixis-declaration>): _deixis-live-declaration
   show metadata.where(label: <deixis-omission-evidence>): _deixis-live-omission-evidence

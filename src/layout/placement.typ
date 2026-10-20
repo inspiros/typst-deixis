@@ -118,13 +118,15 @@
   })
 }
 
-/// Places content relative to an original mark's internal ID or selected pin
-/// bounds. Pin accepts a name, a `(name:, scope:, select:, page:)` target, or an
+/// Places content relative to selected pin bounds, or the call site when no pin
+/// matches. Pin accepts a name, a `(name:, scope:, select:, page:)` target, or an
 /// array of either. Names combine all matches; records default to unique.
+/// `anchor` selects the same point on the bounds and body, or accepts separate
+/// `(target:, body:)` alignments. Offsets apply after alignment, on the call's page.
 #let deixis-place-anchored(
-  body, dx: 0pt, dy: 0pt, anchor: bottom + right, internal-id: none, pin: none, body-size: auto,
+  body, dx: 0pt, dy: 0pt, anchor: bottom + right, pin: none, body-size: auto,
 ) = context _deixis-place-anchored(body, dx: dx, dy: dy, anchor: anchor,
-  internal-id: internal-id, pin: pin, body-size: body-size)
+  pin: pin, body-size: body-size)
 
 /// Places content at a specific exact absolute coordinate on the page ignoring page margins.
 #let deixis-absolute-place(..args) = {

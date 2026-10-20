@@ -5,17 +5,17 @@
     "paper=a4",
     "monochrome=false"
   ],
-  "source_sha256": "3a09151f3d628bfd10b3c20812d62b7ba2034937743ed5a6ee1cd1f56f887937",
+  "source_sha256": "d94b6627ec5323823e0116463e458f55d9c8814d1725812042086e3acd27f4cd",
   "source_files": 162,
-  "pdf_sha256": "34a8ccd9c5ae10772d6c79e75bfe33d7729be9a109cb67dfc459e5efcfa12653",
+  "pdf_sha256": "870078123bcc2ece0213d7ab3aefb476bf40c41a08152d5d27bea4e553ae09b2",
   "checks": {
-    "exports": 67,
-    "entries": 46,
+    "exports": 61,
+    "entries": 42,
     "pages": 40,
     "worked_examples": 23,
     "preview_pages": 26,
     "headings": 20,
-    "internal_links": 86,
+    "internal_links": 80,
     "inputs": [
       "paper=a4",
       "monochrome=false"

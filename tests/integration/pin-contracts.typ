@@ -18,15 +18,16 @@
 ))[
   #block(width: 100pt, height: 40pt)[Box.]
 ]
-#deixis-set-pin-pattern(prefix: "[", postfix: "]")
-#deixis-attach(padding: 0pt)[#text("[Inherited]")]
-#deixis-set-pin-pattern(prefix: none)
-#deixis-attach[deixispinDisabled]
+#let attach = deixis-attach.with(prefix: "[", postfix: "]")
+#attach(padding: 0pt)[#text("[Preset]")]
+#deixis-attach(prefix: none)[deixispinDisabled]
+#deixis-attach(padding: 0pt)[deixispinDefault]
 #context {
   let pins = query(<deixis-pin>)
   let pin(name) = pins.find(p => p.value.name == name)
   let pos(name) = pin(name).location().position()
-  assert.eq(pins.len(), 13)
+  assert(pin("Preset") != none and pin("Default") != none)
+  assert.eq(pins.len(), 14)
   assert.eq(pin("text").value.padding, (left: 2pt, right: 2pt, top: 18pt, bottom: 4pt))
   assert.eq(pin("zero").value.padding, (left: 0pt, right: 0pt, top: 0pt, bottom: 0pt))
   assert.eq(pin("zero").value.tag, "kept")

@@ -20,7 +20,7 @@
   numbering: "1",
   // 1. Note Content Styling
   marker-style: (endnote: (mark: it => super(it), body: it => it), rest: it => super(it)),
-  body-style: (inline-note: it => it, endnote: it => it, rest: deixis-default-footnote-style),
+  body-style: (inline-note: it => it, endnote: it => it, rest: _deixis-default-footnote-style),
   backlink: false,
   // 2. Spacing
   separator: (footnote: line(length: 30%, stroke: 0.5pt), rest: none),
@@ -47,12 +47,12 @@
   z-index: 0,
   // 5. Engines
   render-single: (
-    footnote: deixis-default-render-single,
-    endnote: deixis-default-render-single,
+    footnote: deixis-aligned-render-single,
+    endnote: deixis-aligned-render-single,
     rest: deixis-native-render-single,
   ),
   render-group: (
-    footnote: deixis-default-render-group,
+    footnote: deixis-aligned-render-group,
     endnote: deixis-grid-render-group,
     rest: deixis-native-render-group,
   ),

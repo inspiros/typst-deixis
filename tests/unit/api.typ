@@ -1,5 +1,6 @@
 #import "../../src/lib.typ" as deixis
 #let names = dictionary(deixis).keys()
+#assert.eq(names.len(), 61)
 #assert(names.all(name => (name.starts-with("deixis-") or name == "short") and not name.starts-with("_")))
 #assert("deixis-page-notes" not in names)
 #assert("deixis-query-notes" in names)
@@ -8,13 +9,15 @@
 #for name in ("deixis-inline-mark", "deixis-footnote", "deixis-endnote",
   "deixis-margin-note", "deixis-inset-note", "deixis-native-render-single",
   "deixis-margin-note-exact-layout", "deixis-generate-body-meta", "deixis-generate-body-content",
-  "deixis-arrowhead", "deixis-render-head", "deixis-mark", "deixis-route", "deixis-prepare-connector") {
+  "deixis-arrowhead", "deixis-render-head", "deixis-mark", "deixis-route", "deixis-prepare-connector",
+  "deixis-aligned-render-single", "deixis-aligned-render-group", "deixis-minipage", "deixis-place-anchored") {
   assert(name in names)
 }
 
 #assert.eq(type(deixis.short), module)
 #assert.eq(deixis.deixis-configure, deixis.deixis-set)
 #let aliases = dictionary(deixis.short)
+#assert.eq(aliases.len(), 59)
 #let expected = (:)
 #for (name, value) in dictionary(deixis) {
   if name in ("short", "deixis-configure") { continue }

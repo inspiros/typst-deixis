@@ -18,7 +18,7 @@
         ],
         "call": "#show: deixis-setup-notes",
         "note": "Set page geometry/layers first. Page footnotes default to native flow; override-page-footnotes: true makes the foreground overlay their default. Host themes may install both overlay hooks with page-overlays: false.",
-        "returns": "content → content"
+        "returns": "content \u2192 content"
       },
       {
         "names": [
@@ -334,7 +334,7 @@
         ],
         "call": "#show: deixis-routing.with(policy: \"avoid\")",
         "note": "manual keeps native routes; avoid searches independently; separate adds bounded group repair. Search needs sharp orthogonal geometry. Registered objects stay fixed. Nested wrappers form separate groups.",
-        "returns": "content → content",
+        "returns": "content \u2192 content",
         "guide": "document-routing.md"
       },
       {
@@ -507,20 +507,6 @@
         "note": "id registers a routing frame with avoid behavior by default. Generated node ports are the four side midpoints. pins can define custom outlets. Explicit avoid/ignore/cut/cross also registers anonymous nodes. Pin-only attachments keep their native breakability.",
         "returns": "content",
         "guide": "document-routing.md"
-      },
-      {
-        "names": [
-          "deixis-set-pin-pattern"
-        ],
-        "setup": "free",
-        "summary": "Sets inherited literal delimiters for attachment scanning; can precede setup.",
-        "args": [
-          "prefix",
-          "postfix"
-        ],
-        "call": "deixis-set-pin-pattern(prefix: \"[[\", postfix: \"]]\")",
-        "note": "none/empty prefix disables delimiter scanning. Explicit attachment patterns use one capture. Configuration does not initialize pins or annotations.",
-        "returns": "content"
       }
     ]
   },
@@ -546,7 +532,7 @@
           "inset"
         ],
         "call": "deixis-block(id: <section>)[Local content.]",
-        "note": "Minipage uses margin instead of inset. Named IDs are unique; automatic scopes stay private. Breakable blocks use per-page margin frames and collect local footnotes at the block end.",
+        "note": "Minipage maps margin to internal inset and fixes outset at 0pt. Named IDs are unique; automatic scopes stay private. Breakable blocks use per-page margin frames and collect local footnotes at the block end.",
         "returns": "content",
         "guide": "blocks.md"
       },
@@ -570,7 +556,7 @@
           "deixis-update-note-counter"
         ],
         "setup": "setup",
-        "summary": "Sets a stream to an integer or applies current → integer. The next original increments that value.",
+        "summary": "Sets a stream to an integer or applies current \u2192 integer. The next original increments that value.",
         "args": [
           "value",
           "target",
@@ -603,21 +589,6 @@
         "call": "deixis-ref(<detail>)",
         "note": "@detail uses the native bridge installed by setup. Repeated reference targets deduplicate; compatible numeric ranges can collapse. Explicit marker-style overrides formatting.",
         "returns": "content",
-        "guide": "references.md"
-      },
-      {
-        "names": [
-          "deixis-show-refs"
-        ],
-        "setup": "setup",
-        "summary": "The native reference-conversion show wrapper installed by setup.",
-        "args": [
-          "body"
-        ],
-        "call": "#show: deixis-show-refs",
-        "note": "Normal documents only need deixis-setup-notes. This hook does not initialize the annotation registry.",
-        "returns": "content → content",
-        "extension": true,
         "guide": "references.md"
       },
       {
@@ -683,23 +654,23 @@
       {
         "names": [
           "deixis-native-render-single",
-          "deixis-default-render-single"
+          "deixis-aligned-render-single"
         ],
         "setup": "conditional",
-        "summary": "Built-in single-body layouts. Native keeps a natural text flow; default accepts a shared marker column.",
+        "summary": "Built-in single-body layouts. Native keeps a natural text flow; aligned accepts a shared marker column.",
         "args": [
           "data",
           "inner-width"
         ],
         "call": "deixis-native-render-single(note, ..args.named())",
-        "note": "Use supplied data unchanged when delegating. Default additionally accepts max-marker-width/max-marker-gap. The container and body-style come from the body record.",
+        "note": "Use supplied data unchanged when delegating. Aligned additionally accepts max-marker-width/max-marker-gap. The container and body-style come from the body record.",
         "returns": "content",
         "extension": true
       },
       {
         "names": [
           "deixis-native-render-group",
-          "deixis-default-render-group",
+          "deixis-aligned-render-group",
           "deixis-grid-render-group"
         ],
         "setup": "conditional",
@@ -751,33 +722,16 @@
       },
       {
         "names": [
-          "deixis-default-footnote-style"
-        ],
-        "setup": "free",
-        "summary": "Body-style callback that scales inherited text to 0.85em.",
-        "args": [
-          "it"
-        ],
-        "call": "deixis-default-footnote-style(body)",
-        "note": "This is ordinary content styling; it creates no footnote or annotation.",
-        "returns": "content",
-        "extension": true,
-        "guide": "appearance.md"
-      },
-      {
-        "names": [
           "deixis-rect-region",
-          "deixis-highlight-rect-region",
-          "deixis-ellipse-region",
-          "deixis-highlight-ellipse-region"
+          "deixis-ellipse-region"
         ],
         "setup": "free",
-        "summary": "Region-shape callbacks for rectangular or elliptical bounds; highlight variants omit the outline.",
+        "summary": "Region-shape callbacks for rectangular or elliptical bounds.",
         "args": [
           "..args"
         ],
         "call": "deixis-rect-region(width: 40pt, height: 20pt, fill: teal)",
-        "note": "Shape records provide width, height, fill/stroke and rectangle radius. Region registration/fragment selection belongs to the calling mark, not these painters.",
+        "note": "Shape records provide width, height, fill/stroke and rectangle radius. Region registration/fragment selection belongs to the calling mark, not these painters. Use region marks with stroke: none for a highlight; add region-shape: deixis-ellipse-region for an ellipse.",
         "returns": "content",
         "extension": true,
         "guide": "regions.md"
@@ -789,23 +743,6 @@
     "guide": "rendering.md",
     "intro": "Advanced hooks use supplied measured records and geometry. Most documents should choose note adapters, container/render callbacks, or routing APIs instead. Native layout and document lookup are separate responsibilities.",
     "entries": [
-      {
-        "names": [
-          "deixis-group-layout"
-        ],
-        "setup": "conditional",
-        "summary": "Groups supplied note records by series, then delegates to their group renderer with separator/clearance policy.",
-        "args": [
-          "notes-data",
-          "separator",
-          "clearance",
-          "gap",
-          "render-group"
-        ],
-        "note": "Pure supplied content needs no initialization; registered live notes/visibility need setup. This helper does not collect notes or initialize identities.",
-        "returns": "content",
-        "extension": true
-      },
       {
         "names": [
           "deixis-margin-note-exact-layout",
@@ -834,7 +771,7 @@
           "deixis-place-anchored"
         ],
         "setup": "setup",
-        "summary": "Immediate placement relative to selected pin bounds or a supplied private original ID.",
+        "summary": "Immediate placement relative to selected pin bounds on the call's page.",
         "args": [
           "body",
           "dx",
@@ -843,7 +780,7 @@
           "pin",
           "body-size"
         ],
-        "note": "Prefers a pin name/target for authored code; internal-id is an extension hook, not a public note ID. Pin lookup reads document geometry. Native placement can disturb flow.",
+        "note": "Pin lookup reads document geometry. Native placement can disturb flow.",
         "returns": "content",
         "extension": true,
         "guide": "pins.md"

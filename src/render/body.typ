@@ -28,7 +28,7 @@
 /// A body-style callback that scales inherited text to 0.85em.
 /// - it (content): Content to style.
 /// -> content
-#let deixis-default-footnote-style(it) = {
+#let _deixis-default-footnote-style(it) = {
   set text(size: 0.85em)
   it
 }
@@ -82,7 +82,8 @@
 /// Region Shapes
 /// --------------------
 
-/// A rectangular region mark.
+/// A rectangular region mark. Use `deixis-region-mark(stroke: none)` for a
+/// fill-only highlight.
 ///
 /// -> content
 #let deixis-rect-region(..args) = {
@@ -95,19 +96,8 @@
   )
 }
 
-/// A rectangular region mark without stroke.
-///
-/// -> content
-#let deixis-highlight-rect-region(..args) = {
-  rect(
-    width: args.at("width"),
-    height: args.at("height"),
-    fill: args.at("fill", default: none),
-    radius: args.at("radius", default: 0pt),
-  )
-}
-
-/// An elliptical region mark.
+/// An elliptical region mark. Select with `region-shape: deixis-ellipse-region`
+/// on `deixis-region-mark`; add `stroke: none` for a fill-only highlight.
 ///
 /// -> content
 #let deixis-ellipse-region(..args) = {
@@ -116,17 +106,6 @@
     height: args.at("height"),
     fill: args.at("fill", default: none),
     stroke: args.at("stroke", default: none),
-  )
-}
-
-/// An elliptical region mark without stroke.
-///
-/// -> content
-#let deixis-highlight-ellipse-region(..args) = {
-  ellipse(
-    width: args.at("width"),
-    height: args.at("height"),
-    fill: args.at("fill", default: none),
   )
 }
 
@@ -338,7 +317,7 @@
 /// Weak marker spacing folds indentation through native layout; authored breaks survive.
 ///
 /// -> content
-#let deixis-default-render-single(
+#let deixis-aligned-render-single(
   data,
   inner-width: auto,
   max-marker-width: auto,
@@ -440,10 +419,10 @@
 }
 
 /// Render a group of notes by vertical stacking while aligning body markers.
-/// Should be used in combination with ```ref #deixis-default-render-single```.
+/// Should be used in combination with ```ref #deixis-aligned-render-single```.
 ///
 /// -> content
-#let deixis-default-render-group(notes-data, gap: auto, ..args) = {
+#let deixis-aligned-render-group(notes-data, gap: auto, ..args) = {
   let max-marker-width = 0pt
   let max-marker-gap = 0pt
 
@@ -468,7 +447,7 @@
 
   for (i, data) in notes-data.enumerate() {
     let local-gap = data.at("gap", default: 0.5em)
-    let active-single = data.at("render-single", default: deixis-default-render-single)
+    let active-single = data.at("render-single", default: deixis-aligned-render-single)
 
     v(if gap == auto { _deixis-note-length(data, local-gap) } else { gap }, weak: true)
 

@@ -216,7 +216,7 @@ override also retains component selection and validates the resolved callback.
 Omitting printer overrides preserves the callbacks captured by each body.
 
 The default endnote grid paints cells directly, bypassing single renderers and
-containers; choose `deixis-native-render-group` or `deixis-default-render-group`
+containers; choose `deixis-native-render-group` or `deixis-aligned-render-group`
 when those hooks should run. Inline-decoration bodies (`inline: true`) also
 retain their native formatting path. Body containers, custom renderer forwarding,
 and these bypass rules are described in [containers](containers.md).

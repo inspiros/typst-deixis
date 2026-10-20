@@ -13,6 +13,20 @@ from 0.1.1 or an earlier development snapshot.
 
 ### Breaking
 
+- Rename `deixis-default-render-single` / `deixis-default-render-group` to
+  `deixis-aligned-render-single` / `deixis-aligned-render-group` (short names:
+  `aligned-render-single` / `aligned-render-group`), without compatibility aliases.
+- Remove `deixis-set-pin-pattern`; set attachment `prefix:`/`postfix:` per call
+  or bind a `deixis-attach.with(...)` preset. Default delimiters stay unchanged.
+- Make `deixis-group-layout`, `deixis-default-footnote-style` and
+  `deixis-show-refs` private. Choose `render-group`, supply a `body-style`
+  callback, and let `deixis-setup-notes` install the reference bridge.
+- Remove `internal-id:` from `deixis-place-anchored`; use public `pin:` targets.
+  Inset adapters retain private original-ID placement.
+- Remove `deixis-highlight-rect-region` / `deixis-highlight-ellipse-region`.
+  Use region marks with `stroke: none`; add `region-shape: deixis-ellipse-region`
+  for an elliptical highlight.
+
 - Use `id:` to create an annotation and `of:` to attach its body or reuse its
   mark. Removed `label:`, `deixis-repeat-mark`, and positional reuse targets.
   The original owns numbering; the body adapter owns placement and formatting.
@@ -76,6 +90,8 @@ from 0.1.1 or an earlier development snapshot.
 
 ### Changed
 
+- `deixis-minipage(margin: ...)` retains 0.1.1's internal padding semantics
+  (`inset: margin`, `outset: 0pt`); its documentation now describes that behavior.
 - Default decoration uses muted blue-gray with a light tint. Inline, margin and
   inset marker-to-body spacing is 0.25em. Explicit styles retain precedence.
 - Connector records merge field by field with scoped defaults. Connector layers

@@ -884,7 +884,7 @@
         if type(data.placement) == function {
           box((data.placement)(final-rendered))
         } else if data.dx != none or data.dy != none {
-          deixis-place-anchored(
+          context _deixis-place-anchored(
             final-rendered,
             body-size: measured-size,
             dx: if data.dx == none { 0pt } else { data.dx },
@@ -894,7 +894,7 @@
             pin: data.anchor-pin,
           )
         } else {
-          deixis-place-anchored(
+          context _deixis-place-anchored(
             final-rendered,
             body-size: measured-size,
             dx: 0pt,

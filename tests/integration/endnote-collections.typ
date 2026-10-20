@@ -40,8 +40,8 @@ References: @alpha-body, @forward-mark, @scoped-body.
 
 #pagebreak()
 Long#deixis-endnote(series: "long", id: <long-body>)[Long-start. #lorem(650) Long-end.]
-#batch("long", series: "long", render-single: deixis-default-render-single,
-  render-group: deixis-default-render-group, body-style: it => text(size: 10pt, it))
+#batch("long", series: "long", render-single: deixis-aligned-render-single,
+  render-group: deixis-aligned-render-group, body-style: it => text(size: 10pt, it))
 #batch("long-again", series: "long")
 
 #context {

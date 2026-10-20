@@ -5,7 +5,7 @@
 #let ticks = state("paginated-groups", 0)
 #let column-group(notes, ..args) = columns(2, gutter: 16pt, deixis-native-render-group(notes, ..args.named()))
 #for (index, (name, renderer)) in (
-  ("native", deixis-native-render-group), ("aligned", deixis-default-render-group),
+  ("native", deixis-native-render-group), ("aligned", deixis-aligned-render-group),
   ("grid", deixis-grid-render-group), ("columns", column-group),
 ).enumerate() {
   if index > 0 { pagebreak() }

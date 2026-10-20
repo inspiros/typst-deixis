@@ -22,7 +22,7 @@
 /// - render-group (auto, function): The group render function. If `auto`, uses the first note's renderer in each series.
 ///
 /// -> content
-#let deixis-group-layout(
+#let _deixis-group-layout(
   notes-data,
   separator: auto,
   clearance: auto,
@@ -37,7 +37,7 @@
   let c-separator = if separator == auto { notes-data.first().at("separator", default: none) } else { separator }
   for (i, series-notes) in _deixis-series-groups(notes-data).enumerate() {
     let c-render-group = if render-group == auto {
-      series-notes.first().at("render-group", default: deixis-default-render-group)
+      series-notes.first().at("render-group", default: deixis-aligned-render-group)
     } else { render-group }
 
     if i == 0 {

@@ -5,13 +5,13 @@
 #let check(data, ..args) = {
   assert.eq(text.size, if str(data.id).ends-with("a") { 18pt } else { 10pt })
   assert.eq(par.leading, 8pt)
-  deixis-default-render-single(data, ..args.named())
+  deixis-aligned-render-single(data, ..args.named())
 }
 #let group(name, notes, ..args) = {
   [#metadata((name: name, labels: notes.map(n => n.id)))<group-policy>]
   deixis-native-render-group(notes, ..args.named())
 }
-#let styles = (("native", group.with("native")), ("aligned", deixis-default-render-group), ("grid", deixis-grid-render-group))
+#let styles = (("native", group.with("native")), ("aligned", deixis-aligned-render-group), ("grid", deixis-grid-render-group))
 #for (index, (name, renderer)) in styles.enumerate() {
   if index > 0 { pagebreak() }
   for (suffix, size, gap) in (("a", 18pt, 6pt), ("b", 10pt, 22pt)) {

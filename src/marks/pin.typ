@@ -2,44 +2,6 @@
 #import "../core/pins.typ": *
 #import "../routing/attached.typ": _deixis-attached-corners
 
-/// The default prefix used in ```ref #deixis-attach.prefix``` when `prefix: auto`.
-/// Defaults to `"deixispin"` and can be set using ```ref #deixis-set-pin-pattern```.
-///
-/// Delimiters are literal strings, including regex punctuation.
-///
-/// -> str
-#let deixis-pin-prefix-state = state("deixis-pin-prefix", "deixispin")
-
-/// The default postfix used in ```ref #deixis-attach.postfix``` when `postfix: auto`.
-/// Defaults to `""` (empty string) and can be set using ```ref #deixis-set-pin-pattern```.
-///
-/// Delimiters are literal strings, including regex punctuation.
-///
-/// -> str
-#let deixis-pin-postfix-state = state("deixis-pin-postfix", "")
-
-/// Sets inherited literal delimiters used by ```ref #deixis-attach``` scanning.
-///
-/// - prefix (str, none): Literal opening delimiter; none disables delimiter scanning.
-/// - postfix (str, none): Literal closing delimiter; none omits it.
-#let deixis-set-pin-pattern(
-  /// Literal opening delimiter. `none` or an empty string disables scanning.
-  /// -> auto | str | none
-  prefix: auto,
-  /// Literal closing delimiter. `none` or an empty string omits it.
-  /// -> auto | str | none
-  postfix: auto,
-) = {
-  if prefix != auto {
-    let validated = _deixis-pin-delimiter(prefix)
-    deixis-pin-prefix-state.update(prefix)
-  }
-  if postfix != auto {
-    let validated = _deixis-pin-delimiter(postfix)
-    deixis-pin-postfix-state.update(postfix)
-  }
-}
-
 // Internal callers already have the declaration context. Metadata itself gets
 // its native location without another deferred context per corner.
 #let _deixis-pin(name, scope: none, padding: "text", extra-data: (:)) = {
@@ -114,8 +76,8 @@
   padding: auto, pin-padding: (:), inline: false, scope: none, node: none) = {
   _deixis-check-setup-state()
 
-  let prefix = if prefix == auto { deixis-pin-prefix-state.get() } else { prefix }
-  let postfix = if postfix == auto { deixis-pin-postfix-state.get() } else { postfix }
+  let prefix = if prefix == auto { "deixispin" } else { prefix }
+  let postfix = if postfix == auto { "" } else { postfix }
 
   let pin-pattern = _deixis-pin-pattern(prefix, postfix, pattern)
   assert(type(pin-padding) == dictionary, message: "deixis: pin-padding must be a dictionary of pin names to padding values.")
@@ -229,7 +191,7 @@
 /// - body (content): The content block to wrap and scan.
 /// - pins (dictionary): A dictionary mapping pin names to overlay coordinates and padding. Example: `("my-pin": (dx: 100%, dy: 50%, padding: 2pt))`.
 /// - scope (none, str, label, location): Optional namespace shared by this attachment's scanned and coordinate pins.
-/// - prefix (auto, str, none): Literal opening delimiter, inherited with auto. Set to none to disable delimiter scanning.
+/// - prefix (auto, str, none): Literal opening delimiter; auto uses "deixispin". Set to none to disable delimiter scanning.
 /// - pattern (auto, regex, none): An explicit scanning regex with exactly one capture for the pin name; overrides delimiters.
 /// - padding (auto, str, length, dictionary): Padding for pins replaced with `prefix`. It has no effect on pins defined with `pins`.
 /// - inline (bool): If `true`, the wrapper uses an inline `box` instead of a `block`.
@@ -281,7 +243,7 @@
   /// pin declarations in the body or change note/counter scopes.
   /// -> none | str | label | location
   scope: none,
-  /// Literal opening delimiter. If `auto`, inherits state; none/empty disables
+  /// Literal opening delimiter. If `auto`, uses `"deixispin"`; none/empty disables
   /// delimiter scanning. Use `pattern` for intentional regular expressions.
   ///
   /// ```info
@@ -310,7 +272,7 @@
   /// Set to `none` or an empty string to disable text scanning.
   /// -> auto | str | none
   prefix: auto,
-  /// Literal closing delimiter. If `auto`, inherits state; none/empty omits it.
+  /// Literal closing delimiter. If `auto`, uses `""`; none/empty omits it.
   ///
   /// ````example
   /// Python hello world program:
