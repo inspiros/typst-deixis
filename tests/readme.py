@@ -113,7 +113,8 @@ def main():
         assert 'proposed method' in text and 'cited source remains in both builds' in text
 
     # Reveal frames: the callout and second footnote appear only after the pause.
-    first, second = (PdfReader(out / f'slide-{page}.pdf').pages[0].extract_text() for page in (1, 2))
+    first, second = (' '.join(PdfReader(out / f'slide-{page}.pdf').pages[0].extract_text().split())
+                     for page in (1, 2))
     assert 'present in both frames' in first and 'present in both frames' in second
     assert 'appear together' not in first and 'appears only in the second frame' not in first
     assert 'appear together' in second and 'appears only in the second frame' in second

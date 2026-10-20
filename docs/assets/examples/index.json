@@ -1,6 +1,6 @@
 {
   "compiler": "typst 0.15.1 (unknown commit)",
-  "runtime_sha256": "0ee7e072e6d68aefaf08d87e6e494294026132eca2ef7fc77ca6f52be8688fd6",
+  "runtime_sha256": "8e544335845e72abfe4766bf38a984a0562a4955c677a244ad25b1817c81d256",
   "catalog_sha256": "0a937a582e1cfed47dcf309c94a992908159bfc168fe230c0dde474b43b0d3ef",
   "examples": [
     {
@@ -140,10 +140,10 @@
     },
     {
       "id": "touying",
-      "source_sha256": "96116607a2d09f62bc279b12cbfc447e7621c31729e507500599cacf71105456",
+      "source_sha256": "e3069bb89d57b9b6a269e7d82bda194de9f5a18c6b156942acba66282bf2980d",
       "assets": {
         "touying-1.svg": "4fc22484b27104e41235f5e76dee343d5c97aaa4a914f96f2a9a44ca6abbfc9a",
-        "touying-2.svg": "feeb2449a91b39d1e1c9f6fbf8421a4feee2678ae92ff476910a1d7797618daa"
+        "touying-2.svg": "475df869b8b2d46e6cec55ba3949aa4d52dc1c05d07fdeb874064a78d0e2a56c"
       }
     },
     {
