@@ -3,8 +3,10 @@
 
 import argparse
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 import json
 import math
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -21,6 +23,8 @@ def main():
     parser.add_argument("--manual", action="store_true", help="Also check the manual and its isolated worked examples.")
     parser.add_argument("--filter", action="append", default=[], metavar="GLOB",
                         help="Run matching source paths only; repeat for a union of globs.")
+    parser.add_argument("--jobs", type=int, default=max(1, (os.cpu_count() or 2) // 2),
+                        help="Sources checked concurrently (default: half the CPUs).")
     args = parser.parse_args()
     sources = sorted((ROOT / "tests").glob("**/*.typ")) + sorted((ROOT / "examples").glob("*.typ"))
     if args.manual:
@@ -227,7 +231,7 @@ def main():
     }
 
     failures = []
-    for source in sources:
+    def check(source):
         name = source.relative_to(ROOT).as_posix()
         try:
             pdf = out / (name.replace("/", "-") + ".pdf")
@@ -564,7 +568,7 @@ def main():
                             expected = "connector stroke must be a single stroke"
                     assert result.returncode != 0 and expected.lower() in result.stderr.lower(), (flags, result.stderr)
                 print(f"PASS {name} (expected diagnostic; {len(inputs)} case(s))")
-                continue
+                return
             typst("compile", source, pdf)
             if source == ROOT / "docs/manual.typ":
                 checked = subprocess.run([sys.executable, str(ROOT / "tests/manual.py"),
@@ -2304,6 +2308,11 @@ def main():
         except (AssertionError, subprocess.TimeoutExpired) as error:
             failures.append((name, str(error)))
             print(f"FAIL {name}: {error}", file=sys.stderr)
+
+    # Each check runs its own Typst processes and writes only its own outputs.
+    with ThreadPoolExecutor(max_workers=args.jobs) as pool:
+        list(pool.map(check, sources))
+    failures.sort()
 
     # A copied runtime must exclude development/documentation and retain its entrypoint.
     package = tomllib.loads((ROOT / "typst.toml").read_text())["package"]

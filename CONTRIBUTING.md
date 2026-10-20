@@ -30,6 +30,11 @@ selection fails. Run the two compiler versions **serially**, selecting each with
 `--typst /path/to/typst`, and preserve `target/tests/results.json` between runs.
 The runner installs its own copied package; a global install is unnecessary.
 
+Within one invocation, sources are checked concurrently (`--jobs N`, default
+half the CPUs); the full suite takes a few minutes. While iterating, filter to
+the area you changed, for example `--filter 'tests/integration/*margin*.typ'`,
+and run the full suite on both compilers before committing.
+
 For ordinary CLI/editor development, use
 `python3 scripts/install.py --namespace preview --link --reinstall`.
 This exposes `@preview/deixis:0.2.0` without replacing the old 0.1.1 cache.
