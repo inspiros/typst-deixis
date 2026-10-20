@@ -8,7 +8,7 @@
 /// This function drops a numbered (or custom) marker into the text and registers its location in the
 /// state engine.
 /// With `of: id`, it reuses an annotation through `deixis-mark` instead;
-/// only an original `id` declaration advances the counter. Reuse is forward-safe.
+/// only a numbered original `id` declaration advances the counter. Reuse is forward-safe.
 ///
 /// ```example
 /// Inline note is usually just a single marker#deixis-inline-mark(id: <celibate-inline-note1>).
@@ -16,7 +16,7 @@
 /// ```
 ///
 /// - ..args (arguments): Accepts up to one positional arguments: `[body]`.
-/// - numbering (auto, str, function, dictionary): The numbering style (e.g., `"1"`, `"a"`) for the generated marker.
+/// - numbering (auto, none, str, function, dictionary): The numbering style (e.g., `"1"`, `"a"`) for the generated marker.
 /// - marker (auto, content): A hardcoded marker (like a symbol) to use instead of the automatic counter.
 /// - target (int, label, str): The specific block/minipage counter context this mark belongs to.
 /// - series (str): The counter series this mark belongs to. Defaults to `"default"`.
@@ -36,7 +36,8 @@
   ..args,
   /// The numbering style (e.g., `"1"`, `"a"`) for the generated marker.
   /// A record `(restart: "page", pattern: "1")` restarts displayed markers per original page; assigned counters stay unchanged.
-  /// -> auto | str | function | dictionary
+  /// `none` disables automatic markers and counter allocation.
+  /// -> auto | none | str | function | dictionary
   numbering: auto,
   /// A hardcoded marker (like a symbol) to use instead of the automatic counter.
   /// -> auto | content
@@ -306,7 +307,7 @@
 ///
 /// - id (none, str, label): A unique identifier for linking this mark to a decoupled body.
 /// - data (dictionary): Custom annotation fields, kept under note.data. Configure on creation or a standalone body; omit with of.
-/// - numbering (auto, str, function, dictionary): The numbering style (used for the body and outline, though invisible here).
+/// - numbering (auto, none, str, function, dictionary): The numbering style (used for the body and outline, though invisible here).
 /// - target (int, label, str): The specific block/minipage counter context this mark belongs to.
 /// - series (str): The counter series this mark belongs to. Defaults to `"default"`.
 /// - marker (auto, content): A hardcoded marker override (used for the body and outline, though invisible here).
@@ -331,7 +332,8 @@
   occurrence: none,
   /// The numbering style (used for the body and outline, though invisible here).
   /// Supports `(restart: "page", pattern: "1")` for page-local display numbering.
-  /// -> auto | str | function | dictionary
+  /// `none` disables automatic markers and counter allocation.
+  /// -> auto | none | str | function | dictionary
   numbering: auto,
   /// The specific block/minipage counter context this mark belongs to.
   /// -> int | label | str

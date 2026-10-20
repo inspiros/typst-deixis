@@ -242,7 +242,7 @@ def main():
                 elif source.stem == "local-table-declarations":
                     inputs = [("--input", f"mode={mode}") for mode in ("original", "body", "occurrence", "scope")]
                 elif source.stem == "palette":
-                    inputs = [("--input", f"mode={mode}") for mode in ("empty", "none-entry", "mixed", "map", "bool", "scalar")]
+                    inputs = [("--input", f"mode={mode}") for mode in ("empty", "none-entry", "mixed", "map", "bool", "scalar", "name")]
                 elif source.stem == "spill-regions":
                     inputs = [("--input", f"mode={mode}") for mode in
                               ("type", "name", "key", "missing", "coordinate", "infinite", "reversed", "empty", "outside")]

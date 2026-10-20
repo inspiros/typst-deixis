@@ -1,6 +1,6 @@
 #import "state.typ": *
 #import "palette.typ": _deixis-palette-next, _deixis-palette-finish
-#import "counter.typ": _deixis-read-counter, _deixis-write-counter
+#import "counter.typ": _deixis-counter-series, _deixis-read-counter, _deixis-write-counter
 
 #let _deixis-registry-uid(registry-box, id) = {
   let registry = registry-box.value
@@ -62,8 +62,13 @@
   if _deixis-note-uid(sys, id) != none {
     panic("deixis: Duplicate note ID detected: " + repr(key) + ". Use deixis-mark(of: ...) for reuse, or deixis-ref for a reference.")
   }
-  let count = _deixis-read-counter(sys, resolved.count-id, series) + 1
-  sys = _deixis-write-counter(sys, resolved.count-id, series, count)
+  // Unnumbered originals (resolved numbering none) take no counter value.
+  _deixis-counter-series(series)
+  let count = none
+  if payload.numbering != none {
+    count = _deixis-read-counter(sys, resolved.count-id, series) + 1
+    sys = _deixis-write-counter(sys, resolved.count-id, series, count)
+  }
   let registry = _deixis-registry(sys)
   let uid = registry.note-uid + 1
   // Public identities must not depend on how many deferred marks were found.

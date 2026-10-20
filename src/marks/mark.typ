@@ -23,7 +23,7 @@
 /// - of (none, str, label): Reuse an original annotation; mutually exclusive with id.
 /// - mark-type (auto, str): Inline by default, region with pins, or explicit inline/region/phantom.
 /// - occurrence (none, str, label): Name a reused occurrence within its annotation.
-/// - numbering (auto, str, function, dictionary): Original numbering style; inherited on reuse.
+/// - numbering (auto, none, str, function, dictionary): Original numbering style; inherited on reuse.
 /// - target (int, str, label): Original counter scope; inherited on reuse.
 /// - series (str): Original counter series; inherited on reuse.
 /// - marker (auto, none, content): Number automatically, replace the marker, or hide it.
@@ -62,7 +62,8 @@
   occurrence: none,
   /// Original numbering style; inherited on reuse.
   /// A record `(restart: "page", pattern: "1")` restarts displayed markers per original page; assigned counters stay unchanged.
-  /// -> auto | str | function | dictionary
+  /// `none` disables automatic markers and counter allocation.
+  /// -> auto | none | str | function | dictionary
   numbering: auto,
   /// Original counter scope; inherited on reuse.
   /// -> int | str | label

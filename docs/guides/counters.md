@@ -1,10 +1,18 @@
 # Counters and resets
 
-Each original mark advances one counter, selected by its **counter owner and
-series**. The first original in an unused stream gets 1. Body attachments,
-standalone bodies, references, repeated marks, pins, and explicit connections do
-not advance it. Note identity is independent of its displayed number, so resets
-do not create duplicate identities or change earlier notes.
+Each numbered original mark advances one counter, selected by its **counter owner
+and series**. The first numbered original in an unused stream gets 1. Body
+attachments, standalone bodies, references, repeated marks, pins, and explicit
+connections do not advance it. Note identity is independent of its displayed
+number, so resets do not create duplicate identities or change earlier notes.
+
+An original whose resolved `numbering` is `none` takes no counter value and
+has `count: none` in queries. This includes local options and shared defaults,
+including note-family settings such as `numbering: (margin-note: none)`.
+It shows no automatic marker; an explicit fixed `marker:` still displays.
+With non-`none` numbering, fixed markers and `marker: none` still advance the
+counter. References to a markerless note display `?` by default; outlines keep
+the note with an empty badge.
 
 Most note wrappers use series `"default"`; endnote wrappers use `"endnote"`.
 Both counter functions default to `"default"`. Pass `series: "endnote"` when
@@ -117,13 +125,15 @@ body has no original mark to rank; attaching a body with `of:` uses its original
 
 Each physical page starts at 1, independently for each counter owner and series.
 Ordering follows original declarations within that stream. All originals in the
-stream consume a slot, including ones using a different pattern or custom marker;
-use a separate series when numbering sequences should be independent. Hidden
-originals retain a slot, while omitted originals do not exist and take none.
+stream with non-`none` numbering consume a slot, including ones using a different
+pattern or custom marker; use a separate series when numbering sequences should
+be independent. Hidden numbered originals retain a slot, while unnumbered and
+omitted originals take none.
 Synchronized blocks share a stream; independent local blocks retain their owners.
 
 **The assigned counter is unchanged.** `note.count` and `deixis-note-counter`
-still report the source-order counter, including explicit updates. `note.marker`
+report the source-order assigned value and current counter respectively, including
+explicit updates; unnumbered originals retain `note.count: none`. `note.marker`
 is the displayed content; references, outlines, attached bodies and reused marks
 share it. A reuse on another page keeps its original's marker. Manual counter
 updates change assigned counts but do not change the page-local rank. This

@@ -290,7 +290,7 @@
 /// - mark-type (auto, str): The type of mark to render in the text. Choices: `"inline"` | `"region"` | `"phantom"`.
 /// - id (none, str, label): Names the original annotation created by this wrapper. Without id, its identity is private.
 /// - data (dictionary): Custom annotation fields, kept under note.data. Configure on creation or a standalone body; omit with of.
-/// - numbering (auto, str, function, dictionary): The numbering style for the endnote marker.
+/// - numbering (auto, none, str, function, dictionary): The numbering style for the endnote marker.
 /// - marker (auto, content): A hardcoded marker override.
 /// - target (auto, int, label, str): Creation uses the current scope; of inherits the original's rendering instance. Explicit values override the body scope.
 /// - series (auto, str): Original counter series, defaulting to `"endnote"`. Omit with of; attachments inherit.
@@ -329,7 +329,8 @@
   of: none,
   /// The numbering style for the marker.
   /// A record `(restart: "page", pattern: "1")` restarts displayed markers per original page; assigned counters stay unchanged.
-  /// -> auto | str | function | dictionary
+  /// `none` disables automatic markers and counter allocation.
+  /// -> auto | none | str | function | dictionary
   numbering: auto,
   /// A hardcoded marker override.
   /// -> auto | content

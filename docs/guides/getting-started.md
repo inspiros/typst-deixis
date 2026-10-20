@@ -54,6 +54,20 @@ Default overlay margin notes pack together and may spill onto existing pages.
 Open [First Notes](../../examples/first-notes.typ) for the complete rendered
 example, including a palette and a reused passage.
 
+## Unnumbered Asides
+
+Make margin and inset notes unnumbered while footnotes and endnotes keep their
+own 1, 2, 3 sequences:
+
+```typst
+#deixis-set(numbering: (margin-note: none, inset-note: none))
+```
+
+These asides take no counter value. A [palette](appearance.md), configured with
+`deixis-set(palette: ...)`, or a connector helps readers pair passages with their
+unnumbered notes. Use `numbering: none` on one call for a single aside.
+`marker: none` alone only hides its marker and still consumes a number.
+
 ## 3. Share A Body Or Declare It Elsewhere
 
 After creating `<method>`, use `of:` to add another marked passage:

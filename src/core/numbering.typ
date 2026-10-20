@@ -26,7 +26,7 @@
   let ordinals = (:)
   for (uid, original) in registry-box.value.notes {
     let owner = original.at("count-id", default: none)
-    if owner == none or uid not in locations { continue }
+    if owner == none or original.count == none or uid not in locations { continue }
     let series = original.series
     let page = str(locations.at(uid).page())
     let owner-streams = streams.at(owner, default: (:))

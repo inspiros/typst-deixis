@@ -58,4 +58,11 @@
   assert.eq(_deixis-resolve-typed-param(mixed, auto, "numbering", "inline-mark", family: "margin-note"), "a")
   assert.eq(_deixis-resolve-typed-param(mixed, auto, "numbering", "region-mark", family: "margin-note"), "1")
   assert.eq(_deixis-resolve-typed-param(mixed, "i", "numbering", "inline-mark", family: "footnote"), "i")
+  mixed.stack.push((numbering: (margin-note: none, inset-note: (mark: none))))
+  assert.eq(_deixis-resolve-typed-param(mixed, auto, "numbering", "inline-mark", family: "margin-note"), none)
+  assert.eq(_deixis-resolve-typed-param(mixed, auto, "numbering", "region-mark", family: "inset-note"), none)
+  assert.eq(_deixis-resolve-typed-param(mixed, auto, "numbering", "phantom-mark", family: "margin-note"), none)
+  assert.eq(_deixis-resolve-typed-param(mixed, auto, "numbering", "inline-mark", family: "footnote"), "*")
+  assert.eq(_deixis-resolve-typed-param(mixed, "1", "numbering", "inline-mark", family: "margin-note"), "1")
+  assert.eq(_deixis-resolve-typed-param(none, none, "numbering", "inline-mark"), none)
 }

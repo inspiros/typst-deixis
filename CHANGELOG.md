@@ -36,6 +36,12 @@ from 0.1.1 or an earlier development snapshot.
   prefixed alias `deixis-configure`; `deixis-set` remains supported. The scoped
   container is `note-block`, preserving native `block`.
 
+- Unnumbered notes: a resolved `numbering: none` takes no counter value, so
+  `deixis-set(numbering: (margin-note: none, inset-note: none))` turns margin and
+  inset notes into asides while footnotes keep counting 1, 2, 3.
+- Named palettes: `deixis-set(palette: "okabe-ito")`, plus `"tol-bright"`,
+  `"tol-muted"`, `"tableau"` and the house `"deixis"` set.
+
 - Per-family numbering such as `deixis-set(numbering: (footnote: "*", endnote: "i"))`;
   a wrapper's family key precedes mark-type keys and `rest`.
 

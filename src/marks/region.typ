@@ -45,7 +45,7 @@
 /// - id (none, str, label): The unique identifier linking this region to its data/body state.
 /// - data (dictionary): Custom annotation fields, kept under note.data. Configure on creation or a standalone body; omit with of.
 /// - pins (array): Pin names or `(name:, scope:, select:, page:)` targets. Strings combine all occurrences; records default to a unique match. Cannot be used simultaneously with a positional body.
-/// - numbering (auto, str, function, dictionary): The numbering style for the region's marker.
+/// - numbering (auto, none, str, function, dictionary): The numbering style for the region's marker.
 /// - marker (auto, content): A hardcoded marker to use instead of the automatic counter.
 /// - target (int, label, str): The specific block/minipage counter context this mark belongs to.
 /// - series (str): The counter series this mark belongs to.
@@ -87,7 +87,8 @@
   pins: (),
   /// The numbering style for the region's marker.
   /// A record `(restart: "page", pattern: "1")` restarts displayed markers per original page; assigned counters stay unchanged.
-  /// -> auto | str | function | dictionary
+  /// `none` disables automatic markers and counter allocation.
+  /// -> auto | none | str | function | dictionary
   numbering: auto,
   /// A hardcoded marker to use instead of the automatic counter.
   /// -> auto | content

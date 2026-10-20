@@ -73,10 +73,11 @@
   /// Use none to include every series; auto leaves the policy unchanged.
   /// -> auto | none | dictionary
   omit: auto,
-  /// Optional annotation accent cycle. An explicit array starts a new cycle in
-  /// the current Deixis scope; none disables it and auto leaves it unchanged.
-  /// Reused marks/bodies keep the original accent; explicit styles win.
-  /// -> auto | none | array
+  /// Optional annotation accent cycle. A color array or a built-in name
+  /// ("deixis", "okabe-ito", "tol-bright", "tol-muted", "tableau") starts a new
+  /// cycle in the current Deixis scope; none disables it and auto leaves it
+  /// unchanged. Reused marks/bodies keep the original accent; explicit styles win.
+  /// -> auto | none | str | array
   palette: auto,
   /// The numbering style for the marker. A literal `(restart: "page", pattern: "1")`
   /// uses the original mark's physical page and restarts the displayed ordinal.

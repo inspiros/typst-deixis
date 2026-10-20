@@ -49,7 +49,7 @@
           "layer",
           "render-single"
         ],
-        "call": "deixis-set(palette: (blue, teal, orange))",
+        "call": "deixis-set(palette: \"okabe-ito\")",
         "note": "Top-level auto leaves settings unchanged. Type/component maps merge compatible branches; empty maps and branch auto have option-specific reset semantics. All accepted setting names are listed in the shared-options section. omit: (series: (\"todo\",)) removes selected annotations while preserving passages; none includes all series. `deixis-configure` is an identical alias; `short.configure` uses the same function.",
         "returns": "content",
         "guide": "configuration.md"
