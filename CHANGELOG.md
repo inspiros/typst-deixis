@@ -84,6 +84,9 @@ from 0.1.1 or an earlier development snapshot.
   of notes. Reference, palette and margin preparation share stable evidence.
 - Typed settings resolution reuses a smaller cache key; local 400-note workloads
   show a 1.20–1.25× margin speedup without changing rendered output.
+- Margin planning measures each body once per layout pass instead of once per
+  later page; identity lookups and internal state updates avoid redundant
+  hashing. Rendered output is unchanged.
 - Bodies preserve authored content and explicit breaks; inline decoration can
   wrap and paginate. Collections retain per-note typography and grouping rules.
 
@@ -103,6 +106,9 @@ from 0.1.1 or an earlier development snapshot.
   correctness. The migration guide records remaining native/routing limits.
 - Boxed, underlined and highlighted marks breaking their frame or fill around a
   superscript marker.
+- Custom margin renderers whose measured size depends on their location could
+  be placed twice or not at all: every page now plans earlier notes with the
+  same measurement.
 
 ## [0.1.1] - 2026-06-04
 

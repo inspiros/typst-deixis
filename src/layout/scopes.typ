@@ -1,4 +1,5 @@
 #import "../core/internal.typ": *
+#import "../core/native.typ": *
 
 /// Creates an isolated, self-contained layout environment for notes.
 ///
@@ -189,8 +190,8 @@
     // Reading after an outer step adds a layout dependency for nested anonymous
     // scopes, which can delay their collected bodies beyond native convergence.
     // Named scopes still consume a serial, but need no contextual counter read.
-    let c-val = if name == none { std.counter("deixis-block-inst").get().first() + 1 } else { none }
-    std.counter("deixis-block-inst").step()
+    let c-val = if name == none { _std-counter("deixis-block-inst").get().first() + 1 } else { none }
+    _std-counter("deixis-block-inst").step()
     let inst-id = if name != none { _deixis-scope-key("block", name) } else { _deixis-scope-key("auto", c-val) }
     let sys = _deixis-layout-scopes.get()
 

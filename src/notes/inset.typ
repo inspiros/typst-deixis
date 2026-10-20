@@ -4,6 +4,7 @@
 #import "../marks/region.typ": *
 #import "../routing/frames.typ": _deixis-body-corners
 #import "../routing/document-policy.typ": _deixis-capture-routing
+#import "../core/native.typ": *
 
 /// A standalone body content of an inset note.
 ///
@@ -288,7 +289,7 @@
           final-rendered
         }
       } else {
-        let dummy-lbl = std.label("deixis-mark-" + str(celibate-id))
+        let dummy-lbl = _std-label("deixis-mark-" + str(celibate-id))
         note-data.insert("mark-lbl", dummy-lbl)
         note-data.insert("backlink-mark-lbl", none)
         [#metadata(none)#dummy-lbl#_deixis-metadata(note-data, <deixis-inset-note>)]
@@ -299,10 +300,10 @@
       return {
         prepared.declarations
         if id != none { deixis-system.update(sys => _deixis-register-standalone(sys, id, body, "inset-note", data: data)) }
-        std.counter("deixis-celibate-note").step()
+        _std-counter("deixis-celibate-note").step()
         context {
           _deixis-check-setup-state()
-          let uid = if id == none { "celibate-" + str(std.counter("deixis-celibate-note").get().first()) } else { "id-" + str(id) }
+          let uid = if id == none { "celibate-" + str(_std-counter("deixis-celibate-note").get().first()) } else { "id-" + str(id) }
           if id == none { _deixis-palette-anonymous(deixis-system.get(), sys => render-celibate(sys, uid)) }
           else { render-celibate(deixis-system.get(), uid) }
         }
@@ -313,7 +314,7 @@
     deixis-system.update(sys => _deixis-register-body(sys, of, body, "inset-note"))
     // Step at the declaration, before final mark association is known. A missing
     // mark must not introduce another counter update during a later layout pass.
-    std.counter("deixis-celibate-note").step()
+    _std-counter("deixis-celibate-note").step()
     context {
       _deixis-check-setup-state()
 
@@ -323,7 +324,7 @@
       let reg = _deixis-resolve-note(final-sys, of)
 
       if reg == none {
-        return render-celibate(sys, "celibate-" + str(std.counter("deixis-celibate-note").get().first()))
+        return render-celibate(sys, "celibate-" + str(_std-counter("deixis-celibate-note").get().first()))
       }
 
       sys = _deixis-accent-context(sys, reg.at("accent", default: none))
@@ -335,13 +336,13 @@
       let marker-str = _deixis-evaluate-marker-str(reg)
       let marker-position = reg.at("marker-position", default: none)
 
-      let mark-lbl = std.label("deixis-mark-" + str(internal-id))
-      let body-lbl = std.label("deixis-body-" + str(internal-id))
+      let mark-lbl = _std-label("deixis-mark-" + str(internal-id))
+      let body-lbl = _std-label("deixis-body-" + str(internal-id))
 
-      let dest-top-lbl = std.label("deixis-dest-top-" + str(internal-id))
-      let dest-bot-lbl = std.label("deixis-dest-bot-" + str(internal-id))
-      let dest-left-lbl = std.label("deixis-dest-left-" + str(internal-id))
-      let dest-right-lbl = std.label("deixis-dest-right-" + str(internal-id))
+      let dest-top-lbl = _std-label("deixis-dest-top-" + str(internal-id))
+      let dest-bot-lbl = _std-label("deixis-dest-bot-" + str(internal-id))
+      let dest-left-lbl = _std-label("deixis-dest-left-" + str(internal-id))
+      let dest-right-lbl = _std-label("deixis-dest-right-" + str(internal-id))
 
       let saved-styles = reg.at("styles", default: (:))
       let merged-styles = _deixis-merge-styles(saved-styles, styles)

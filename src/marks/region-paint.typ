@@ -1,6 +1,7 @@
 #import "../layout/geometry.typ": _deixis-region-bounds
 #import "../core/internal.typ": *
 #import "pin.typ": *
+#import "../core/native.typ": *
 
 // Detached note measurement needs the native flow footprint, not page-position
 // lookup or painting. A private label lets the shared renderer replace only
@@ -90,7 +91,7 @@
 
   let marker = if has-marker { _deixis-inherited-content(reg, context {
     if hidden or reg.marker-str == none { anchor }
-    else if body-exists { [#anchor#std.link(reg.body-lbl)[#mark-marker-style(reg.marker-str)]] }
+    else if body-exists { [#anchor#_std-link(reg.body-lbl)[#mark-marker-style(reg.marker-str)]] }
     else { [#anchor#mark-marker-style(reg.marker-str)] }
   }) }
 

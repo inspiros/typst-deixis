@@ -1,5 +1,6 @@
 #import "core/internal.typ": *
 #import "core/references.typ": *
+#import "core/native.typ": *
 
 /// A styled, clickable cross-reference to a specific note.
 ///
@@ -162,7 +163,7 @@
       }
     }
 
-    let linked(res, body) = if res.dest == none { body } else { std.link(res.dest, body) }
+    let linked(res, body) = if res.dest == none { body } else { _std-link(res.dest, body) }
 
     // Sorting/ranges apply only to a single compatible counter and style. Mixed
     // streams retain the caller's order and each note's own marker formatting.

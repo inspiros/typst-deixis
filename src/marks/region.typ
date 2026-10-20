@@ -2,6 +2,7 @@
 #import "../render/commands.typ": _deixis-paint-command
 #import "region-paint.typ": *
 #import "repeat.typ": _deixis-repeat-mark
+#import "../core/native.typ": *
 
 /// A visual enclose mark of a specific region in the document.
 ///
@@ -372,8 +373,8 @@
       let count = reg.count
       let marker-str = _deixis-evaluate-marker-str(reg)
 
-      let mark-lbl = std.label("deixis-mark-" + str(internal-id))
-      let body-lbl = std.label("deixis-body-" + str(internal-id))
+      let mark-lbl = _std-label("deixis-mark-" + str(internal-id))
+      let body-lbl = _std-label("deixis-body-" + str(internal-id))
 
       let mark-marker-style = if reg != none { reg.marker-style } else {
         _deixis-resolve-typed-param(

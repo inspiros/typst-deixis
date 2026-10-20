@@ -1,5 +1,6 @@
 #import "query.typ": deixis-query-notes
 #import "core/declarations.typ": _deixis-replay
+#import "core/native.typ": *
 
 /// Shows content again without its annotations.
 ///
@@ -200,7 +201,7 @@
         if physical-page in seen-pages { continue }
         seen-pages.push(physical-page)
         let pattern = dest.page-numbering()
-        let formatted = std.numbering(if pattern == none { "1" } else { pattern }, ..counter(page).at(dest))
+        let formatted = _std-numbering(if pattern == none { "1" } else { pattern }, ..counter(page).at(dest))
         pages.push(link(dest, formatted))
       }
       let content-and-page = grid(columns: (1fr, auto), column-gutter: 0.5em,

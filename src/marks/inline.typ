@@ -1,4 +1,5 @@
 #import "../core/internal.typ": *
+#import "../core/native.typ": *
 
 #import "inline-paint.typ": *
 #import "repeat.typ": _deixis-repeat-mark
@@ -237,8 +238,8 @@
       let count = reg.count
       let marker-str = _deixis-evaluate-marker-str(reg)
 
-      let mark-lbl = std.label("deixis-mark-" + str(internal-id))
-      let body-lbl = std.label("deixis-body-" + str(internal-id))
+      let mark-lbl = _std-label("deixis-mark-" + str(internal-id))
+      let body-lbl = _std-label("deixis-body-" + str(internal-id))
 
       let mark-marker-style = if reg != none { reg.marker-style } else {
         _deixis-resolve-typed-param(
@@ -391,8 +392,8 @@
 
       let internal-id = str(reg.internal-id)
 
-      let mark-lbl = std.label("deixis-mark-" + internal-id)
-      let body-lbl = std.label("deixis-body-" + internal-id)
+      let mark-lbl = _std-label("deixis-mark-" + internal-id)
+      let body-lbl = _std-label("deixis-body-" + internal-id)
 
       let meta-payload = (
         internal-id: internal-id,

@@ -7,6 +7,7 @@
 #import "geometry.typ": _deixis-box-bounds
 #import "../render/commands.typ": _deixis-paint-command, _deixis-emit-paint-commands
 #import "../core/order.typ": _deixis-group-z-index
+#import "../core/native.typ": *
 
 #let text-padding = (top: 0.9em, bottom: 0.2em, x: 0.1em)
 
@@ -203,7 +204,25 @@
   )))
 }
 
-#let _deixis-prepare-margin(data, side, frame, layout, ..args) = {
+// Typst keys a measurement by its context location. Each page overlay plans
+// the preceding pages again, so measuring there repeated identical body layout
+// once per later page. A show rule on the note's own located metadata runs at
+// that one location for every page, so Typst can reuse the same measurement.
+// The overlay's styles still apply. Only the height leaves the rule, as fixed
+// spacing that set/show rules for visible containers cannot resize.
+#let _deixis-measure-margin-height(body, anchor) = {
+  if anchor == none { return measure(body).height }
+  let target = anchor.location()
+  measure({
+    show metadata.where(label: <deixis-margin-note>): it => {
+      if it.location() != target { return it }
+      v(measure(body).height)
+    }
+    anchor
+  }).height
+}
+
+#let _deixis-prepare-margin(data, side, frame, layout, measure-anchor: none, ..args) = {
   let margin-width = if side == left { frame.l-space } else { frame.r-space }
   let w = calc.max(0pt, _deixis-margin-rel-len(data.at("width", default: auto), margin-width, margin-width))
   let dx = _deixis-margin-rel-len(data.at("dx", default: auto), margin-width, (margin-width - w) / 2)
@@ -211,11 +230,12 @@
     margin-width: margin-width, w: w, dx: dx,
     pad-left: if side == left { margin-width - w - dx } else { dx },
   )
-  let h = measure(_deixis-margin-box(data + (disable-links: true), geometry, ..args.named())).height
+  let h = _deixis-measure-margin-height(
+    _deixis-margin-box(data + (disable-links: true), geometry, ..args.named()), measure-anchor)
   let anchor-y = data.at("y", default: 0pt) + deixis-utils.resolve-signed-len(data.at("dy", default: 0pt))
   let alignment = data.at("mark-align", default: "top")
   let body-align = if type(alignment) == dictionary { alignment.at("body", default: "top") } else { alignment }
-  let body-align = if type(body-align) == std.alignment { repr(body-align.y) } else { str(body-align) }
+  let body-align = if type(body-align) == _std-alignment { repr(body-align.y) } else { str(body-align) }
   let y = anchor-y - if body-align == "bottom" { h } else if body-align == "horizon" { h / 2 } else { 0pt }
   geometry + (
     frame: frame, layout: if type(layout) == function { "custom" } else { layout },
@@ -510,7 +530,7 @@
 }
 
 #let _deixis-predict-cascade(notes, blocks-info, pref-dir, margin-layout,
-  min-margin-width: 1in, cascade-breaker: true, ..args,
+  min-margin-width: 1in, cascade-breaker: true, measure-anchors: (:), ..args,
 ) = {
   if blocks-info.len() == 0 { return () }
   let buckets = range(blocks-info.len()).map(_ => ())
@@ -567,7 +587,8 @@
       let data = n.note-data
       let side = _deixis-margin-side(data, frame, pref-dir, layout, req-space, l-bottom, r-bottom,
         overflowed-l: overflowed-l, overflowed-r: overflowed-r)
-      let p = _deixis-prepare-margin(data, side, frame, layout, ..args.named())
+      let p = _deixis-prepare-margin(data, side, frame, layout, ..args.named(),
+        measure-anchor: measure-anchors.at(str(data.at("internal-id", default: "")), default: none))
       let previous = if side == left { left-notes } else { right-notes }
       let compact = _deixis-margin-prefix-bottom(p, frame, layout,
         if side == left { l-bottom } else { r-bottom },

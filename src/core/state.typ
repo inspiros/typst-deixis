@@ -7,7 +7,9 @@
   notes: (:), // str(internal-id) -> note-data
   id-index: (:), // str(id) -> str(internal-id)
   pending-bodies: (:), // Explicit IDs whose mark has not occurred yet.
-  auto-index: (), // (location, uid) pairs for wrapper-owned identities.
+  // Wrapper-owned identities: parallel location/uid lists in registration order.
+  auto-locs: (),
+  auto-uids: (),
 )
 #let deixis-system = std.state("deixis-system", (
   stack: (),
@@ -15,7 +17,8 @@
   registry: metadata(_deixis-empty-registry),
 ))
 #let _deixis-registry(sys) = sys.at("registry", default: metadata(_deixis-empty-registry)).value
-#let _deixis-with-registry(sys, registry) = sys + (registry: metadata(registry))
+// Write it back inline as `sys + (registry: metadata(registry))`. A helper
+// receiving the unboxed registry would hash the whole record on every call.
 #let deixis-setup-state = std.state("deixis-setup-state", false)
 
 // Block construction needs scope geometry/counter ownership before its content

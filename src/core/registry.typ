@@ -6,10 +6,19 @@
   let registry = registry-box.value
   assert(type(id) == location or (type(id) in (str, label) and str(id).len() > 0),
     message: "deixis: A note ID must be a nonempty string or label.")
-  if type(id) == location {
-    let found = registry.auto-index.find(entry => entry.loc == id)
-    if found == none { none } else { found.uid }
-  } else { registry.id-index.at(str(id), default: none) }
+  if type(id) != location { return registry.id-index.at(str(id), default: none) }
+  // Locations have no string key. Native membership tests over halved slices
+  // find the first registration without one script callback per note. Stay
+  // inline: passing the unboxed registry to a helper would hash it per call.
+  let locs = registry.auto-locs
+  if not locs.contains(id) { return none }
+  let low = 0
+  let high = locs.len()
+  while high - low > 1 {
+    let mid = calc.quo(low + high, 2)
+    if locs.slice(low, mid).contains(id) { high = mid } else { low = mid }
+  }
+  registry.auto-uids.at(low)
 }
 #let _deixis-note-uid(sys, id) = _deixis-registry-uid(sys.registry, id)
 
@@ -33,7 +42,7 @@
     }
     registry.notes.insert(uid, note + record)
   }
-  _deixis-with-registry(sys, registry)
+  sys + (registry: metadata(registry))
 }
 
 // A named standalone body is an identity without a mark or counter owner.
@@ -47,7 +56,7 @@
   registry.id-index.insert(str(id), uid)
   registry.notes.insert(uid, (internal-id: uid, id: id, data: data, body: body, body-type: body-type,
     count: none, marker-str: none, accent: sys.annotation-accent))
-  _deixis-palette-finish(_deixis-with-registry(sys, registry))
+  _deixis-palette-finish(sys + (registry: metadata(registry)))
 }
 
 #let _deixis-validate-attachments() = {
@@ -83,11 +92,14 @@
     note += registry.pending-bodies.remove(key)
   }
   registry.notes.insert(uid-key, note)
-  if type(id) == location { registry.auto-index.push((loc: id, uid: uid-key)) } else {
+  if type(id) == location {
+    registry.auto-locs.push(id)
+    registry.auto-uids.push(uid-key)
+  } else {
     registry.id-index.insert(key, uid-key)
   }
   registry.note-uid = uid
-  _deixis-palette-finish(_deixis-with-registry(sys, registry))
+  _deixis-palette-finish(sys + (registry: metadata(registry)))
 }
 
 #let _deixis-resolve-note(sys, id) = {

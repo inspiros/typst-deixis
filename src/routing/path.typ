@@ -14,6 +14,7 @@
 #import "continuation-marks.typ": _deixis-prepare-continuation-mark, _deixis-paint-continuation-mark
 #import "connector-scene.typ": _deixis-connector-scene, _deixis-connector-scene-plan, _deixis-connector-scene-events
 #import "../layout/geometry.typ": _deixis-port-bounds, _deixis-select-port, _deixis-box-bounds, _deixis-inline-bounds
+#import "../core/native.typ": *
 
 #let deixis-waypoint-split = "split"
 
@@ -28,7 +29,7 @@
 // same value rather than treating auto as sharp and silently skipping smoothing.
 #let _deixis-path-radius(value, line-stroke) = {
   if value != auto { return _deixis-path-length(value) }
-  let obj = std.stroke(if line-stroke == none { 1pt } else { line-stroke })
+  let obj = _std-stroke(if line-stroke == none { 1pt } else { line-stroke })
   let thick = _deixis-path-length(if obj.thickness == auto { 1pt } else { obj.thickness })
   calc.max(3pt, thick * 4)
 }
@@ -800,7 +801,7 @@
       stroke: _deixis-resolve-stroke(link-stroke), frame: "continuation-local-x-right-y-down")
     elements.push(place(top + left, dx: point.first(), dy: point.last(), link-continuation(request)))
   } else if (is-incoming or is-outgoing) and link-continuation == auto and link-stroke != none {
-    let c-obj = std.stroke(link-stroke)
+    let c-obj = _std-stroke(link-stroke)
     let c-paint = if c-obj.paint == auto { black } else { c-obj.paint }
     let c-rad = if c-obj.thickness == auto { 1.5pt } else { 1.5 * c-obj.thickness }
     let spill-mark = circle(radius: c-rad, fill: c-paint, stroke: none)
