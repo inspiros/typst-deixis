@@ -1,6 +1,3 @@
-#!/bin/bash
-for f in examples/*.typ; do 
-  filename=$(basename "$f" .typ)
-  echo "Compiling $filename..." 
-  typst compile "$f" "assets/gallery/${filename}-{p}.svg" --root "."
-done
+#!/usr/bin/env bash
+set -euo pipefail
+python3 "$(dirname "$0")/render-examples.py" "$@"

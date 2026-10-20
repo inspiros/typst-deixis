@@ -1,99 +1,100 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+"""Install the package locally using the exclusions declared in typst.toml."""
 
 import argparse
+import fnmatch
 import os
-import shutil
-import re
-
-from sys import platform
 from pathlib import Path
+import shutil
+import sys
+import tomllib
 
 
 def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--root_dir", default=None,
-                        help="Package root directory. Defaults to None (inferred from script location).")
-    parser.add_argument("--data_dir", default=None,
-                        help="Typst package install directory. Defaults to None (inferred from OS).")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--root_dir", "--root-dir", type=Path, default=Path(__file__).resolve().parents[1])
+    parser.add_argument("--data_dir", "--data-dir", type=Path, help="Application data directory containing typst/packages.")
     parser.add_argument("--namespace", default="local",
-                        help="Package namespace. Defaults to 'local'.")
-    parser.add_argument("--package_name", default=None,
-                        help="Package name. Defaults to None (inferred from typst.toml).")
-    parser.add_argument("--version", default=None,
-                        help="Package version. Defaults to None (inferred from typst.toml).")
-
-    parser.add_argument("--exclude", nargs='+', default=["*.pdf", "assets/samples", "examples", "scripts", "develop", "docs"],
-                        help="Files and folders to be excluded.")
+                        help="Installation namespace (default: local). Use preview to override that namespace locally for editors and examples.")
+    parser.add_argument("--package_name", "--package-name")
+    parser.add_argument("--version")
+    parser.add_argument("--exclude", nargs="+", default=[], help="Additional package-relative paths or glob patterns to exclude.")
     parser.add_argument("--reinstall", action="store_true")
+    parser.add_argument("--link", action="store_true", help="Link the checkout for live development instead of copying a release snapshot.")
     return parser.parse_args()
 
 
-def _is_root_dir(path):
-    return os.path.isfile(os.path.join(path, "typst.toml"))
+def default_data_dir():
+    if sys.platform.startswith("linux"):
+        return Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local/share"))
+    if sys.platform == "darwin":
+        return Path.home() / "Library/Application Support"
+    if sys.platform == "win32":
+        return Path(os.environ["APPDATA"])
+    raise RuntimeError("Specify --data-dir on this operating system.")
+
+
+def exclusion_filter(root, patterns):
+    """Match both basenames and package-relative paths, including directories."""
+    def ignore(directory, names):
+        relative_dir = Path(directory).relative_to(root)
+        return [
+            name for name in names
+            if any(
+                fnmatch.fnmatchcase(name, pattern)
+                or fnmatch.fnmatchcase((relative_dir / name).as_posix(), pattern)
+                for pattern in patterns
+            )
+        ]
+    return ignore
 
 
 def main():
     args = parse_args()
-
-    root_dir = args.root_dir if args.root_dir is not None else os.path.dirname(__file__)
-    if not _is_root_dir(root_dir):
-        root_dir = os.path.dirname(root_dir)
-        if not _is_root_dir(root_dir):
-            raise FileNotFoundError("Cannot find typst.toml, please specify --root_dir")
-    with open(os.path.join(root_dir, "typst.toml"), 'r') as f:
-        toml_content = '\n'.join(f.readlines())
-
-    # data_dir
-    if args.data_dir is not None:
-        data_dir = args.data_dir
-    elif platform == "linux" or platform == "linux2":
-        data_dir = os.path.join(Path.home(), ".local/share")
-    elif platform == "darwin":
-        data_dir = os.path.join(Path.home(), "Library/Application Support")
-    elif platform == "win32":
-        data_dir = os.getenv("APPDATA")
-    # namespace
-    namespace = args.namespace
-    if namespace.startswith('@'):  # remove @
-        namespace = namespace[1:]
-    # name
-    if args.package_name is not None:
-        package_name = args.package_name
-    else:
-        match = re.search(r'^\s*name\s*=\s*["\']([^"\']+)["\']', toml_content, re.MULTILINE)
-        if match:
-            package_name = match.group(1).strip()
+    source = args.root_dir.resolve()
+    with (source / "typst.toml").open("rb") as manifest:
+        metadata = tomllib.load(manifest)
+    package = metadata["package"]
+    thumbnail = metadata.get("template", {}).get("thumbnail")
+    namespace = args.namespace.removeprefix("@")
+    name = args.package_name or package["name"]
+    version = args.version or package["version"]
+    for part in (namespace, name, version):
+        if not part or part in (".", "..") or "/" in part or "\\" in part:
+            raise ValueError("Namespace, package name, and version must be single path components.")
+    data_dir = args.data_dir if args.data_dir is not None else default_data_dir()
+    # Resolve parents only: resolving a linked leaf could delete the source on reinstall.
+    destination = (data_dir / "typst/packages" / namespace / name).resolve() / version
+    if destination == source or source.is_relative_to(destination):
+        raise ValueError("The installation directory must not contain the source checkout.")
+    patterns = [".git", ".agents", ".codex", ".aws", "develop", "target", "__pycache__",
+                *package.get("exclude", []), *([thumbnail] if thumbnail else []), *args.exclude]
+    if destination.is_relative_to(source):
+        relative = destination.relative_to(source)
+        excluded = False
+        for index, part in enumerate(relative.parts):
+            prefix = Path(*relative.parts[:index + 1]).as_posix()
+            if any(fnmatch.fnmatchcase(part, pattern) or fnmatch.fnmatchcase(prefix, pattern)
+                   for pattern in patterns):
+                excluded = True
+                break
+        if not excluded:
+            raise ValueError("An installation inside the checkout must use an excluded directory such as target.")
+    if destination.exists() or destination.is_symlink():
+        if not args.reinstall:
+            raise FileExistsError("Package already exists. Rerun with --reinstall to replace it.")
+        if destination.is_symlink():
+            destination.unlink()
         else:
-            raise ValueError("Cannot infer package_name, please specify --package_name")
-    # version
-    if args.version is not None:
-        version = args.version
+            shutil.rmtree(destination)
+    print(f"Installing {name}:{version}\n> source_dir = {source}\n> install_dir = {destination}")
+    if args.link:
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.symlink_to(source, target_is_directory=True)
+        print("Linked checkout: source edits are live. Rerun this command after changing the manifest version.")
     else:
-        match = re.search(r'^\s*version\s*=\s*["\']([^"\']+)["\']', toml_content, re.MULTILINE)
-        if match:
-            version = match.group(1).strip()
-        else:
-            raise ValueError("Cannot infer version, please specify --version")
-
-    install_dir = f"{data_dir}/typst/packages/{namespace}/{package_name}/{version}"
-    if args.reinstall and os.path.exists(install_dir):
-        shutil.rmtree(install_dir)
-    print(f"Installing {package_name}:{version}")
-    print(f"> source_dir  = {root_dir}")
-    print(f"> install_dir = {install_dir}")
-    try:
-        shutil.copytree(
-            root_dir, 
-            install_dir, 
-            ignore=shutil.ignore_patterns(".git", *args.exclude),
-        )
-        print(
-f'''Success! You can import this package in Typst as follows:
-
-#import "@{namespace}/{package_name}:{version}": *
-''')
-    except FileExistsError:
-        raise FileExistsError("Package already exists. Rerun with --reinstall to force reinstall.")
+        shutil.copytree(source, destination, ignore=exclusion_filter(source, patterns))
+    print(f'Success! Import with:\n\n#import "@{namespace}/{name}:{version}": *')
 
 
 if __name__ == "__main__":
