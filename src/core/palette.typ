@@ -1,5 +1,15 @@
 #import "state.typ": deixis-system
 
+// Discrete annotation accents. Published sets keep their canonical order;
+// the house set starts with the documentation's original three accents.
+#let _deixis-palettes = (
+  okabe-ito: "E69F00 56B4E9 009E73 0072B2 D55E00 CC79A7".split().map(rgb),
+  tol-bright: "4477AA EE6677 228833 CCBB44 66CCEE AA3377".split().map(rgb),
+  tol-muted: "CC6677 332288 DDCC77 117733 88CCEE 882255 44AA99 999933 AA4499".split().map(rgb),
+  tableau: "1F77B4 FF7F0E 2CA02C D62728 9467BD 8C564B E377C2 7F7F7F BCBD22 17BECF".split().map(rgb),
+  deixis: "3B6D9A 387C69 9A663F 7D5A87 397D86 A05268 73783E".split().map(rgb),
+)
+
 // Palettes are opt-in configuration, not numbering streams. Each explicit
 // setting starts an independent cycle; inherited scopes share its saved token.
 #let _deixis-palette-policy(sys) = {
@@ -10,6 +20,12 @@
 }
 
 #let _deixis-check-palette(colors) = {
+  if type(colors) == str {
+    assert(colors in _deixis-palettes,
+      message: "deixis: palette must be none or an array of colors, or a known palette name; unknown name "
+        + repr(colors) + ". Valid names: " + _deixis-palettes.keys().join(", ") + ".")
+    return
+  }
   assert(colors == none or (type(colors) == array and colors.len() > 0
     and colors.all(c => type(c) == color)),
     message: "deixis: palette must be none or an array of colors; the array cannot be empty.")
@@ -17,6 +33,7 @@
 
 #let _deixis-palette-setting(sys, colors) = {
   _deixis-check-palette(colors)
+  if type(colors) == str { colors = _deixis-palettes.at(colors) }
   let policy = none
   if colors != none {
     let token = sys.at("palette-uid", default: 0) + 1

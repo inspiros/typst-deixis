@@ -24,8 +24,8 @@ reading text keeps the document's color.
 #pagebreak()
 = The Original Owns The Accent
 
-// Start a fresh cycle for the next originals. The earlier note stays blue.
-#deixis-set(palette: (rgb("387C69"), rgb("9A663F")))
+// A named palette starts a fresh cycle too. The earlier note stays blue.
+#deixis-set(palette: "deixis")
 
 #deixis-inset-note-body(of: <forward>, width: 130pt, dx: 190pt, dy: 30pt,
   connector: (route: "orthogonal", radius: 3pt))[This body precedes its original.]
