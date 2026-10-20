@@ -116,6 +116,21 @@ See [footnote/rendering limits](rendering.md#footnote-ownership),
 [paginated blocks](blocks.md), [scopes inside notes](deferred-scopes.md),
 [custom renderers](custom-renderers.md), and [scoped page styles](setup.md#host-owned-or-scoped-page-styles).
 
+## Output Formats
+
+Deixis targets paged output: PDF, PNG and SVG. Typst 0.15's HTML export is
+experimental and ignores page layers, so Deixis does not support it yet. Native
+footnotes still reach the HTML footnote section, but margin, inset and comment
+bodies, collected endnotes and connectors are missing, and markers do not link.
+
+Tagged PDF output, including `--pdf-standard ua-1`, compiles without
+diagnostics. Native footnotes are tagged as notes beside their marks, and
+markers are tagged links. Overlay bodies (margin, inset and comment notes) are
+painted in a page layer, so assistive technology reaches them after the page's
+flow content, without a note role. When explanations must be read beside their
+marks, prefer native footnotes or inline notes; endnotes read as a list where
+they are printed.
+
 ## Migrate From 0.1.1 Or Earlier Overhaul Snapshots
 
 Install the checkout's `0.2.0` preview override and update imports first. The
