@@ -1,9 +1,11 @@
-#import "core.typ": *
+#import "core/internal.typ": *
+#import "core/references.typ": *
 
 /// A styled, clickable cross-reference to a specific note.
 ///
 /// - ..targets (arguments): The positional target label (e.g., `<my-note>`) to reference.
-/// - supplement (auto, content, none): The prefix to display before the number (e.g., `[Note]`). Set to `none` for just the number.
+/// - supplement (auto, content, function, none): The prefix, or a function receiving the selected note's metadata element. Set to `none` for just the number.
+/// - form (str): `"normal"` for note markers or `"page"` for native page references to the selected destination.
 /// - marker-style (auto, function): A custom styling function `(string) => content` for the reference number. If `auto`, it inherits the note's original marker style.
 /// - celibate-marker (str): The marker displayed for celibate notes.
 ///
@@ -14,14 +16,15 @@
   /// ```example
   /// //| sandbox-mode: "page"
   /// Let's create some test notes
-  /// #deixis-margin-note(label: <note-a>)[Test note A.]
-  /// #deixis-margin-note(label: <note-b>)[Test note B.]
-  /// #deixis-margin-note(label: <note-c>)[Test note C.]
+  /// #deixis-margin-note(id: <note-a>)[Test note A.]
+  /// #deixis-margin-note(id: <note-b>)[Test note B.]
+  /// #deixis-margin-note(id: <note-c>)[Test note C.]
   ///
   /// Single reference: #deixis-ref(<note-a>)
   /// ```
   ///
-  /// - Multiple consecutive references will be collapsed automatically.
+  /// - Compatible automatic decimal markers are sorted; consecutive runs of three or more become ranges.
+  ///   Mixed counters, series, numbering rules, or styles retain the input order.
   /// ```example
   /// Multiple reference: #deixis-ref(<note-a>, <note-b>, <note-c>)
   /// ```
@@ -39,8 +42,15 @@
   /// #deixis-ref(<note-c>, supplement: [Todo])
   /// ```
   ///
-  /// -> auto | content | none
+  /// A function receives the selected mark/body metadata element, as with native
+  /// references. An unprinted standalone body supplies unlocated metadata.
+  /// -> auto | content | function | none
   supplement: auto,
+  /// `"normal"` displays note markers; `"page"` uses Typst's page reference
+  /// formatting at the selected body/mark destination. An unprinted standalone
+  /// body has no destination and displays the celibate marker.
+  /// -> str
+  form: "normal",
   /// A custom styling function `(string) => content` for the reference number. If `auto`, it inherits the note's original marker style.
   /// -> auto | function
   marker-style: auto,
@@ -48,6 +58,7 @@
   /// -> str
   celibate-marker: "?",
 ) = {
+  assert(form in ("normal", "page"), message: "deixis: Reference form must be normal or page.")
   let named = targets.named()
   let fallback = named.remove("_fallback", default: auto)
   if named.len() > 0 {
@@ -67,112 +78,67 @@
     panic("deixis: #deixis-ref only accepts one last positional content argument as supplement.")
   }
 
-  let meta-tags = targets
-    .map(target => {
-      [#metadata((target: str(target)))<deixis-ref-marker>]
-    })
-    .join()
+  if targets.len() == 0 { return none }
+
+  let meta-tags = [#metadata((targets: targets.map(str)))<deixis-ref-marker>]
 
   let content = context {
+    for target in targets { _deixis-check-omitted(target) }
     let sys = deixis-system.final()
-    let notes = sys.at("notes", default: (:))
-    let id-idx = sys.at("id-index", default: (:))
-    let lbl-idx = sys.at("label-index", default: (:))
-
-    let resolve-payload(t) = {
-      // check registry
-      if t in lbl-idx { return notes.at(lbl-idx.at(t)) }
-      if t in id-idx { return notes.at(id-idx.at(t)) }
-      let raw-internal = t.replace("deixis-body-", "").replace("deixis-mark-", "")
-      if raw-internal in notes { return notes.at(raw-internal) }
-
-      // query metadata for celibate notes
-      let queried = query(std.label(t))
-      if queried.len() > 0 {
-        let el = queried.first()
-        if el.func() == metadata {
-          if type(el.value) == dictionary {
-            return el.value
-          } else {
-            // Failsafe in case the metadata payload was stripped
-            return (marker-str: none, is-celibate: true)
-          }
-        }
-      }
-
-      return none
+    // Native references through the setup bridge (citations, headings, figures)
+    // cannot name an annotation unless the key is a registered ID or one of the
+    // private destination labels; return them without building the index.
+    let key = str(targets.first())
+    if (targets.len() == 1 and fallback != auto and key not in _deixis-registry(sys).id-index
+      and not key.starts-with("deixis-body-") and not key.starts-with("deixis-mark-")) {
+      return fallback
     }
-
-    // Single-target resolution for the `show ref:` rule fallback
-    if targets.len() == 1 {
-      let t-str = str(targets.first())
-      let is-deixis = false
-
-      if resolve-payload(t-str) != none {
-        is-deixis = true
-      }
-
-      if not is-deixis {
-        return if fallback != auto { fallback } else { ref(targets.first()) }
-      }
-    }
-
+    let index = _deixis-reference-index(details: form == "page" or type(supplement) == function)
     let results = ()
+    let seen = (:)
 
     for target in targets {
-      let t-lbl = if type(target) == str { std.label(target) } else { target }
-      let t-str = str(t-lbl)
-
-      let data = resolve-payload(t-str)
-      if data == none { data = (:) }
-
-      let internal-id = data.at("internal-id", default: none)
-      let marker-str = none
-
-      if internal-id != none {
-        let marks = query(selector(<deixis-inline-mark>).or(<deixis-phantom-mark>).or(<deixis-region-mark>))
-
-        let match = marks.find(m => (
-          type(m.value) == dictionary
-            and m.value.at("internal-id", default: none) != none
-            and str(m.value.internal-id) == str(internal-id)
-        ))
-
-        if match != none {
-          marker-str = match.value.at("marker-str", default: none)
+      let resolved = _deixis-reference-target(index, target)
+      if resolved == none {
+        // Preserve native references, including user show rules and supplements.
+        let native = if targets.len() == 1 and fallback != auto { fallback } else {
+          ref(target, supplement: supplement, form: form)
+        }
+        results.push((native: native, int-val: none, m-style: auto))
+        continue
+      }
+      if resolved.uid in seen { continue }
+      seen.insert(resolved.uid, true)
+      let data = resolved.data
+      if form == "page" {
+        let native = if resolved.dest-label == none { celibate-marker } else {
+          // Keep native localization, destination-page numbering, and functional
+          // supplements. The private label prevents the bridge from intercepting
+          // this generated reference again after its deferred context is realized.
+          [#ref(resolved.dest-label, form: "page",
+            supplement: if results.len() == 0 { supplement } else { none })<deixis-native-page-ref>]
+        }
+        results.push((native: native, int-val: none, m-style: auto))
+        continue
+      }
+      let marker-str = _deixis-evaluate-marker-str(data)
+      if marker-str == none { marker-str = celibate-marker }
+      let m-style = if marker-style != auto { marker-style } else {
+        data.at("marker-style", default: data.at("mark-marker-style", default: auto))
+      }
+      let int-val = none
+      // Only automatically numbered decimal markers can form a range.
+      if data.at("marker", default: auto) == auto and data.at("count", default: none) != none {
+        if type(marker-str) == str and marker-str.match(regex("^[0-9]+$")) != none {
+          int-val = int(marker-str)
+        } else if type(marker-str) == int {
+          int-val = marker-str
+          marker-str = str(marker-str)
         }
       }
-
-      if marker-str == none {
-        marker-str = _deixis-evaluate-marker-str(data)
-      }
-
-      if marker-str == none { marker-str = celibate-marker }
-
-      let m-style = auto
-      if marker-style != auto {
-        m-style = marker-style
-      } else {
-        let mark-type = data.at("mark-type", default: "inline")
-        let raw-m-style = data.at("marker-style", default: auto)
-        m-style = _deixis-resolve-typed-param(
-          sys,
-          raw-m-style,
-          "marker-style",
-          mark-type,
-          component: "mark",
-        )
-      }
-
-      let int-val = none
-      if type(marker-str) == str and marker-str.match(regex("^\d+$")) != none {
-        int-val = int(marker-str)
-      } else if type(marker-str) == int {
-        int-val = marker-str
-        marker-str = str(marker-str)
-      }
-
-      results.push((lbl: t-lbl, marker-str: marker-str, int-val: int-val, m-style: m-style))
+      results.push((dest: resolved.dest, marker-str: marker-str, int-val: int-val,
+        m-style: m-style, element: resolved.at("element", default: none), count-id: data.at("count-id", default: none),
+        series: data.at("series", default: none), numbering: data.at("numbering", default: none)))
     }
 
     let valid-styles = results.filter(r => r.m-style != auto)
@@ -188,21 +154,29 @@
 
     let format-num(res, is-first) = {
       let num = (res.m-style)(res.marker-str)
-      if is-first and supplement not in (auto, none) {
-        [#supplement~#num]
+      let prefix = if is-first and type(supplement) == function { supplement(res.element) } else { supplement }
+      if is-first and prefix not in (auto, none, [], "") {
+        [#prefix~#num]
       } else {
         num
       }
     }
 
-    // collapsing
-    let all-ints = results.all(r => r.int-val != none)
+    let linked(res, body) = if res.dest == none { body } else { std.link(res.dest, body) }
+
+    // Sorting/ranges apply only to a single compatible counter and style. Mixed
+    // streams retain the caller's order and each note's own marker formatting.
+    let first = results.first()
+    let separator-style = if form != "page" and results.all(r => r.m-style == first.m-style) { master-style } else { it => it }
+    let all-ints = results.all(r => r.int-val != none and r.count-id != none
+      and r.count-id == first.count-id and r.series == first.series
+      and r.numbering == first.numbering and r.m-style == first.m-style)
     let formatted-content = ()
 
     if not all-ints {
       for (i, res) in results.enumerate() {
-        formatted-content.push(std.link(res.lbl, format-num(res, i == 0)))
-        if i < results.len() - 1 { formatted-content.push(master-style([, ])) }
+        formatted-content.push(if "native" in res { res.native } else { linked(res, format-num(res, i == 0)) })
+        if i < results.len() - 1 { formatted-content.push(separator-style([, ])) }
       }
     } else {
       let sorted = results.sorted(key: r => r.int-val)
@@ -226,21 +200,21 @@
 
         if run.len() == 1 {
           let r0 = run.first()
-          formatted-content.push(std.link(r0.lbl, format-num(r0, is-first)))
+          formatted-content.push(linked(r0, format-num(r0, is-first)))
         } else if run.len() == 2 {
           let r0 = run.first()
           let r1 = run.last()
-          formatted-content.push(std.link(r0.lbl, format-num(r0, is-first)))
-          formatted-content.push(master-style([, ]))
-          formatted-content.push(std.link(r1.lbl, (r1.m-style)(r1.marker-str)))
+          formatted-content.push(linked(r0, format-num(r0, is-first)))
+          formatted-content.push(separator-style([, ]))
+          formatted-content.push(linked(r1, (r1.m-style)(r1.marker-str)))
         } else {
           let r0 = run.first()
           let r1 = run.last()
-          formatted-content.push(std.link(r0.lbl, format-num(r0, is-first)))
-          formatted-content.push(master-style([–]))
-          formatted-content.push(std.link(r1.lbl, (r1.m-style)(r1.marker-str)))
+          formatted-content.push(linked(r0, format-num(r0, is-first)))
+          formatted-content.push(separator-style([–]))
+          formatted-content.push(linked(r1, (r1.m-style)(r1.marker-str)))
         }
-        if i < runs.len() - 1 { formatted-content.push(master-style([, ])) }
+        if i < runs.len() - 1 { formatted-content.push(separator-style([, ])) }
       }
     }
 
@@ -260,7 +234,9 @@
 ///
 /// -> content
 #let deixis-show-refs(body) = {
-  show ref: it => deixis-ref(it.target, supplement: it.supplement, _fallback: it)
+  show ref: it => if it.has("label") and it.label == <deixis-native-page-ref> { it } else {
+    deixis-ref(it.target, supplement: it.supplement, form: it.form, _fallback: it)
+  }
 
   body
 }

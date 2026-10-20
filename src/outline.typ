@@ -1,11 +1,41 @@
-#import "core.typ": *
+#import "query.typ": deixis-query-notes
+#import "core/declarations.typ": _deixis-replay
+
+/// Shows content again without its annotations.
+///
+/// Marked passages remain; marks, markers, note bodies and connections inside
+/// the content are not created a second time. Native outlines already apply
+/// this to heading and figure-caption entries. Use it wherever a document
+/// repeats content, such as a running header that shows the current heading.
+///
+/// ```example
+/// #set page(header: context {
+///   let previous = query(selector(heading).before(here()))
+///   if previous.len() > 0 { deixis-plain(previous.last().body) }
+/// })
+/// ```
+///
+/// -> content
+#let deixis-plain(
+  /// Content that may contain annotations, such as a heading body.
+  /// -> content
+  body,
+) = _deixis-replay(body)
+
 
 /// A dynamically styled outline (Table of Contents) for your annotations.
 ///
-/// The outline extracts the content from note bodies and clips it to a single line.
+/// The outline extracts static text from note bodies without executing them again.
 /// Each entry features a dynamic visual badge that inherits
 /// the styling of the specific note it represents.
 /// They act as clickable hyperlinks, returning the reader to the mark's location.
+/// Entries follow original mark order, or body declaration order for standalone
+/// bodies. Bounds select those source locations; scope filters use body rendering
+/// ownership when a body exists. Target and thread filters combine.
+/// Reused marks stay in the same entry. Page links list distinct physical pages
+/// in mark source order and use native page numbering at each painted destination.
+/// Standalone bodies link to their live destination, or declaration if unprinted.
+/// For custom layouts or one row per occurrence, use deixis-query-notes.
 ///
 /// ```example
 /// #deixis-inset-note(dx: 10pt, dy: 0pt, stroke: red)[This is a note!]
@@ -20,16 +50,17 @@
 /// - title (content, none): The heading content to display above the outline. Set to `none` to disable the heading.
 /// - heading-level (int): The heading level for the outline's main title. Any dynamically generated group sub-headings will be rendered at `heading-level + 1`.
 /// - target (auto, label, str, int): Filters the outline to notes belonging to a specific target block or minipage.
-/// - threat (auto, label, str): Filters the outline to only show notes belonging to a specific thread of minipages.
-/// - include-types (auto, array): A list of note types to explicitly include (e.g., `("margin-note", "endnote")`). If `auto`, includes all types.
-/// - exclude-types (array): A list of note types to explicitly exclude.
+/// - thread (auto, str, label): Filters the outline to only show notes belonging to a specific thread of minipages.
+/// - include-types (auto, str, array): One note type or a union of types. Auto includes all; an empty array includes none.
+/// - exclude-types (str, array): One note type or a union of types to exclude.
 /// - series (auto, str, array): Filters the outline to notes belonging to a specific series or array of series.
-/// - include-celibates (bool, str): Determines if decoupled, standalone marks or bodies should be included. Choices: `bool` | `"both"` | `"none"` | `"mark"` | `"body"`.
-/// - after (none, location, label, str): Only includes notes that appear *after* this location, label, or `<deixis-pin>` name.
-/// - before (none, location, label, str): Only includes notes that appear *before* this location, label, or `<deixis-pin>` name.
+/// - include-unpaired (bool, str): Also include marks without bodies, standalone bodies, or both. Values: false, true, "mark", "body".
+/// - after (none, location, label, str, dictionary, selector, function): Exclusive source boundary: a native location/label/selector or a pin name/target.
+/// - before (none, location, label, str, dictionary, selector, function): Exclusive source boundary, with the same selection rules as after.
 /// - group-by (none, str, function): Categorizes the notes under sub-headings. Accepts `"type"` (e.g., "Margin Notes"), `"series"`, or a custom `function(note) => string`.
 /// - fill (none, content): Fills the space between the excerpt and the page number. Commonly set to `repeat[.]` for standard TOC styling.
 /// - gap (auto, length): The vertical spacing between individual note rows in the outline.
+/// - summary (auto, function): A callback `(note) => content` for each excerpt. By default, extracts up to 160 characters of static text without executing contextual content.
 ///
 /// -> content
 #let deixis-note-outline(
@@ -49,29 +80,36 @@
   ///
   /// -> int
   heading-level: 1,
-  /// Filters the outline to notes belonging to a specific target block or minipage.
+  /// Filters by rendering scope (body scope when attached, original scope for
+  /// marks without bodies). Combines with thread if both are supplied.
   /// -> auto | label | str | int
   target: auto,
   /// Filters the outline to only show notes belonging to a specific thread of minipages.
-  /// -> auto | str
+  /// -> auto | str | label
   thread: auto,
-  /// A list of note types to explicitly include (e.g., `("margin-note", "endnote")`). If `auto`, includes all types.
-  /// -> auto | array
+  /// One note type or an array of types to include. Auto includes all; an empty
+  /// array includes none. Unknown names select no matching records.
+  /// -> auto | str | array
   include-types: auto,
-  /// A list of note types to explicitly exclude.
-  /// -> array
+  /// One note type or an array of types to exclude. An empty array excludes none.
+  /// -> str | array
   exclude-types: (),
   /// Filters the outline to notes belonging to a specific series or array of series.
   /// -> auto | str | array
   series: auto,
-  /// Determines if decoupled, standalone marks or bodies should be included. Choices: `bool` | `"both"` | `"none"` | `"mark"` | `"body"`.
+  /// Also include unpaired marks or bodies. False includes paired notes only;
+  /// true includes both unpaired kinds; mark or body adds that kind.
   /// -> bool | str
-  include-celibates: false,
-  /// Only includes notes that appear *after* this location, label, or `<deixis-pin>` name.
-  /// -> none | location | label | str
+  include-unpaired: false,
+  /// Only includes notes after this location, label, pin name, or structured
+  /// name/scope/select/page pin target. A pin boundary needs one occurrence.
+  /// Native selectors use their first match, as native labels do.
+  /// -> none | location | label | str | dictionary | selector | function
   after: none,
-  /// Only includes notes that appear *before* this location, label, or `<deixis-pin>` name.
-  /// -> none | location | label | str
+  /// Only includes notes before this location, label, pin name, or structured
+  /// name/scope/select/page pin target. Forward pin declarations work.
+  /// Native selectors use their first match, as native labels do.
+  /// -> none | location | label | str | dictionary | selector | function
   before: none,
   /// Categorizes the notes under sub-headings. Accepts `"type"`, `"series"`, or a custom `function(note) => string`.
   ///
@@ -103,292 +141,80 @@
   /// The vertical spacing between individual note rows in the outline.
   /// -> auto | length
   gap: auto,
+  /// A callback `(note) => content` for each excerpt. The default extracts static
+  /// text without running the body; contextual-only notes get a placeholder.
+  /// Receives the structured query record plus its presentation badge. Use
+  /// note.summary for the safe default excerpt; note.body is a location record.
+  /// -> auto | function
+  summary: auto,
+  /// Unknown options are rejected; include-celibates was renamed to include-unpaired.
+  /// -> arguments
+  ..args,
 ) = context {
-  _deixis-check-setup-state()
-  let active-sys = deixis-system.get()
-
-  let resolve-bound(b-val, b-name) = {
-    if b-val == none { return none }
-    if type(b-val) == location { return b-val }
-    if type(b-val) == str {
-      let pins = query(<deixis-pin>).filter(p => p.value.at("name", default: "") == b-val)
-      if pins.len() == 0 { panic("deixis: Could not find pin named '" + b-val + "'.") }
-      return pins.first().location()
-    } else {
-      let elems = query(b-val)
-      if elems.len() == 0 { panic("deixis: Could not find target matching '" + repr(b-val) + "'.") }
-      return elems.first().location()
-    }
-  }
-
-  let loc-after = resolve-bound(after, "after")
-  let loc-before = resolve-bound(before, "before")
-
-  let is-in-bounds(loc) = {
-    if loc == none { return false }
-    if loc-after != none {
-      if loc.page() < loc-after.page() { return false }
-      if loc.page() == loc-after.page() and loc.position().y < loc-after.position().y { return false }
-    }
-    if loc-before != none {
-      if loc.page() > loc-before.page() { return false }
-      if loc.page() == loc-before.page() and loc.position().y > loc-before.position().y { return false }
-    }
-    return true
-  }
-
-  let extract-id(val) = {
-    if type(val) != dictionary { return none }
-
-    let raw-id = val.at("internal-id", default: none)
-
-    if raw-id == none {
-      let b-lbl = val.at("body-lbl", default: none)
-      if b-lbl == none and "note-data" in val { b-lbl = val.note-data.at("body-lbl", default: none) }
-      if b-lbl != none and str(b-lbl).starts-with("deixis-body-") { raw-id = str(b-lbl).replace("deixis-body-", "") }
-    }
-
-    if raw-id == none {
-      let m-lbl = val.at("mark-lbl", default: none)
-      if m-lbl == none and "note-data" in val { m-lbl = val.note-data.at("mark-lbl", default: none) }
-      if m-lbl != none and str(m-lbl).starts-with("deixis-mark-") { raw-id = str(m-lbl).replace("deixis-mark-", "") }
-    }
-
-    if raw-id != none {
-      let sid = str(raw-id)
-      if sid.starts-with("celibate-") { return none }
-      return sid
-    }
-    return none
-  }
-
-  let extract-field(val, key, default-val) = {
-    if key in val { return val.at(key) }
-    if "note-data" in val and key in val.note-data { return val.note-data.at(key) }
-    return default-val
-  }
-
-  let m-tag-map = (
-    (<deixis-inline-mark>, "inline-mark"),
-    (<deixis-region-mark>, "region-mark"),
-    (<deixis-phantom-mark>, "phantom-mark"),
-  )
-  let b-tag-map = (
-    (<deixis-inline-note>, "inline-note"),
-    (<deixis-footnote>, "footnote"),
-    (<deixis-endnote>, "endnote"),
-    (<deixis-margin-note>, "margin-note"),
-    (<deixis-inset-note>, "inset-note"),
-  )
-
-  // collect metadata
-  let combined = (:)
-  let raw-celibates = ()
-
-  for (tag, type-str) in m-tag-map {
-    for m in query(selector(tag)) {
-      let val = m.value
-      let i-id = extract-id(val)
-      if i-id == none {
-        raw-celibates.push((loc: m.location(), mark-meta: val, body-meta: none, m-type: type-str, b-type: none))
-      } else {
-        let entry = combined.at(i-id, default: (
-          loc: m.location(),
-          mark-meta: none,
-          body-meta: none,
-          m-type: none,
-          b-type: none,
-        ))
-        entry.mark-meta = val
-        entry.m-type = type-str
-        entry.loc = m.location() // Mark loc takes priority
-        combined.insert(i-id, entry)
-      }
-    }
-  }
-
-  for (tag, type-str) in b-tag-map {
-    for b in query(selector(tag)) {
-      let val = b.value
-      let i-id = extract-id(val)
-      if i-id == none {
-        raw-celibates.push((loc: b.location(), mark-meta: none, body-meta: val, m-type: none, b-type: type-str))
-      } else {
-        let entry = combined.at(i-id, default: (
-          loc: b.location(),
-          mark-meta: none,
-          body-meta: none,
-          m-type: none,
-          b-type: none,
-        ))
-        entry.body-meta = val
-        entry.b-type = type-str
-        if entry.mark-meta == none { entry.loc = b.location() } // Fallback to body loc
-        combined.insert(i-id, entry)
-      }
-    }
-  }
-
-  let c-inc-marks = (
-    include-celibates == true
-      or include-celibates == "both"
-      or include-celibates in ("mark", "marks")
-      or (type(include-celibates) == array and ("mark" in include-celibates or "marks" in include-celibates))
-  )
-
-  let c-inc-bodies = (
-    include-celibates == true
-      or include-celibates == "both"
-      or include-celibates in ("body", "bodies")
-      or (type(include-celibates) == array and ("body" in include-celibates or "bodies" in include-celibates))
-  )
-
-  let all-raw = combined.values() + raw-celibates
-  let valid-notes = ()
-
-  for n in all-raw {
-    let is-celibate-mark = n.body-meta == none and n.mark-meta != none
-    let is-celibate-body = n.mark-meta == none and n.body-meta != none
-
-    if is-celibate-mark and not c-inc-marks { continue }
-    if is-celibate-body and not c-inc-bodies { continue }
-
-    if not is-in-bounds(n.loc) { continue }
-
-    let actual-type = if n.b-type != none { n.b-type } else { n.m-type }
-    if include-types != auto and actual-type not in include-types { continue }
-    if actual-type in exclude-types { continue }
-
-    let meta-to-use = if n.body-meta != none { n.body-meta } else { n.mark-meta }
-
-    let c-series = extract-field(meta-to-use, "series", "default")
-    if series != auto {
-      if type(series) == array and c-series not in series { continue }
-      if type(series) == str and c-series != series { continue }
-    }
-
-    let note-target-id = extract-field(meta-to-use, "target-id", "page")
-    if thread != auto {
-      if note-target-id != ("thread-" + str(thread)) { continue }
-    } else if target != auto {
-      let resolved-outline-target = _deixis-resolve-target(active-sys, target)
-      if note-target-id != resolved-outline-target.render-id { continue }
-    }
-
-    let num = extract-field(meta-to-use, "marker-str", none)
-    if num == none and n.mark-meta != none { num = extract-field(n.mark-meta, "marker-str", none) }
-
-    let m-lbl = extract-field(meta-to-use, "mark-lbl", none)
-    let b-lbl = extract-field(meta-to-use, "body-lbl", none)
-    let target-dest = if m-lbl != none {
-      m-lbl
-    } else if b-lbl != none {
-      b-lbl
-    } else {
-      n.loc
-    }
-
-    let styles = extract-field(meta-to-use, "styles", (:))
-    let s-obj = if styles.at("stroke", default: auto) != none { styles.at("stroke", default: 0.5pt + luma(200)) } else {
-      none
-    }
-    let f-obj = if styles.at("fill", default: auto) != auto { styles.fill } else { none }
-    let r-obj = if styles.at("radius", default: auto) != auto { styles.radius } else { 2pt }
-
-    let badge = if num != none and num != "" {
-      box(
-        fill: f-obj,
-        stroke: s-obj,
-        radius: r-obj,
-        inset: (x: 0.3em, y: 0.2em),
-        outset: (y: 0.1em),
-        baseline: 15%,
-        clip: true,
-        text(size: 0.8em, weight: "bold", num),
-      )
-    } else {
-      box(fill: f-obj, stroke: s-obj, radius: r-obj, width: 0.8em, height: 0.8em, baseline: 10%)
-    }
-
-    valid-notes.push((
-      loc: n.loc,
-      dest: target-dest,
-      body: extract-field(meta-to-use, "body", none),
-      badge: badge,
-      type: actual-type,
-      series: c-series,
-    ))
-  }
-
-  // group and render
-  let grouped = (:)
+  assert(args.pos().len() == 0, message: "deixis: The note outline accepts named options only.")
+  assert("include-celibates" not in args.named(),
+    message: "deixis: include-celibates was renamed to include-unpaired. Use false, true, mark, or body.")
+  assert(args.named().len() == 0, message: "deixis: Unknown outline option(s) " + repr(args.named().keys()) + ".")
+  assert(summary == auto or type(summary) == function, message: "deixis: Outline summary must be auto or a function.")
+  assert(group-by == none or group-by in ("type", "series") or type(group-by) == function,
+    message: "deixis: Outline group-by must be none, type, series, or a function.")
+  let notes = deixis-query-notes(target: target, thread: thread, include-types: include-types,
+    exclude-types: exclude-types, series: series, include-unpaired: include-unpaired, after: after, before: before)
   let pretty-types = (
-    "inline-mark": "Inline Marks",
-    "phantom-mark": "Phantom Marks",
-    "region-mark": "Region Marks",
-    "inline-note": "Inline Notes",
-    "footnote": "Footnotes",
-    "endnote": "Endnotes",
-    "margin-note": "Margin Notes",
-    "inset-note": "Inset Notes",
+    "inline-mark": "Inline Marks", "phantom-mark": "Phantom Marks", "region-mark": "Region Marks",
+    "inline-note": "Inline Notes", "footnote": "Footnotes", "endnote": "Endnotes",
+    "margin-note": "Margin Notes", "inset-note": "Inset Notes",
   )
-
-  for note in valid-notes.sorted(key: n => n.loc.page()) {
-    let key = "Notes"
-    if type(group-by) == str {
-      if group-by == "type" {
-        key = pretty-types.at(note.type, default: note.type)
-      } else if group-by == "series" { key = note.series }
-    } else if type(group-by) == function {
-      key = group-by(note)
+  let grouped = (:)
+  for entry in notes {
+    let styles = entry.styles
+    let badge = if entry.marker != none and entry.marker != "" {
+      box(fill: styles.at("fill", default: none), stroke: styles.at("stroke", default: 0.5pt + luma(200)),
+        radius: styles.at("radius", default: 2pt), inset: (x: 0.3em, y: 0.2em), outset: (y: 0.1em),
+        baseline: 15%, clip: true, text(size: 0.8em, weight: "bold", entry.marker))
+    } else {
+      box(fill: styles.at("fill", default: none), stroke: styles.at("stroke", default: 0.5pt + luma(200)),
+        radius: styles.at("radius", default: 2pt), width: 0.8em, height: 0.8em, baseline: 10%)
     }
-    let arr = grouped.at(str(key), default: ())
-    arr.push(note)
-    grouped.insert(str(key), arr)
+    let note = entry + (badge: badge)
+    let key = if group-by == "type" { pretty-types.at(note.type, default: note.type) }
+      else if group-by == "series" { note.series }
+      else if type(group-by) == function { group-by(note) } else { "Notes" }
+    assert(type(key) == str, message: "deixis: Outline group-by callback must return a string.")
+    if key not in grouped { grouped.insert(key, ()) }
+    grouped.at(key).push(note)
   }
-
   if title != none { heading(level: heading-level, title) }
-
   let c-gap = if gap == auto { 0.6em } else { gap }
   for (g-key, g-notes) in grouped {
-    if grouped.keys().len() > 1 and group-by != none {
-      heading(level: heading-level + 1, g-key)
-    }
-
-    let outline-items = ()
+    if grouped.len() > 1 and group-by != none { heading(level: heading-level + 1, g-key) }
+    let items = ()
     for note in g-notes {
-      let c-body = if note.body != none {
-        note.body
-      } else {
-        text(fill: luma(150), style: "italic", size: 0.9em)[No body text]
+      let excerpt = link(note.dest, if summary == auto { note.summary } else { summary(note) })
+      let destinations = if note.marks.len() > 0 { note.marks.map(m => m.dest) }
+        else { (note.dest,) }
+      let seen-pages = ()
+      let pages = ()
+      for dest in destinations {
+        let physical-page = dest.page()
+        if physical-page in seen-pages { continue }
+        seen-pages.push(physical-page)
+        let pattern = dest.page-numbering()
+        let formatted = std.numbering(if pattern == none { "1" } else { pattern }, ..counter(page).at(dest))
+        pages.push(link(dest, formatted))
       }
-
-      let content-and-page = grid(
-        columns: (1fr, auto),
-        column-gutter: 0.5em,
-        align: (left + top, right + bottom),
-        {
+      let content-and-page = grid(columns: (1fr, auto), column-gutter: 0.5em,
+        align: (left + top, right + bottom), {
           set text(size: 0.95em)
           set par(justify: false)
-
-          if fill != none {
-            [#c-body #box(width: 1fr, fill)]
-          } else {
-            [#c-body #h(1fr)]
-          }
-        },
-        text(size: 0.95em)[#note.loc.page()],
-      )
-
-      outline-items.push(link(note.dest, note.badge))
-      outline-items.push(link(note.dest, content-and-page))
+          if fill != none { [#excerpt #box(width: 1fr, fill)] } else { [#excerpt #h(1fr)] }
+        }, text(size: 0.95em, pages.join([, ])))
+      items.push(link(note.dest, note.badge))
+      // Page links have their own mark destinations; do not wrap the whole row
+      // in the original's link and accidentally override those nested targets.
+      items.push(content-and-page)
     }
-    grid(
-      columns: (auto, 1fr),
-      column-gutter: 0.75em,
-      row-gutter: c-gap,
-      align: (center + top, left + top),
-      ..outline-items
-    )
+    grid(columns: (auto, 1fr), column-gutter: 0.75em, row-gutter: c-gap,
+      align: (center + top, left + top), ..items)
   }
 }
