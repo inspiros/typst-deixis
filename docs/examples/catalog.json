@@ -1,0 +1,233 @@
+[
+  {
+    "id": "footnote",
+    "title": "A Native Footnote",
+    "caption": "A single content argument creates a solo mark and its explanation. Native flow reserves the footer slot.",
+    "source": "examples/footnote.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": false,
+    "width": 260
+  },
+  {
+    "id": "inline-modes",
+    "title": "Choose An Inline Mark",
+    "caption": "Decoration changes the passage without adding a note body. These anonymous marks have no number.",
+    "source": "examples/inline-modes.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": false,
+    "width": 260
+  },
+  {
+    "id": "shared-endnote",
+    "title": "One Body, Several Passages",
+    "caption": "Reuse keeps the original number and body; the next original advances the counter. The printer chooses the body position.",
+    "source": "examples/shared-endnote.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": false,
+    "width": 260
+  },
+  {
+    "id": "forward-margin",
+    "title": "Declare The Body First",
+    "caption": "Forward lookup resolves identity. An overlay margin follows the original even when its body was declared earlier.",
+    "source": "examples/forward-margin.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": false,
+    "width": 280
+  },
+  {
+    "id": "palette",
+    "title": "Cycle Annotation Colors",
+    "caption": "Each original takes one accent. Shared marks retain it and explicit component styles can override it.",
+    "source": "examples/palette.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": false,
+    "width": 280
+  },
+  {
+    "id": "inset",
+    "title": "A Callout With An Arrow",
+    "caption": "The mark and body use one wrapper. Placement offsets belong to the body; the connector has its own route and head.",
+    "source": "examples/inset.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": false,
+    "width": 260
+  },
+  {
+    "id": "region",
+    "title": "Highlight A Formula",
+    "caption": "A region wrapper measures the actual content. Mark and body layers can be selected independently.",
+    "source": "examples/region.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": false,
+    "width": 260
+  },
+  {
+    "id": "pins",
+    "title": "Attach Region Corners",
+    "caption": "Pins can be attached around an existing object. Their padding is geometric: it adds no space to the object.",
+    "source": "examples/pins.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": false,
+    "width": 260
+  },
+  {
+    "id": "scoped-settings",
+    "title": "Restore Local Settings",
+    "caption": "A Deixis block scopes its settings and numbering. After it ends, the outer defaults resume.",
+    "source": "examples/scoped-settings.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": false,
+    "width": 260
+  },
+  {
+    "id": "local-notes",
+    "title": "Keep Notes With A Table",
+    "caption": "One block owns the whole figure and its caption. Its footnotes collect below the object with independent numbering.",
+    "source": "examples/local-notes.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": false,
+    "width": 260
+  },
+  {
+    "id": "container",
+    "title": "Give A Body A Container",
+    "caption": "Container options stay with the body. A stacked endnote group delegates to its single-note container.",
+    "source": "examples/container.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": false,
+    "width": 260
+  },
+  {
+    "id": "custom-renderer",
+    "title": "Customize The Body Layout",
+    "caption": "The marker helper supplies the destination; the content helper retains live spans. Use each once.",
+    "source": "examples/custom-renderer.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": false,
+    "width": 260
+  },
+  {
+    "id": "catalogue",
+    "title": "Build A Custom Note List",
+    "caption": "Author data stays separate from identity and layout. Query records can supply custom catalogues without replaying body content.",
+    "source": "examples/catalogue.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": false,
+    "width": 260
+  },
+  {
+    "id": "attached-nodes",
+    "title": "Connect Ordinary Content",
+    "caption": "Node IDs register bounds where objects are rendered. No detached list of object positions is needed.",
+    "source": "examples/attached-nodes.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": false,
+    "width": 260
+  },
+  {
+    "id": "head-shapes",
+    "title": "Choose A Native Arrowhead",
+    "caption": "Head size, fill, stroke and trimming are configurable. Numeric geometry and its painter work without note setup.",
+    "source": "examples/head-shapes.typ",
+    "setup": "free",
+    "pages": 1,
+    "full": false,
+    "width": 260
+  },
+  {
+    "id": "curve-cuts",
+    "title": "Cut A Curve Without Moving It",
+    "caption": "Cuts hide intervals on the completed curve. Optional indicators are independent; the remaining pieces retain the original geometry.",
+    "source": "examples/curve-cuts.typ",
+    "setup": "free",
+    "pages": 1,
+    "full": false,
+    "width": 260
+  },
+  {
+    "id": "avoidance",
+    "title": "Route Around An Obstacle",
+    "caption": "The wrapper captures a policy for individually declared connections. Registered nodes stay fixed; the sharp orthogonal route avoids the middle rectangle.",
+    "source": "examples/avoidance.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": false,
+    "width": 260
+  },
+  {
+    "id": "page-portals",
+    "title": "Continue On Another Page",
+    "caption": "A portal marks each accepted page boundary. The two fragments use each page\u2019s geometry; no line is drawn across the intervening document.",
+    "source": "examples/page-portals.typ",
+    "setup": "setup",
+    "pages": 2,
+    "full": false,
+    "width": 260
+  },
+  {
+    "id": "adaptive-header",
+    "title": "Follow Endnotes In The Header",
+    "caption": "The header reads complete body spans on its physical page, then gathers all original and reused mark pages. Querying never renders an explanation again. These source page numbers are physical; native page-label formatting is a separate step.",
+    "source": "examples/adaptive-header.typ",
+    "setup": "setup",
+    "pages": 2,
+    "full": true,
+    "width": 320
+  },
+  {
+    "id": "touying",
+    "title": "Reveal An Annotation With Its Passage",
+    "caption": "Touying renders two subslides. The second reveals the region, connector and callout together; hidden declarations retain their semantic ownership.",
+    "source": "../examples/touying-reveals.typ",
+    "setup": "setup",
+    "pages": 2,
+    "full": true,
+    "width": 720,
+    "excerpt": "touying"
+  },
+  {
+    "id": "editorial-apparatus",
+    "title": "Separate Readings From Commentary",
+    "caption": "Independent series give source readings and editorial comments their own numbering. A custom renderer adds a lemma; reused passages share one reading.",
+    "source": "examples/editorial-apparatus.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": true,
+    "width": 340
+  },
+  {
+    "id": "review-index",
+    "title": "Find Open Review Comments",
+    "caption": "Author and status are ordinary annotation data. A filtered linked view selects open comments without removing resolved notes from the draft.",
+    "source": "examples/review-index.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": true,
+    "width": 340
+  },
+  {
+    "id": "glossary",
+    "title": "Link Terms To Their First Use",
+    "caption": "Explicit originals choose the first use. A sorted catalogue displays safe definition summaries without printing or executing their endnote bodies.",
+    "source": "examples/glossary.typ",
+    "setup": "setup",
+    "pages": 1,
+    "full": true,
+    "width": 340
+  }
+]

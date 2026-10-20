@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "compiler": "typst 0.15.1 (unknown commit)",
+  "inputs": [
+    "paper=a4",
+    "monochrome=false"
+  ],
+  "source_sha256": "11202f9e57e544d0db93be4f27eaf99ee67e350dd29b26e2b28ae0ba2eb78e7a",
+  "source_files": 160,
+  "pdf_sha256": "8076ccedd8934e5d03278eb44b6abd2206c150c3f5e1a07025eaaf728f323c1e",
+  "checks": {
+    "exports": 66,
+    "entries": 45,
+    "pages": 39,
+    "worked_examples": 23,
+    "preview_pages": 26,
+    "headings": 20,
+    "internal_links": 85,
+    "inputs": [
+      "paper=a4",
+      "monochrome=false"
+    ],
+    "failures": 0
+  }
+}

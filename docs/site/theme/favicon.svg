@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-labelledby="title desc">
+  <title id="title">deixis logo mark</title>
+  <desc id="desc">A coral deictic pointer connected to a teal annotation note.</desc>
+
+  <!-- Teal annotation body -->
+  <rect x="605" y="470" width="525" height="545" rx="86" fill="#017B87"/>
+
+  <!-- Pointer/locator head: centered target and centered tail -->
+  <circle cx="280" cy="335" r="205" fill="#FC4443"/>
+  <path d="M 126 462 Q 204 518 280 603 Q 356 518 434 462
+           Q 401 505 383 540 Q 330 527 280 527 Q 230 527 177 540
+           Q 159 505 126 462 Z" fill="#FC4443"/>
+  <circle cx="280" cy="335" r="121" fill="#FFFFFF"/>
+  <circle cx="280" cy="335" r="64" fill="#FC4443"/>
+
+  <!-- White isolation stroke under the connector; invisible on white, crisp over teal -->
+  <path d="M 390 418
+           C 468 430, 516 477, 575 523
+           C 625 562, 674 596, 758 603"
+        fill="none" stroke="#FFFFFF" stroke-width="74" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Coral connector -->
+  <path d="M 390 418
+           C 468 430, 516 477, 575 523
+           C 625 562, 674 596, 758 603"
+        fill="none" stroke="#FC4443" stroke-width="43" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Top rule first, then connector node, for a precise integrated joint -->
+  <rect x="748" y="572" width="302" height="60" rx="30" fill="#FFFFFF"/>
+  <circle cx="758" cy="603" r="73" fill="#FFFFFF"/>
+  <circle cx="758" cy="603" r="49" fill="#FC4443"/>
+
+  <!-- Note text rules: centered and evenly spaced -->
+  <rect x="677" y="715" width="383" height="53" rx="26.5" fill="#FFFFFF"/>
+  <rect x="677" y="815" width="290" height="53" rx="26.5" fill="#FFFFFF"/>
+</svg>

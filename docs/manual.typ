@@ -1,316 +1,56 @@
-#import "@preview/tidy:0.4.3"
-#import "@preview/gentle-clues:1.3.1": *
-
-#import "../src/lib.typ"
-#import "../src/lib.typ": *
-#show: deixis-setup-notes
-
-#import "logo.typ": deixis-logo
-#import "demo.typ": demo, show-demo
-#show: show-demo
-
-#let show-module(
-  module,
-  fn: none,
-  ..args) = {
-  if fn not in (none, auto) {
-    module.functions = module.functions.filter(f => f.name == fn)
-    module.variables = module.variables.filter(v => v.name == fn)
-  }
-
-  // scrubber
-  module.functions = module.functions.map(f => {
-    let desc = f.at("description", default: "")
-    if desc != "" {
-      desc = desc.replace(regex("(?m)^[ \t]*-[ \t]+[a-zA-Z0-9_.-]+[ \t]*\\(.*?\\):.*\\n?"), "")
-      f.description = desc.trim()
-    }
-    f
-  })
-
-  import "deixis-style.typ"
-  tidy.show-module(
-    ..args,
-    module,
-    sort-functions: none,
-    show-module-name: false,
-    show-outline: false,
-    first-heading-level: 3,
-    style: deixis-style
-  )
-}
-
-#show link: it => {
-  if type(it.dest) == str {
-    underline(text(fill: rgb("#1668af"), it), offset: 0.1em)
-  } else {
-    it
-  }
-}
-
-#set page(numbering: "1")
-// #set text(font: "Linux Libertine", size: 11pt)
-#set heading(numbering: (..numbers) => {
-  let n = numbers.pos()
-  if n.len() <= 3 {
-    numbering("1.1.", ..n)
-  }
-})
-#show heading: it => {
-  if it.level == 5 {
-    set text(fill: luma(100))
-    it
-  } else {
-    it
-  }
-}
-
+#import "manual-style.typ": *
 #let manifest = toml("../typst.toml")
-
 #let version = manifest.package.version
-#let pkg-name = manifest.package.name
-#let description = manifest.package.description
-#let repository = manifest.package.repository
+#show: manual.with(version: version, paper: sys.inputs.at("paper", default: "a4"),
+  monochrome: sys.inputs.at("monochrome", default: "false") == "true")
+#set document(title: "Deixis Manual", author: manifest.package.authors)
 
-#let titlecase(s) = {
-  s.split(" ").map(w => if w.len() > 0 { upper(w.first()) + lower(w.slice(1)) } else { w }).join(" ")
-}
-#align(center)[
+#align(left)[
   #v(1fr)
-  #text(size: 24pt, weight: "bold")[#titlecase(lower(pkg-name).replace("-", " "))] \
+  #image("../assets/logos/deixis-logo-horizontal.svg", width: 260pt)
+  #v(1.4em)
+  #text(font: "DejaVu Sans", size: 31pt, weight: "bold", fill: accent)[The Deixis Manual]
+  #v(0.5em)
+  #text(size: 17pt)[Notes, Highlights, And Connections]
   #v(1em)
-  #text(size: 14pt, style: "italic")[#description] \
-  #v(2em)
-  Version #version
+  Mark a passage. Share its explanation. Draw the relationship.
   #v(1fr)
+  #line(length: 100%, stroke: 0.6pt + accent)
+  #v(0.5em)
+  #badge("DEVELOPMENT " + version) #badge("TYPST 0.15.0+")
+  #v(0.7em)
+  A visual guide with worked examples and a compact API reference.\
+  Detailed recipes and complete record contracts live in `docs/guides`.
 ]
-
-#outline(depth: 3)
+#pagebreak()
+#outline(depth: 1)
 #pagebreak()
 
-#set par(justify: true)
-
-= Introduction
-`deixis` is a unified layout engine for inline notes, footnotes, endnotes, margin notes, inset notes, and inline spatial highlights with visual connectors.
-
-== Quick Start
-To use `deixis`, you must initialize the state engine at the top of your document:
-
-```source
-#import "@preview/deixis:0.1.1": *
-#show: deixis-setup-notes
-```
-
-== Core Concepts
-
-Inspired by ```tex \footnotemark``` and ```tex \footnotetext``` in LaTeX, `deixis` decouples an annotation into distinct components:
-
-- *The mark:*
-  The visual indicator placed directly within your text flow.
-  It increments counters and records its exact physical coordinates in the document.
-```demo
-#deixis-inline-mark(
-  id: <anatomy>,
-)[*Note mark*]
-```
-
-- *The body:*
-  The actual content of your note.
-  It can be rendered anywhere -- floating in the margin, at the bottom of the page, or at the end of a chapter -- while maintaining a bi-directional hyperlink to the mark if they share the same `id`.
-```demo
-#deixis-inset-note-body(
-  id: <anatomy>,
-  link: "right-angle",
-  link-waypoints: ((200pt, "body"),),
-  link-marks: "body",
-  label: <anatomy>,
-  backlink: true,
-)[*Note body.*]
-```
-
-- *The link:*
-  The optional connection that links the mark to the body.
-  Semantically, it can be considered the third component, but programatically, it is treated as part of the body (set via `link`).
-
-If given a `label`, notes can be referenced anywhere in the document.
-The body is also aware of where it is referenced, allowing it to generate backlink buttons #super(emoji.arrow.l.hook).
-```demo
-See @anatomy.
-```
-
-#align(center, {
-  deixis-logo
-  quote[_Still unamused? There are way more to discover._ #emoji.face.smirk]
-})
+#include "manual-introduction.typ"
+#include "manual-examples.typ"
+#include "manual-reference.typ"
 
 #pagebreak()
+= Integration Checklist
 
-= API Reference
+- Configure native page layers before setup; reapply setup after replacing them.
+  Host-owned overlays still need initialization. Changing dimensions/margins alone
+  does not need another setup call.
+- Use flow for long footnotes. Overlays cannot create pages. Immediate margin
+  placement has no collision packing and native placement may disturb paragraphs.
+- A body declaration controls formatting and adapter-specific allocation, even
+  with forward identity lookup. Collected bodies must be printed to be endpoints.
+- Multi-page region highlights need overlays. Arbitrary native columns/fragments
+  are not automatically discovered. Deep deferred contexts have a finite native
+  layout-pass budget; do not replace missing geometry with guessed bounds.
+- In custom renderers, emit destination/marker once and live body content once.
+  Query summaries are safe; replaying raw executable body content is not.
+- For Touying, use the frame identity/reveal recipes. For migration from 0.1.1 or
+  older overhaul snapshots, read `docs/guides/compatibility.md`.
 
-#let doc-scope = (
-  ..dictionary(lib),
-  demo: demo,
-  info: info,
-  notify: notify,
-  warning: warning,
-  danger: danger,
-  success: success,
-  error: error,
-  tip: tip,
-  experiment: experiment,
-  conclusion: conclusion,
-  memo: memo,
-  code: code,
-)
+Read the task-oriented index in `docs/README.md`. Source examples live in
+`examples/` and `docs/examples/`; the worked pairs name their editable sources.
+This checkout is unreleased: install its 0.2.0 preview override to compile the
+examples. Build this source with `python3 scripts/render-manual.py`.
 
-#let lib-docs = tidy.parse-module(read("../src/lib.typ"), scope: doc-scope)
-
-#let inline-note-docs = tidy.parse-module(read("../src/inline-note.typ"), scope: doc-scope)
-#let region-note-docs = tidy.parse-module(read("../src/region-note.typ"), scope: doc-scope)
-#let footnote-docs = tidy.parse-module(read("../src/footnote.typ"), scope: doc-scope)
-#let endnote-docs = tidy.parse-module(read("../src/endnote.typ"), scope: doc-scope)
-#let margin-note-docs = tidy.parse-module(read("../src/margin-note.typ"), scope: doc-scope)
-#let inset-note-docs = tidy.parse-module(read("../src/inset-note.typ"), scope: doc-scope)
-
-#let minipage-docs = tidy.parse-module(read("../src/minipage.typ"), scope: doc-scope)
-
-#let pin-docs = tidy.parse-module(read("../src/pin.typ"), scope: doc-scope)
-#let counter-docs = tidy.parse-module(read("../src/counter.typ"), scope: doc-scope)
-#let ref-docs = tidy.parse-module(read("../src/reference.typ"), scope: doc-scope)
-#let outline-docs = tidy.parse-module(read("../src/outline.typ"), scope: doc-scope)
-
-
-#let layout-docs = tidy.parse-module(read("../src/layout.typ"), scope: doc-scope)
-#let render-docs = tidy.parse-module(read("../src/render.typ"), scope: doc-scope)
-
-#let extra-docs = tidy.parse-module(read("extra.typ"), scope: doc-scope)
-
-== Setup & Configuration
-#show-module(lib-docs, fn: "deixis-setup-notes")
-#pagebreak()
-#show-module(lib-docs, fn: "deixis-set")
-
-== Common Mechanics
-#show-module(extra-docs, fn: "deixis-common-note-args")
-#pagebreak()
-
-== Marks
-
-=== Inline Mark
-#show-module(inline-note-docs, fn: "deixis-inline-mark")
-#pagebreak()
-
-=== Phantom Mark
-#show-module(inline-note-docs, fn: "deixis-phantom-mark")
-#pagebreak()
-
-=== Region Mark
-#place(left, deixis-pin("region-mark-chapter-start"))
-#show-module(region-note-docs, fn: "deixis-region-mark")
-#place(right, deixis-pin("region-mark-chapter-end"))
-#pagebreak()
-
-== Notes
-
-=== Inline Note
-#show-module(inline-note-docs, fn: "deixis-inline-note-body")
-#pagebreak()
-
-=== Footnote
-#show-module(footnote-docs, fn: "deixis-footnote-body")
-#show-module(footnote-docs, fn: "deixis-footnote")
-#pagebreak()
-
-=== Endnote
-#show-module(endnote-docs, fn: "deixis-endnote-body")
-#show-module(endnote-docs, fn: "deixis-endnote")
-#show-module(endnote-docs, fn: "deixis-print-endnotes")
-#pagebreak()
-
-=== Margin Note
-#show-module(margin-note-docs, fn: "deixis-margin-note-body")
-#show-module(margin-note-docs, fn: "deixis-margin-note")
-#pagebreak()
-
-=== Inset Note
-#show-module(inset-note-docs, fn: "deixis-inset-note-body")
-#show-module(inset-note-docs, fn: "deixis-inset-note")
-#pagebreak()
-
-== Renderers
-
-=== Note Renderer
-#show-module(render-docs, fn: "deixis-native-render-single")
-#show-module(render-docs, fn: "deixis-default-render-single")
-
-=== Group Renderer
-#show-module(render-docs, fn: "deixis-native-render-group")
-#show-module(render-docs, fn: "deixis-default-render-group")
-#show-module(render-docs, fn: "deixis-grid-render-group")
-
-=== Helpers
-
-These helper functions can be useful for implementing a custom render function.
-
-#show-module(render-docs, fn: "deixis-generate-backlinks")
-#show-module(render-docs, fn: "deixis-generate-body-meta")
-#show-module(render-docs, fn: "deixis-generate-body-marker")
-#pagebreak()
-
-== Minipage
-#show-module(minipage-docs)
-#pagebreak()
-
-== Utilities
-=== Pin
-#show-module(pin-docs)
-#pagebreak()
-
-=== Counter
-#show-module(counter-docs)
-#pagebreak()
-
-=== Cross-reference
-#show-module(ref-docs)
-#pagebreak()
-
-=== Note Outline
-#show-module(outline-docs)
-#pagebreak()
-
-=== Others
-#show-module(lib-docs, fn: "deixis-page-notes")
-#show-module(layout-docs, fn: "deixis-place-anchored")
-#show-module(layout-docs, fn: "deixis-absolute-place")
-#pagebreak()
-
-= Limitations and Conclusion
-
-== Known Issues
-
-If you encounter any bug, please report at #link(repository).
-
-This is just a non-exhaustive list of known limitations that might not have a fix.
-
-- Page-level footnotes are currently dependent on `std.footnote` internally, limiting their customizability.
-- Occasionally, if put inside the `demo` environment in this manual, foreground overlayed notes like footnotes and margin notes may have their mark $arrow.r$ body link broken, pointing to the beginning of the document when clicked. 
-- Similarly, a relative-placed `#deixis-inset-note` sometimes have wrongly calculated body coordinates, resulting in a link connecting to the border of the page.
-  ```demo
-  #deixis-inset-note(
-    stroke: red,
-    fill: red.transparentize(95%),
-    link: "straight-line",
-    link-marks: "both",
-    dx: 4em, dy: 3em,
-    layer: "flow",  // not affecting "foreground"
-  )[Note mark.][Note body.]
-  ```
-
-== Conclusion
-
-#conclusion[
-  The package is meant to be a proof of concept.
-  Do not expect much, as there are always limits to what a hacky Typst package can do.
-
-  Plus, having a strong opinion on using native features whenever possible, I hope future Typst versions will provide a more powerful noting mechanism.
-]
+Bug reports and source: #link(manifest.package.repository).

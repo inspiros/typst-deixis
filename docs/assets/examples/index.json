@@ -1,0 +1,171 @@
+{
+  "compiler": "typst 0.15.1 (unknown commit)",
+  "runtime_sha256": "0ee7e072e6d68aefaf08d87e6e494294026132eca2ef7fc77ca6f52be8688fd6",
+  "catalog_sha256": "0a937a582e1cfed47dcf309c94a992908159bfc168fe230c0dde474b43b0d3ef",
+  "examples": [
+    {
+      "id": "footnote",
+      "source_sha256": "843399ad6afdbc17ab48287177ca4266fac240106bf48d01bc9d7b3a47d7b602",
+      "assets": {
+        "footnote-1.svg": "0938b294d9c069e483fc56d6df7aca98624b2839e1b1b5df0eb4b0c6eadf6ce8"
+      }
+    },
+    {
+      "id": "inline-modes",
+      "source_sha256": "20f3040b351311175e3942ed75ed01edcb8ffef04a70475f2020e0cfe1e63aff",
+      "assets": {
+        "inline-modes-1.svg": "55b20ca9b553d7a6b9ecfe4616e07e503ccfeacea34c8e222e7e222a5a62cfde"
+      }
+    },
+    {
+      "id": "shared-endnote",
+      "source_sha256": "8a4da068555c062c778caf8d7a2a0aabb259d1d2c10c141928599263ce70c47b",
+      "assets": {
+        "shared-endnote-1.svg": "d8db5e26c64e1490bf358581fa4c5326dd72161cf18d0ec29a64e521d840b709"
+      }
+    },
+    {
+      "id": "forward-margin",
+      "source_sha256": "498914f9c665b017c9cf27b86025ae850196fc8648088bf97019cf2c5d793a73",
+      "assets": {
+        "forward-margin-1.svg": "bcee749a4f9e739164a826d3c459bf5a39ab3ee77678ae30cc59e9da57323e30"
+      }
+    },
+    {
+      "id": "palette",
+      "source_sha256": "64f788d21719b211324200a8c123af9b2574eef0724795c8b8a0b8f5ad4ba0ab",
+      "assets": {
+        "palette-1.svg": "ac07c604e0378e6e378bfdbceba39bcaf06d721791b06109a266a8bf25020634"
+      }
+    },
+    {
+      "id": "inset",
+      "source_sha256": "d086eaccee72cc3d6bcdad051a772e8ab2949ae6962d8c801350eb531e5e843f",
+      "assets": {
+        "inset-1.svg": "25be6e504aa7a3a47737397f4aabb98a9aadb5a7cf73365cbc3300201f0244ac"
+      }
+    },
+    {
+      "id": "region",
+      "source_sha256": "325650ab489041af4c9822a398994422f80a73bc4adecda1f455fe4d66c30156",
+      "assets": {
+        "region-1.svg": "a15da28e4a4b9428d446fbd187d030b65fa1ef4310004ee484d2751179535e43"
+      }
+    },
+    {
+      "id": "pins",
+      "source_sha256": "4b9f33c6fef424b16b2811d5f071cd9c3e58900174981264102068d3499b7fea",
+      "assets": {
+        "pins-1.svg": "840f765b3e6e8d4867413aa4fb302611d7e21ac2ef255faa68d9629b5677a53d"
+      }
+    },
+    {
+      "id": "scoped-settings",
+      "source_sha256": "2a994958bf01fe2247f13dbb331d4f53a5644b2f94806ff0f4bdfb074f2e1876",
+      "assets": {
+        "scoped-settings-1.svg": "bcfe0edf3ce7e837e54263ecb1de8485cdec6ef2b35c903cee294fa487fbae06"
+      }
+    },
+    {
+      "id": "local-notes",
+      "source_sha256": "c1b3581815824de15a39d88549a8c0c5253f34c51d5e14e0a2042f75f5a2e581",
+      "assets": {
+        "local-notes-1.svg": "09c3bde6a7f59f826d767ba8155aaed2e1789cdba702f1c06638aee59b3ca31c"
+      }
+    },
+    {
+      "id": "container",
+      "source_sha256": "d2236be2b41b1a7ff79a929bd3a78f097bcd6c3c67a994b3e331a4066a588b7d",
+      "assets": {
+        "container-1.svg": "81e1d6c71a1c7f2aa9829f937bee4346cbbbab720f9c75f823b2e2cded141888"
+      }
+    },
+    {
+      "id": "custom-renderer",
+      "source_sha256": "b4ffa026f21a05f7cf184859a3dd7f06c520ac9735fd667a9aba57be3541d518",
+      "assets": {
+        "custom-renderer-1.svg": "b618a0044661f8d75f1e186cf495e6d19c558df49f324da7f99525c784ee34c4"
+      }
+    },
+    {
+      "id": "catalogue",
+      "source_sha256": "1f8d28229a2ac89f68befb5651e7de822bc55f3f26dfe2a700ef39f6fc5c966d",
+      "assets": {
+        "catalogue-1.svg": "640e1b728aea7d8a75a5bff65345222cc2928ff750d9b1445e79c0219b43a193"
+      }
+    },
+    {
+      "id": "attached-nodes",
+      "source_sha256": "3f0f5351f0eb53e042ac2372d374785faf12c84bef2dedd6840db28de8c2f4f5",
+      "assets": {
+        "attached-nodes-1.svg": "2a401d16afc236a847a8f0ff1d2aaaf147b56d2b33c3c6ada23549441892c3ef"
+      }
+    },
+    {
+      "id": "head-shapes",
+      "source_sha256": "adc0caf28c211caad65587edc360a5564796d5da6f11b3c10785e82351fc5fba",
+      "assets": {
+        "head-shapes-1.svg": "0b9c5719cabf3fe8f85e12d5d3693a360ccc2a0fa5e27f6779dda5a2cea93316"
+      }
+    },
+    {
+      "id": "curve-cuts",
+      "source_sha256": "1ee4c5b5a32e5a6e348a4350fcf4f49485e398949bc83240d84512a085417f32",
+      "assets": {
+        "curve-cuts-1.svg": "cf91f54ff97f3aefa5d515baac3297bbfc14ab5b7785929abc56e3234dd67dc2"
+      }
+    },
+    {
+      "id": "avoidance",
+      "source_sha256": "f95195e3f341926b1e3a614939593a33a52bd4288ce8425847466c1136d33062",
+      "assets": {
+        "avoidance-1.svg": "32fe2755eba25e4edcf5cfb93f674c3ece048efc7180de45293db50f2e0dd683"
+      }
+    },
+    {
+      "id": "page-portals",
+      "source_sha256": "b2c8c7b542628b7806e8f46b4df287e13a6f5e1816b29addf20d4612916b4e3a",
+      "assets": {
+        "page-portals-1.svg": "dfe5048a8f2a923919f80ca98ad15922b686c0927b0dc51849a5120fe8a9a09d",
+        "page-portals-2.svg": "35cfac0dfb84f2c8965e35cb338807d838e59c81b4141276580c1f49835db8de"
+      }
+    },
+    {
+      "id": "adaptive-header",
+      "source_sha256": "b980952d74b986c64e65b263752fa26aefbea72ea786503aa31f34f974af5a27",
+      "assets": {
+        "adaptive-header-1.svg": "18e7fd4c8e5e6874c6f964c2591de7a3fc840c27db0782bdc6dae44a09b3dbea",
+        "adaptive-header-2.svg": "9bda373f6ebb6bd7f9c0ccc61ee88ddc2bd288c7df4821aae320a215ea0be955"
+      }
+    },
+    {
+      "id": "touying",
+      "source_sha256": "96116607a2d09f62bc279b12cbfc447e7621c31729e507500599cacf71105456",
+      "assets": {
+        "touying-1.svg": "4fc22484b27104e41235f5e76dee343d5c97aaa4a914f96f2a9a44ca6abbfc9a",
+        "touying-2.svg": "feeb2449a91b39d1e1c9f6fbf8421a4feee2678ae92ff476910a1d7797618daa"
+      }
+    },
+    {
+      "id": "editorial-apparatus",
+      "source_sha256": "ab63677ee81e0effb0c220b7002b2ef68276863c055c8d9553d3619373e51bb5",
+      "assets": {
+        "editorial-apparatus-1.svg": "feed80a4c66ceb07c4ce25268429b1f58c1bbfafe72a11cc5314e9a0c9d3f534"
+      }
+    },
+    {
+      "id": "review-index",
+      "source_sha256": "eb6752c2b12cba2199521a3003776db93907c62f6b9c207249c87c809487a28c",
+      "assets": {
+        "review-index-1.svg": "e7d6251811993d55b7cae49e39eed8fbe7fc1f24dc9f9c0da40e288f90599fe4"
+      }
+    },
+    {
+      "id": "glossary",
+      "source_sha256": "491f64b000709fd43f53b6086f3dfb0c2123e7de3243167a84ac797863c36177",
+      "assets": {
+        "glossary-1.svg": "24a78f84f69f4646cfa0ee4c20576522d86975c4abc6f080f55775a43a8ba9e5"
+      }
+    }
+  ]
+}

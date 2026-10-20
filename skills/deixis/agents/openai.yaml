@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deixis"
+  short_description: "Write Typst annotations, notes, and connectors"
+  default_prompt: "Use $deixis to add annotations to this Typst document."

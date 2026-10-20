@@ -1,0 +1,28 @@
+[book]
+title = "Deixis"
+description = "Notes, highlights, and connections for Typst"
+language = "en"
+src = "target/site-source"
+
+[build]
+build-dir = "target/site"
+create-missing = false
+
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "navy"
+no-section-label = true
+git-repository-url = "https://github.com/inspiros/typst-deixis"
+theme = "docs/site/theme"
+additional-css = ["docs/site/theme/deixis.css"]
+
+[output.html.fold]
+enable = true
+level = 0
+
+[output.html.print]
+enable = false
+
+[output.html.search]
+enable = true
+

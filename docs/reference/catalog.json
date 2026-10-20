@@ -1,0 +1,849 @@
+[
+  {
+    "title": "Setup And Defaults",
+    "guide": "setup.md",
+    "intro": "Install setup before document annotations. Configuration can precede it. Reapply setup after replacing a native page foreground/background; identities and counters persist.",
+    "entries": [
+      {
+        "names": [
+          "deixis-setup-notes"
+        ],
+        "setup": "installs",
+        "summary": "Document show rule: installs registration, references, visibility, validation and optional page overlays.",
+        "args": [
+          "override-page-footnotes",
+          "page-overlays",
+          "foreground",
+          "background"
+        ],
+        "call": "#show: deixis-setup-notes",
+        "note": "Set page geometry/layers first. Page footnotes default to native flow; override-page-footnotes: true makes the foreground overlay their default. Host themes may install both overlay hooks with page-overlays: false.",
+        "returns": "content → content"
+      },
+      {
+        "names": [
+          "deixis-page-overlay"
+        ],
+        "setup": "setup",
+        "summary": "Host integration hook for one page overlay; does not initialize the annotation registry.",
+        "args": [
+          "layer"
+        ],
+        "call": "deixis-page-overlay(layer: \"foreground\")",
+        "note": "Install background too: it records page geometry. See the setup guide for host-owned/scoped composition.",
+        "returns": "content"
+      },
+      {
+        "names": [
+          "deixis-set",
+          "deixis-configure"
+        ],
+        "setup": "free",
+        "summary": "Updates subsequent defaults in the current Deixis scope; ordinary Typst brackets do not create a settings scope.",
+        "args": [
+          "omit",
+          "palette",
+          "stroke",
+          "marker-style",
+          "connector",
+          "layer",
+          "render-single"
+        ],
+        "call": "deixis-set(palette: (blue, teal, orange))",
+        "note": "Top-level auto leaves settings unchanged. Type/component maps merge compatible branches; empty maps and branch auto have option-specific reset semantics. All accepted setting names are listed in the shared-options section. omit: (series: (\"todo\",)) removes selected annotations while preserving passages; none includes all series. `deixis-configure` is an identical alias; `short.configure` uses the same function.",
+        "returns": "content",
+        "guide": "configuration.md"
+      },
+      {
+        "names": [
+          "short"
+        ],
+        "summary": "Opt-in module of short aliases. Use configure for settings and note-block for Deixis scopes; native block remains available.",
+        "setup": "free",
+        "args": [],
+        "guide": "getting-started.md",
+        "call": "#import short: *",
+        "returns": "module",
+        "note": "Use short as dx for qualified calls. All function aliases preserve identity; configure replaces the keyword set and note-block preserves native block. See the getting-started guide for import syntax."
+      }
+    ]
+  },
+  {
+    "title": "Marks And Identity",
+    "guide": "identities.md",
+    "intro": "Use id to create the original counter owner; of reuses it. Names accept nonempty strings or labels. An original, its one body and reused marks may appear in any order. Reuse does not add a drawn connector.",
+    "entries": [
+      {
+        "names": [
+          "deixis-mark"
+        ],
+        "setup": "setup",
+        "summary": "Unified original/reused mark. Defaults to inline; pins select region mode. A call without id/of is anonymous decoration.",
+        "args": [
+          "id",
+          "of",
+          "mark-type",
+          "occurrence",
+          "marker",
+          "numbering"
+        ],
+        "call": "deixis-mark(id: <detail>)[A passage]",
+        "note": "mark-type: \"region\" highlights a passage or pins; \"phantom\" is a semantic origin. Set data on creation, not reuse. See shared options for styles, targets and region controls.",
+        "returns": "content"
+      },
+      {
+        "names": [
+          "deixis-inline-mark"
+        ],
+        "setup": "setup",
+        "summary": "Specialized inline form of deixis-mark, with an optional marked passage.",
+        "args": [
+          "inline-mode",
+          "marker-position"
+        ],
+        "call": "deixis-inline-mark(of: <detail>)[Another passage]",
+        "note": "Box, highlight, underline, parentheses, text-fill and none are available. Reused marks retain the original styles beneath explicit overrides.",
+        "returns": "content",
+        "guide": "shared-notes.md"
+      },
+      {
+        "names": [
+          "deixis-region-mark"
+        ],
+        "setup": "setup",
+        "summary": "Highlights a passage or a pin-defined region, with page-local fragment geometry.",
+        "args": [
+          "pins",
+          "padding",
+          "layer",
+          "inline",
+          "region-shape"
+        ],
+        "call": "deixis-region-mark(inline: true)[$x^2 + y^2$]",
+        "note": "Supply passage or pins, never both. A flow region must fit one page. Foreground/background regions may span pages. Region marker numerals remain foreground.",
+        "returns": "content",
+        "guide": "regions.md"
+      },
+      {
+        "names": [
+          "deixis-phantom-mark"
+        ],
+        "setup": "setup",
+        "summary": "Creates/reuses an invisible semantic original; its body may still carry a numbered marker.",
+        "args": [
+          "id",
+          "of",
+          "occurrence",
+          "marker"
+        ],
+        "call": "deixis-phantom-mark(id: <quiet>)",
+        "note": "Phantom reuse accepts no passage or appearance overrides. An anonymous phantom draws nothing and consumes no palette slot.",
+        "returns": "content"
+      }
+    ]
+  },
+  {
+    "title": "Bodies And Collections",
+    "guide": "ownership.md",
+    "intro": "Wrappers accept [body] or [passage][body]. A -body call takes [body]. Wrapper id creates original + body; -body id creates a standalone body. With of, both forms attach only a body. Margin, inset and endnote bodies capture declaration typography; page footnotes use the native footer.",
+    "entries": [
+      {
+        "names": [
+          "deixis-footnote",
+          "deixis-footnote-body"
+        ],
+        "setup": "setup",
+        "summary": "Allocates a native footer slot at the body declaration, even when its original mark is on another page.",
+        "args": [
+          "layer",
+          "backlink",
+          "container-args"
+        ],
+        "call": "deixis-footnote[An explanation.]",
+        "note": "Native flow (the default) paginates long bodies and uses the footer's typography; separator/gap are native footnote.entry settings. Overlay footnotes reserve space but paint whole units. Local block footnotes collect at the block end. numbering: (restart: \"page\", pattern: \"1\") restarts displayed markers on each original page; assigned counts stay stable.",
+        "returns": "content",
+        "guide": "rendering.md"
+      },
+      {
+        "names": [
+          "deixis-margin-note",
+          "deixis-margin-note-body"
+        ],
+        "setup": "setup",
+        "summary": "Overlay bodies follow the original mark or anchor pin; native margin packing may spill onto later existing pages.",
+        "args": [
+          "width",
+          "side",
+          "dx",
+          "dy",
+          "spillover",
+          "overflow",
+          "mark-align",
+          "mark-align-strictness",
+          "anchor-pin"
+        ],
+        "call": "deixis-margin-note(width: 30mm, side: right)[Passage][Explanation.]",
+        "note": "Leave a wide page margin. Flow places exactly on the declaration page with no collision packing. overflow: \"error\" checks the final frame. Connector shorthand selects the original mark.",
+        "returns": "content",
+        "guide": "margin-overflow.md"
+      },
+      {
+        "names": [
+          "deixis-sidenote",
+          "deixis-sidenote-body"
+        ],
+        "setup": "setup",
+        "summary": "Margin-note presets for the outside margin and loose mark alignment.",
+        "args": [
+          "side",
+          "mark-align-strictness"
+        ],
+        "call": "deixis-sidenote[A brief aside.]",
+        "note": "Uses margin-note configuration/query type. Explicit arguments override the preset; mark-align-strictness: auto resumes configured strictness.",
+        "returns": "content",
+        "guide": "configuration.md"
+      },
+      {
+        "names": [
+          "deixis-inset-note",
+          "deixis-inset-note-body"
+        ],
+        "setup": "setup",
+        "summary": "Callout whose page defaults to its body declaration; use anchors, offsets or a placement callback for deliberate positioning.",
+        "args": [
+          "width",
+          "layer",
+          "placement",
+          "dx",
+          "dy",
+          "anchor",
+          "anchor-pin"
+        ],
+        "call": "deixis-inset-note(dx: 100pt, dy: 40pt)[Passage][Callout.]",
+        "note": "Flow is the factory body layer. Overlay declarations are invisible in flow. The connector layer is independent. Custom containers receive container-args.",
+        "returns": "content"
+      },
+      {
+        "names": [
+          "deixis-inline-note",
+          "deixis-inline-note-body"
+        ],
+        "setup": "setup",
+        "summary": "An explanation in native flow: the wrapper places it right after its passage as an inline aside; a -body call places it where called.",
+        "args": [
+          "inline",
+          "of",
+          "breakable",
+          "container-args"
+        ],
+        "call": "deixis-inline-note[term][An inline explanation.]",
+        "note": "The wrapper defaults to inline: true and keeps the sentence; inline: false gives a callout after the line (the -body default). Inline decoration bypasses block containers/custom single renderers. breakable: false supplies one frame for an explicit body endpoint.",
+        "returns": "content",
+        "guide": "containers.md"
+      },
+      {
+        "names": [
+          "deixis-endnote",
+          "deixis-endnote-body"
+        ],
+        "setup": "setup",
+        "summary": "Declares a collected explanation, rendered only by an eligible endnote printer.",
+        "args": [
+          "series",
+          "backlink",
+          "container-args"
+        ],
+        "call": "deixis-endnote[A collected explanation.]",
+        "note": "Wrapper series defaults to \"endnote\"; attachments inherit the original series. The printer controls where it appears. Body settings are retained until printing.",
+        "returns": "content",
+        "guide": "collected-notes.md"
+      },
+      {
+        "names": [
+          "deixis-print-endnotes"
+        ],
+        "setup": "setup",
+        "summary": "Prints unprinted eligible bodies in source order; successive printers do not duplicate output.",
+        "args": [
+          "target",
+          "series",
+          "after",
+          "before",
+          "render-group",
+          "container-args"
+        ],
+        "call": "deixis-print-endnotes()",
+        "note": "Omitted overrides retain body settings. Default grid bypasses single-note containers; select deixis-native-render-group to use them. after/before are exclusive source boundaries.",
+        "returns": "content",
+        "guide": "collected-notes.md"
+      }
+    ]
+  },
+  {
+    "title": "Connections And Drawing",
+    "guide": "connectors.md",
+    "intro": "A body connector is the short path for margin/inset notes. Independent edges select document endpoints without creating or moving them. Connections paint in their own foreground/background layer, below bodies at matching priorities.",
+    "entries": [
+      {
+        "names": [
+          "deixis-connect"
+        ],
+        "setup": "setup",
+        "summary": "Draws an independent edge between marks, bodies, attached objects or pins; declarations may precede endpoints.",
+        "args": [
+          "from",
+          "to",
+          "connector"
+        ],
+        "call": "deixis-connect(from: (node: <a>), to: (node: <b>))",
+        "note": "Bare from IDs select original marks; bare to IDs select bodies. Use (mark: id, occurrence: name), (body: id, point: \"end\"), (node: id) or (pin: target) explicitly. Default route is straight, or sharp orthogonal inside deixis-routing.",
+        "returns": "content",
+        "guide": "independent-connections.md"
+      },
+      {
+        "names": [
+          "deixis-routing"
+        ],
+        "setup": "setup",
+        "summary": "Show-rule wrapper that captures a policy for individual connections and enabled margin/inset shorthand.",
+        "args": [
+          "policy",
+          "nodes",
+          "clearance",
+          "spacing",
+          "rounds",
+          "max-searches"
+        ],
+        "call": "#show: deixis-routing.with(policy: \"avoid\")",
+        "note": "manual keeps native routes; avoid searches independently; separate adds bounded group repair. Search needs sharp orthogonal geometry. Registered objects stay fixed. Nested wrappers form separate groups.",
+        "returns": "content → content",
+        "guide": "document-routing.md"
+      },
+      {
+        "names": [
+          "deixis-route"
+        ],
+        "setup": "free",
+        "summary": "Builds source-local line/cubic geometry from finite absolute coordinates, optionally using a prepared scene.",
+        "args": [
+          "from",
+          "to",
+          "route",
+          "via",
+          "segments",
+          "radius",
+          "scene",
+          "page"
+        ],
+        "call": "deixis-route(from: (0pt, 0pt), to: (100pt, 40pt), route: \"curve\")",
+        "note": "Coordinates use x-right/y-down. origin is the source; segments are relative to it. No measurement or painting. Scene routes can fail: inspect status/detail before preparation. Avoidance requires sharp orthogonal paths.",
+        "returns": "route / failure record",
+        "guide": "numeric-routing.md"
+      },
+      {
+        "names": [
+          "deixis-routing-scene"
+        ],
+        "setup": "conditional",
+        "summary": "Prepares reusable fixed rectangles/points in caller-defined page planes.",
+        "args": [
+          "nodes",
+          "clearance",
+          "escape",
+          "bend-cost",
+          "bounds",
+          "pages"
+        ],
+        "call": "deixis-routing-scene(nodes: ((id: <a>, bounds: (left: 0pt, top: 0pt, right: 30pt, bottom: 20pt)),))",
+        "note": "Numeric nodes need no setup. Selectors for document marks/bodies/pins need setup + context. Node behavior is avoid, ignore, cut or cross; the latter two do not add visual indicators.",
+        "returns": "scene record",
+        "guide": "routing-scenes.md"
+      },
+      {
+        "names": [
+          "deixis-route-group"
+        ],
+        "setup": "free",
+        "summary": "Plans up to sixteen explicit sharp orthogonal page fragments together against a prepared scene.",
+        "args": [
+          "edges",
+          "scene",
+          "spacing",
+          "weight",
+          "max-detour",
+          "rounds",
+          "max-searches",
+          "max-expansions"
+        ],
+        "call": "deixis-route-group(((from: <a>, to: <b>),), scene: scene)",
+        "note": "Result routes retain input order. quality has before/after metrics; stats reports bounded work. No registration or painting. Complete separation/global optimality is not guaranteed. Preparing a document-derived scene still needs setup.",
+        "returns": "(routes, quality, stats)",
+        "guide": "route-groups.md"
+      },
+      {
+        "names": [
+          "deixis-prepare-connector"
+        ],
+        "setup": "free",
+        "summary": "Prepares existing geometry for native/custom paint without repeating routing. Head callbacks run here.",
+        "args": [
+          "route",
+          "stroke",
+          "heads",
+          "cuts",
+          "gap-marks"
+        ],
+        "call": "deixis-prepare-connector(path, heads: (body: \"stealth\"))",
+        "note": "Place the painted request at path.origin yourself. Relative styles/custom heads may need context. It consults no document defaults, page layer or automatic crossing group.",
+        "returns": "painter request",
+        "guide": "numeric-routing.md"
+      },
+      {
+        "names": [
+          "deixis-render-connector"
+        ],
+        "setup": "free",
+        "summary": "Paints a prepared connector request, including shafts, heads and optional decorations.",
+        "args": [
+          "request"
+        ],
+        "call": "deixis-render-connector(request)",
+        "note": "Numeric painting adds no layout dimensions; reserve the drawing area and place at the source origin. In document callbacks this is the default-painter delegation helper.",
+        "returns": "content",
+        "guide": "numeric-routing.md"
+      },
+      {
+        "names": [
+          "deixis-arrowhead"
+        ],
+        "setup": "free",
+        "summary": "Constructs a reusable head specification; stealth is a filled triangular head with an open notch.",
+        "args": [
+          "shape",
+          "length",
+          "width",
+          "fill",
+          "stroke",
+          "trim",
+          "render"
+        ],
+        "call": "deixis-arrowhead(shape: \"stealth\", length: 7pt, width: 5pt)",
+        "note": "Other native shapes include triangle, vee, circle, diamond and bar. Custom render(request) returns body, trim and bounds in a tip-local +x frame. Omitted dimensions scale with the shaft. Disable endpoint heads with heads: none.",
+        "returns": "head specification"
+      },
+      {
+        "names": [
+          "deixis-render-head"
+        ],
+        "setup": "free",
+        "summary": "Paints a prepared head in its local frame. A missing head or zero direction emits nothing.",
+        "args": [
+          "head",
+          "tip",
+          "forward"
+        ],
+        "call": "deixis-render-head(request.heads.body, request.route.end, request.route.end-tangent)",
+        "note": "Use prepared heads from the connector request, not the raw specification returned by deixis-arrowhead.",
+        "returns": "content",
+        "extension": true
+      }
+    ]
+  },
+  {
+    "title": "Pins And Attachments",
+    "guide": "pins.md",
+    "intro": "Pin names and attachment IDs accept string/label spellings. They have independent namespaces from note IDs. A pin is a point; an attached routing object registers one live, nonbreaking frame.",
+    "entries": [
+      {
+        "names": [
+          "deixis-pin"
+        ],
+        "setup": "setup",
+        "summary": "Publishes a geometric anchor at its declaration; padding expands bounds around that anchor.",
+        "args": [
+          "name",
+          "scope",
+          "padding",
+          "extra-data"
+        ],
+        "call": "deixis-pin(<anchor>, padding: 0pt)",
+        "note": "Default \"text\" padding follows local text metrics. Percentages have no pin-size basis. Scope namespaces pins independently of note/block identities.",
+        "returns": "content"
+      },
+      {
+        "names": [
+          "deixis-attach"
+        ],
+        "setup": "setup",
+        "summary": "Wraps rendered content to attach pins, scan marked tokens, or register a selectable routing node.",
+        "args": [
+          "id",
+          "behavior",
+          "pins",
+          "scope",
+          "inline",
+          "padding",
+          "pin-padding"
+        ],
+        "call": "deixis-attach(id: <card>)[A card]",
+        "note": "id registers a routing frame with avoid behavior by default. Generated node ports are the four side midpoints. pins can define custom outlets. Explicit avoid/ignore/cut/cross also registers anonymous nodes. Pin-only attachments keep their native breakability.",
+        "returns": "content",
+        "guide": "document-routing.md"
+      },
+      {
+        "names": [
+          "deixis-set-pin-pattern"
+        ],
+        "setup": "free",
+        "summary": "Sets inherited literal delimiters for attachment scanning; can precede setup.",
+        "args": [
+          "prefix",
+          "postfix"
+        ],
+        "call": "deixis-set-pin-pattern(prefix: \"[[\", postfix: \"]]\")",
+        "note": "none/empty prefix disables delimiter scanning. Explicit attachment patterns use one capture. Configuration does not initialize pins or annotations.",
+        "returns": "content"
+      }
+    ]
+  },
+  {
+    "title": "Scopes And Counters",
+    "guide": "scopes.md",
+    "intro": "Scope names and note IDs are independent. Blocks own rendering instances and counter streams; thread shares a rendering domain, while counter synchronization only shares numbering.",
+    "entries": [
+      {
+        "names": [
+          "deixis-block",
+          "deixis-minipage"
+        ],
+        "setup": "setup",
+        "summary": "Creates local annotation rendering/settings/counter scope around native content.",
+        "args": [
+          "id",
+          "thread",
+          "sync-counters-with",
+          "breakable",
+          "width",
+          "height",
+          "inset"
+        ],
+        "call": "deixis-block(id: <section>)[Local content.]",
+        "note": "Minipage uses margin instead of inset. Named IDs are unique; automatic scopes stay private. Breakable blocks use per-page margin frames and collect local footnotes at the block end.",
+        "returns": "content",
+        "guide": "blocks.md"
+      },
+      {
+        "names": [
+          "deixis-note-counter"
+        ],
+        "setup": "setup",
+        "summary": "Reads the assigned counter value for a scope and literal series. Use inside context.",
+        "args": [
+          "target",
+          "series"
+        ],
+        "call": "#context deixis-note-counter()",
+        "note": "Unused streams start at zero. This is not a total annotation count. Page numbering resets do not reset note counters. Opt-in page-local display markers do not change this assigned value.",
+        "returns": "integer",
+        "guide": "counters.md"
+      },
+      {
+        "names": [
+          "deixis-update-note-counter"
+        ],
+        "setup": "setup",
+        "summary": "Sets a stream to an integer or applies current → integer. The next original increments that value.",
+        "args": [
+          "value",
+          "target",
+          "series"
+        ],
+        "call": "deixis-update-note-counter(0)",
+        "note": "Bodies, references and reuse never increment. Earlier notes keep assigned numbers. Endnote wrappers use the \"endnote\" series; select it explicitly for their resets.",
+        "returns": "content",
+        "guide": "counters.md"
+      }
+    ]
+  },
+  {
+    "title": "References And Custom Views",
+    "guide": "queries.md",
+    "intro": "Queries return safe semantic records and summaries instead of replaying live annotation content. An annotation remains one entry even when several marks share its body.",
+    "entries": [
+      {
+        "names": [
+          "deixis-ref"
+        ],
+        "setup": "setup",
+        "summary": "References one or more annotations, retaining original marker styling and native fallback for ordinary labels.",
+        "args": [
+          "..targets",
+          "supplement",
+          "form",
+          "marker-style"
+        ],
+        "call": "deixis-ref(<detail>)",
+        "note": "@detail uses the native bridge installed by setup. Repeated reference targets deduplicate; compatible numeric ranges can collapse. Explicit marker-style overrides formatting.",
+        "returns": "content",
+        "guide": "references.md"
+      },
+      {
+        "names": [
+          "deixis-show-refs"
+        ],
+        "setup": "setup",
+        "summary": "The native reference-conversion show wrapper installed by setup.",
+        "args": [
+          "body"
+        ],
+        "call": "#show: deixis-show-refs",
+        "note": "Normal documents only need deixis-setup-notes. This hook does not initialize the annotation registry.",
+        "returns": "content → content",
+        "extension": true,
+        "guide": "references.md"
+      },
+      {
+        "names": [
+          "deixis-query-notes"
+        ],
+        "setup": "setup",
+        "summary": "One safe structured record per selected annotation. Page queries follow native body order; the unfiltered catalogue follows source order. Call inside context.",
+        "args": [
+          "target",
+          "thread",
+          "include-types",
+          "series",
+          "include-unpaired",
+          "after",
+          "before",
+          "page",
+          "order"
+        ],
+        "call": "#context deixis-query-notes(page: here().page())",
+        "note": "Page queries include standalone bodies and require complete unique live spans. order: \"source\" / \"body\" and include-unpaired override automatic defaults. Each record retains all shared marks, safe summaries and optional body metadata; no live body content is returned.",
+        "returns": "array of records"
+      },
+      {
+        "names": [
+          "deixis-note-outline"
+        ],
+        "setup": "setup",
+        "summary": "Ready-made linked list over the annotation catalogue; custom callbacks can replace summaries or presentation.",
+        "args": [
+          "title",
+          "include-types",
+          "include-unpaired",
+          "group-by",
+          "summary"
+        ],
+        "call": "deixis-note-outline()",
+        "note": "One entry per annotation, with links to all marked pages. Use query-notes for cards/tables or occurrence indexes. data can supply a custom title/status.",
+        "returns": "content",
+        "guide": "outlines.md"
+      },
+      {
+        "names": [
+          "deixis-plain"
+        ],
+        "setup": "setup",
+        "summary": "Shows repeated content with its marked passages but without creating marks, bodies or connections again.",
+        "args": [
+          "body"
+        ],
+        "call": "deixis-plain(heading.body)",
+        "note": "Native outlines apply it to heading and caption entries automatically. Use it for running headers and custom tables of contents that repeat annotated headings.",
+        "returns": "content",
+        "guide": "outlines.md"
+      }
+    ]
+  },
+  {
+    "title": "Rendering Extension Points",
+    "guide": "custom-renderers.md",
+    "intro": "These hooks consume supplied records or content; they do not create a registered annotation. When used in live document annotations, keep setup active and preserve destination/content helpers. Relative typography and backlinks may require context.",
+    "entries": [
+      {
+        "names": [
+          "deixis-native-render-single",
+          "deixis-default-render-single"
+        ],
+        "setup": "conditional",
+        "summary": "Built-in single-body layouts. Native keeps a natural text flow; default accepts a shared marker column.",
+        "args": [
+          "data",
+          "inner-width"
+        ],
+        "call": "deixis-native-render-single(note, ..args.named())",
+        "note": "Use supplied data unchanged when delegating. Default additionally accepts max-marker-width/max-marker-gap. The container and body-style come from the body record.",
+        "returns": "content",
+        "extension": true
+      },
+      {
+        "names": [
+          "deixis-native-render-group",
+          "deixis-default-render-group",
+          "deixis-grid-render-group"
+        ],
+        "setup": "conditional",
+        "summary": "Stack bodies, align stacked markers, or lay markers/content directly in two grid columns.",
+        "args": [
+          "notes-data",
+          "gap"
+        ],
+        "call": "deixis-native-render-group(notes, ..args.named())",
+        "note": "Native/aligned groups delegate to each single renderer. Grid bypasses single renderers and containers. Empty groups produce no content. Supplied records may contain live document behavior.",
+        "returns": "content",
+        "extension": true,
+        "guide": "collected-notes.md"
+      },
+      {
+        "names": [
+          "deixis-generate-body-meta",
+          "deixis-generate-body-marker",
+          "deixis-generate-body-content",
+          "deixis-generate-backlinks"
+        ],
+        "setup": "conditional",
+        "summary": "Composable helpers for a custom body renderer: one destination, a marker, live content span, and return links.",
+        "args": [
+          "data"
+        ],
+        "call": "[#deixis-generate-body-marker(note)#deixis-generate-body-content(note)]",
+        "note": "Emit meta OR marker once; marker already includes meta. Content publishes start/end spans and preserves nested palette ownership. Measurement records suppress live metadata. Backlinks read document origins and need setup/context.",
+        "returns": "content",
+        "extension": true
+      },
+      {
+        "names": [
+          "deixis-plain-container",
+          "deixis-rect-container",
+          "deixis-alert-container"
+        ],
+        "setup": "free",
+        "summary": "Body wrappers: identity, native rect alias, or a left-bar alert. Container arguments are forwarded separately from shared styles.",
+        "args": [
+          "body",
+          "..args"
+        ],
+        "call": "deixis-alert-container(body, stroke: teal, inset: 6pt)",
+        "note": "rect-container has native rect parameters. Alert doubles scalar border thickness on the left; native edge maps remain literal. Configure via container-func and container-args.",
+        "returns": "content",
+        "extension": true,
+        "guide": "containers.md"
+      },
+      {
+        "names": [
+          "deixis-default-footnote-style"
+        ],
+        "setup": "free",
+        "summary": "Body-style callback that scales inherited text to 0.85em.",
+        "args": [
+          "it"
+        ],
+        "call": "deixis-default-footnote-style(body)",
+        "note": "This is ordinary content styling; it creates no footnote or annotation.",
+        "returns": "content",
+        "extension": true,
+        "guide": "appearance.md"
+      },
+      {
+        "names": [
+          "deixis-rect-region",
+          "deixis-highlight-rect-region",
+          "deixis-ellipse-region",
+          "deixis-highlight-ellipse-region"
+        ],
+        "setup": "free",
+        "summary": "Region-shape callbacks for rectangular or elliptical bounds; highlight variants omit the outline.",
+        "args": [
+          "..args"
+        ],
+        "call": "deixis-rect-region(width: 40pt, height: 20pt, fill: teal)",
+        "note": "Shape records provide width, height, fill/stroke and rectangle radius. Region registration/fragment selection belongs to the calling mark, not these painters.",
+        "returns": "content",
+        "extension": true,
+        "guide": "regions.md"
+      }
+    ]
+  },
+  {
+    "title": "Low-Level Layout Hooks",
+    "guide": "rendering.md",
+    "intro": "Advanced hooks use supplied measured records and geometry. Most documents should choose note adapters, container/render callbacks, or routing APIs instead. Native layout and document lookup are separate responsibilities.",
+    "entries": [
+      {
+        "names": [
+          "deixis-group-layout"
+        ],
+        "setup": "conditional",
+        "summary": "Groups supplied note records by series, then delegates to their group renderer with separator/clearance policy.",
+        "args": [
+          "notes-data",
+          "separator",
+          "clearance",
+          "gap",
+          "render-group"
+        ],
+        "note": "Pure supplied content needs no initialization; registered live notes/visibility need setup. This helper does not collect notes or initialize identities.",
+        "returns": "content",
+        "extension": true
+      },
+      {
+        "names": [
+          "deixis-margin-note-exact-layout",
+          "deixis-margin-note-adaptive-layout",
+          "deixis-margin-note-flow-layout"
+        ],
+        "setup": "conditional",
+        "summary": "Numeric margin adapter hooks: exact ignores collisions; adaptive packs; flow distributes available space.",
+        "args": [
+          "notes",
+          "top-bound",
+          "bottom-bound",
+          "start-x",
+          "text-width",
+          "end-y",
+          "left-space",
+          "right-space",
+          "current-page"
+        ],
+        "note": "All share min-margin-width, pushed-notes and extra arguments. Supply accepted page geometry and prepared notes. They paint locally through the layout adapter. These hooks are not the body layer: \"flow\" switch.",
+        "returns": "content",
+        "extension": true
+      },
+      {
+        "names": [
+          "deixis-place-anchored"
+        ],
+        "setup": "setup",
+        "summary": "Immediate placement relative to selected pin bounds or a supplied private original ID.",
+        "args": [
+          "body",
+          "dx",
+          "dy",
+          "anchor",
+          "pin",
+          "body-size"
+        ],
+        "note": "Prefers a pin name/target for authored code; internal-id is an extension hook, not a public note ID. Pin lookup reads document geometry. Native placement can disturb flow.",
+        "returns": "content",
+        "extension": true,
+        "guide": "pins.md"
+      },
+      {
+        "names": [
+          "deixis-absolute-place"
+        ],
+        "setup": "conditional",
+        "summary": "Immediate placement in physical page coordinates, ignoring margins.",
+        "args": [
+          "..args"
+        ],
+        "call": "deixis-absolute-place(top + left, dx: 30pt, dy: 40pt)[Content]",
+        "note": "Accepts content, or alignment + content; dx/dy default to 0pt. Fixed page dimensions need no setup. An auto page axis needs setup-provided page frames for accepted dimensions. This is placement, not dimension reservation.",
+        "returns": "content",
+        "extension": true
+      }
+    ]
+  }
+]
