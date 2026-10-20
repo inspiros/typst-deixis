@@ -205,6 +205,24 @@
       },
       {
         "names": [
+          "deixis-comment"
+        ],
+        "setup": "setup",
+        "summary": "Review-comment preset: a margin note in the \"review\" series with lettered markers, author/status data and a bold header.",
+        "args": [
+          "author",
+          "status",
+          "series",
+          "numbering",
+          "header"
+        ],
+        "call": "deixis-comment(author: \"Ada\", status: \"open\")[Passage][Comment.]",
+        "note": "Omit the series for a final copy with deixis-set(omit: (series: (\"review\",))). Other options are margin-note options; of is rejected.",
+        "returns": "content",
+        "guide": "review-comments.md"
+      },
+      {
+        "names": [
           "deixis-inset-note",
           "deixis-inset-note-body"
         ],

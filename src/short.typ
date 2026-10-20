@@ -13,7 +13,7 @@
 #import "notes/inline.typ": deixis-inline-note as inline-note, deixis-inline-note-body as inline-note-body
 #import "notes/footnote.typ": deixis-footnote as footnote, deixis-footnote-body as footnote-body
 #import "notes/endnote.typ": deixis-endnote as endnote, deixis-endnote-body as endnote-body, deixis-print-endnotes as print-endnotes
-#import "notes/margin.typ": deixis-margin-note as margin-note, deixis-margin-note-body as margin-note-body, deixis-sidenote as sidenote, deixis-sidenote-body as sidenote-body
+#import "notes/margin.typ": deixis-margin-note as margin-note, deixis-margin-note-body as margin-note-body, deixis-sidenote as sidenote, deixis-sidenote-body as sidenote-body, deixis-comment as comment
 #import "notes/inset.typ": deixis-inset-note as inset-note, deixis-inset-note-body as inset-note-body
 #import "render/body.typ": deixis-default-footnote-style as default-footnote-style, deixis-plain-container as plain-container, deixis-rect-container as rect-container, deixis-alert-container as alert-container, deixis-rect-region as rect-region, deixis-highlight-rect-region as highlight-rect-region, deixis-ellipse-region as ellipse-region, deixis-highlight-ellipse-region as highlight-ellipse-region, deixis-generate-backlinks as generate-backlinks, deixis-generate-body-meta as generate-body-meta, deixis-generate-body-marker as generate-body-marker, deixis-generate-body-content as generate-body-content, deixis-native-render-single as native-render-single, deixis-default-render-single as default-render-single, deixis-native-render-group as native-render-group, deixis-default-render-group as default-render-group, deixis-grid-render-group as grid-render-group
 #import "reference.typ": deixis-ref as ref, deixis-show-refs as show-refs

@@ -168,6 +168,7 @@ def main():
         "attachment-content": "attached wrapper accepts only",
         "attachment-mark-options": "original-mark option(s)",
         "phantom-arguments": "Unknown phantom mark argument(s)",
+        "comment-of": "deixis-comment creates an original",
         "attachment-series": "attached bodies inherit their original's series",
         "body-series": "body series must be auto or a string",
         "collection-filter": "must be",
@@ -585,6 +586,8 @@ def main():
                         typst("compile", *flags, source, target)
                         data = json.loads(typst("eval", *flags, "--in", source, "--format", "json", expression))
                         check_pdf_links(target, data, minimum=16)
+            elif source.parent.name == "integration" and source.stem == "comment-preset":
+                typst("compile", "--input", "final=true", source, out / "comment-preset-final.pdf")
             elif source.parent.name == "integration" and source.stem == "automatic-splits":
                 for kind in ("explicit", "inset"):
                     for direction in ("forward", "backward"):

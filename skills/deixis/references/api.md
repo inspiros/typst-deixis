@@ -130,6 +130,16 @@ Selected parameters: `side = "outside"`; `mark-align-strictness = "loose"`.
 
 Uses margin-note configuration/query type. Explicit arguments override the preset; mark-align-strictness: auto resumes configured strictness.
 
+### `deixis-comment`
+
+Review-comment preset: a margin note in the "review" series with lettered markers, author/status data and a bold header.
+
+Setup: **setup**.
+
+Selected parameters: `author = none`; `status = none`; `series = "review"`; `numbering = "A"`; `header = auto`.
+
+Omit the series for a final copy with deixis-set(omit: (series: ("review",))). Other options are margin-note options; of is rejected.
+
 ### `deixis-inset-note` / `deixis-inset-note-body`
 
 Callout whose page defaults to its body declaration; use anchors, offsets or a placement callback for deliberate positioning.

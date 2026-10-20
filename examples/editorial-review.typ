@@ -11,12 +11,10 @@
 
 = Review A Claim
 
-The #deixis-margin-note(series: "review", numbering: "A", side: right, width: 107pt, dx: 12pt,
+The #deixis-comment(author: "Ada", status: "open", side: right, width: 107pt, dx: 12pt,
   stroke: rgb("A86C3F"), fill: rgb("FFF4E8"),
-  data: (author: "Ada", status: "open"),
   connector: (route: "right-angle", radius: 3pt),
-)[proposed method][*Ada · Open* \
-  State the conditions under which this claim holds.]
+)[proposed method][State the conditions under which this claim holds.]
 preserves the structure of the original argument.
 
 Supporting evidence#deixis-footnote[The cited source remains in both builds.]

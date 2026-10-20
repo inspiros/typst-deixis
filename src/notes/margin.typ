@@ -1252,3 +1252,58 @@
 /// Uses margin-note configuration and query type, without a separate sidenote
 /// engine. Set mark-align-strictness: auto to inherit configured strictness.
 #let deixis-sidenote = deixis-margin-note.with(side: "outside", mark-align-strictness: "loose")
+
+/// A review comment: a ```ref #deixis-margin-note``` in the `"review"` series
+/// with lettered markers and `author`/`status` fields. Omit the series for a
+/// final copy with `deixis-set(omit: (series: ("review",)))`.
+///
+/// ```example
+/// The #deixis-comment(author: "Ada", status: "open")[proposed method][
+///   State the conditions under which this claim holds.]
+/// preserves the argument.
+/// ```
+///
+/// - author (none, str, content): Stored as `note.data.author`; shown in the header.
+/// - status (none, str, content): Stored as `note.data.status`; shown in the header.
+/// - data (dictionary): Further annotation fields, merged with author/status.
+/// - series (str): The counter/omission series. Defaults to `"review"`.
+/// - numbering (auto, str, function, dictionary): Marker numbering; letters by default.
+/// - header (auto, none, function): Body heading. auto shows the present fields in bold, joined by " · ";
+///   a function receives the merged data dictionary.
+/// - ..args (arguments): `[passage][comment]` and other margin-note options.
+///
+/// -> content
+#let deixis-comment(
+  /// Stored as `note.data.author`; shown in the header.
+  /// -> none | str | content
+  author: none,
+  /// Stored as `note.data.status`; shown in the header.
+  /// -> none | str | content
+  status: none,
+  /// Further annotation fields, merged with author/status.
+  /// -> dictionary
+  data: (:),
+  /// The counter/omission series.
+  /// -> str
+  series: "review",
+  /// Marker numbering; letters keep comments apart from source notes.
+  /// -> auto | str | function | dictionary
+  numbering: "A",
+  /// Body heading: auto, none, or a function of the merged data.
+  /// -> auto | none | function
+  header: auto,
+  ..args,
+) = {
+  assert("of" not in args.named(),
+    message: "deixis: deixis-comment creates an original; attach a body with deixis-margin-note-body(of: ...).")
+  let pos = args.pos()
+  assert(pos.len() in (1, 2), message: "deixis: deixis-comment expects [passage][comment] or [comment].")
+  // Every comment carries both fields so queries can filter without defaults.
+  let fields = data + (author: author, status: status)
+  let heading = if header == auto {
+    let parts = (author, status).filter(it => it != none)
+    if parts.len() > 0 { [#strong(parts.join[ · ]) \ ] }
+  } else if header != none { [#header(fields) \ ] }
+  deixis-margin-note(..args.named(), data: fields, series: series, numbering: numbering,
+    ..pos.slice(0, -1), [#heading#pos.last()])
+}

@@ -73,9 +73,16 @@ the diagram in the banner above uses it.
 
 <img src="assets/readme/review.svg" width="1000" alt="Two builds of the same passage: the draft has Ada's editorial comment and connector; the final keeps the passage and source footnote while omitting the review annotation.">
 
-Put editorial comments in a separate series, here lettered to keep them apart
-from source footnotes. A final build omits that series while preserving the
-marked passage and the document's other notes:
+`deixis-comment` writes an editorial comment in its own `"review"` series, with
+lettered markers that stay apart from source notes:
+
+```typst
+The #deixis-comment(author: "Ada", status: "open")[proposed method][
+  State the conditions under which this claim holds.]
+```
+
+A final build omits that series while preserving the marked passage and the
+document's other notes:
 
 ```typst
 #deixis-set(omit: (series: ("review",)))

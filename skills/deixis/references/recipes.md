@@ -61,15 +61,17 @@ See @claim for the explanation.
 
 ## Final Copy Without Editorial Notes
 
-Omit the review series at creation; keep real citations in another series.
+Write comments with `deixis-comment` (a margin note in the `"review"` series)
+and omit that series at creation; real citations stay in their own series.
 Conditionally remove references to omitted comments too.
 
 ```typst
 #import "@preview/deixis:0.2.0": *
+#set page(margin: (right: 45mm))
 #show: deixis-setup-notes
-#deixis-set(omit: (series: ("todo",)))
+#deixis-set(omit: (series: ("review",)))
 
-A #deixis-footnote(series: "todo")[provisional claim][Check this wording.]
+A #deixis-comment(author: "Ada", status: "open")[provisional claim][Check this wording.]
 needs evidence#deixis-footnote[A source retained in the final copy.].
 ```
 

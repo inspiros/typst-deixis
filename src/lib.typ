@@ -12,7 +12,7 @@
 #import "notes/inline.typ": deixis-inline-note, deixis-inline-note-body
 #import "notes/footnote.typ": deixis-footnote, deixis-footnote-body
 #import "notes/endnote.typ": deixis-endnote, deixis-endnote-body, deixis-print-endnotes
-#import "notes/margin.typ": deixis-margin-note, deixis-margin-note-body, deixis-sidenote, deixis-sidenote-body
+#import "notes/margin.typ": deixis-margin-note, deixis-margin-note-body, deixis-sidenote, deixis-sidenote-body, deixis-comment
 #import "notes/inset.typ": deixis-inset-note, deixis-inset-note-body
 #import "render/body.typ": deixis-default-footnote-style, deixis-plain-container, deixis-rect-container, deixis-alert-container, deixis-rect-region, deixis-highlight-rect-region, deixis-ellipse-region, deixis-highlight-ellipse-region, deixis-generate-backlinks, deixis-generate-body-meta, deixis-generate-body-marker, deixis-generate-body-content, deixis-native-render-single, deixis-default-render-single, deixis-native-render-group, deixis-default-render-group, deixis-grid-render-group
 #import "reference.typ": deixis-ref, deixis-show-refs

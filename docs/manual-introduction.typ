@@ -220,8 +220,8 @@ and `docs/guides/visibility.md` / `touying-identities.md` for that integration.
 
 == Read By Task
 
-- *Prepare a final copy:* `review-comments.md`; use
-  `deixis-set(omit: (series: ("todo",)))` to keep passages without review notes.
+- *Prepare a final copy:* `review-comments.md`; write `deixis-comment` notes and
+  use `deixis-set(omit: (series: ("review",)))` to keep passages without them.
   Omitted originals consume no numbers or colors; attached bodies/reused marks
   follow them. References to omitted IDs report an error. `omit: none` includes
   subsequent series; a Deixis block restores its parent's policy.

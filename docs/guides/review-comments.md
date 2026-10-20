@@ -1,20 +1,28 @@
 # Review Comments And Final Builds
 
-Put editorial annotations in a separate series and choose whether to include
-that series at the start of the document:
+`deixis-comment` writes an editorial comment in the `"review"` series. Choose
+whether to include that series at the start of the document:
 
 ```typst
 #import "@preview/deixis:0.2.0": *
+#set page(margin: (right: 45mm))
 #show: deixis-setup-notes
 #let final = sys.inputs.at("final", default: "false") == "true"
-#deixis-set(omit: if final { (series: ("todo",)) } else { none })
+#deixis-set(omit: if final { (series: ("review",)) } else { none })
 
-A #deixis-footnote(series: "todo")[provisional claim][Check this wording.]
+A #deixis-comment(author: "Ada", status: "open")[provisional claim][Check this wording.]
 needs supporting evidence#deixis-footnote[A source retained in both builds.].
 ```
 
 Compile normally for a draft; pass `--input final=true` to Typst for a final
 copy. See the [editable example](../../examples/review-comments.typ).
+
+A comment is a margin note with lettered markers, so its numbers stay apart from
+source notes. `author` and `status` are stored in `note.data` (as `none` when
+absent) and shown in bold above the comment; use `header: none` or a function of
+the data to change that line. Other margin-note options pass through. Any
+wrapper can carry comments instead: give it its own series, for example
+`deixis-footnote(series: "todo")[...]`, and omit that series.
 
 In the final copy, “provisional claim” remains ordinary text. Its decoration,
 marker, body, and connections disappear. Omitted originals consume neither a
@@ -42,7 +50,7 @@ annotation disappear. Authored IDs remain unique even when omitted.
 ## Author And Status Index
 
 Store static fields such as `author`, `status`, and `title` in the original's
-`data` dictionary. The [review-index specimen](../examples/review-index.typ)
+`data` dictionary; `deixis-comment` fills `author` and `status` for you. The [review-index specimen](../examples/review-index.typ)
 keeps all comments in the draft but shows only Ada's open comments in a custom
 linked list:
 
