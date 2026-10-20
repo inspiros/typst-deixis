@@ -52,11 +52,22 @@ note-type scoping belongs in `deixis-set`.
 
 Type keys select the component's actual adapter. An inset note with an inline
 mark uses `inline-mark` for its mark and `inset-note` for its body/connector.
-Likewise, `numbering: (footnote: "i")` does not configure an inline mark's
-numbering: use `numbering: "i"` or `numbering: (inline-mark: "i")`. Region and
-phantom originals have their own mark types. To style both halves of just one
-note family, a small wrapper preset with local component options is usually
-clearer than document-wide mark defaults.
+Region and phantom originals have their own mark types. To style both halves of
+just one note family, a small wrapper preset with local component options is
+usually clearer than document-wide mark defaults.
+
+Numbering is the exception: it identifies the note, so a wrapper's family key
+applies to the mark it creates. At each level, the family key precedes the mark
+type, which precedes `rest`:
+
+```typst
+#deixis-set(numbering: (footnote: "*", endnote: "i", inline-mark: "a", rest: "1"))
+```
+
+Footnotes use symbols and endnotes roman numerals; margin, inset and inline
+notes with inline marks use letters; their region and phantom marks use `"1"`.
+A standalone `deixis-mark` has no family and uses its mark type. A local
+`numbering:` or an inner `deixis-set` level still takes precedence.
 
 Single-role options choose the relevant component automatically:
 

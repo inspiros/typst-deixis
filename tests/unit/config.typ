@@ -52,4 +52,10 @@
   settings.stack.push((numbering: (footnote: policy)))
   assert.eq(_deixis-resolve-typed-param(settings, auto, "numbering", "footnote", with-origin: true),
     (value: policy, origin: "stack"))
+  // A wrapper's family key precedes its mark type and rest at each level.
+  let mixed = (stack: ((numbering: (footnote: "*", inline-mark: "a", rest: "1")),))
+  assert.eq(_deixis-resolve-typed-param(mixed, auto, "numbering", "inline-mark", family: "footnote"), "*")
+  assert.eq(_deixis-resolve-typed-param(mixed, auto, "numbering", "inline-mark", family: "margin-note"), "a")
+  assert.eq(_deixis-resolve-typed-param(mixed, auto, "numbering", "region-mark", family: "margin-note"), "1")
+  assert.eq(_deixis-resolve-typed-param(mixed, "i", "numbering", "inline-mark", family: "footnote"), "i")
 }

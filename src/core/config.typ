@@ -130,7 +130,9 @@
   }
 }
 
-#let _deixis-resolve-param-cascade(stack, global-val, accent, local-val, param-key, note-type, component: auto, with-origin: false) = {
+// A wrapper-created mark resolves numbering with its note family first, then
+// its own mark type, then rest at each level: (footnote: "*") numbers footnotes.
+#let _deixis-resolve-param-cascade(stack, global-val, accent, local-val, param-key, note-type, component: auto, with-origin: false, family: none) = {
   // Single-role options resolve their own component even when a call site has
   // no shared mark/body/connector value to split. Head maps and margin alignment
   // pairs are deliberately absent: their mark/body keys describe endpoints.
@@ -195,7 +197,10 @@
         let match-found = false
         let specific-val = none
 
-        if note-type in current-val {
+        if family != none and family in current-val {
+          specific-val = current-val.at(family)
+          match-found = true
+        } else if note-type in current-val {
           specific-val = current-val.at(note-type)
           match-found = true
         } else if component != auto {
@@ -297,12 +302,12 @@
 }
 
 // Project settings before the pure cascade: no registry or unrelated options.
-#let _deixis-resolve-typed-param(sys, local-val, param-key, note-type, component: auto, with-origin: false) = {
+#let _deixis-resolve-typed-param(sys, local-val, param-key, note-type, component: auto, with-origin: false, family: none) = {
   let stack = if sys == none { () } else { sys.stack.map(level => level.at(param-key, default: auto)) }
   let global-val = if sys == none { auto } else { sys.at(param-key, default: auto) }
   let accent = if sys == none { none } else { sys.at("annotation-accent", default: none) }
   _deixis-resolve-param-cascade(stack, global-val, accent, local-val, param-key, note-type,
-    component: component, with-origin: with-origin)
+    component: component, with-origin: with-origin, family: family)
 }
 
 #let _deixis-resolve-component-styles(sys, note-type, component: auto, ..args) = {

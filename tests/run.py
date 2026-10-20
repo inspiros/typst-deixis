@@ -167,6 +167,7 @@ def main():
         "attachment-id": "use id or of, not both",
         "attachment-content": "attached wrapper accepts only",
         "attachment-mark-options": "original-mark option(s)",
+        "phantom-arguments": "Unknown phantom mark argument(s)",
         "attachment-series": "attached bodies inherit their original's series",
         "body-series": "body series must be auto or a string",
         "collection-filter": "must be",

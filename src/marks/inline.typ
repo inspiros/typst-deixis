@@ -113,10 +113,12 @@
   let render-with-order-hints() = {
     _deixis-check-note-data(data, of: of)
     let named = args.named()
+    // Private: the note wrapper that created this mark (numbering family).
+    let family = named.remove("_family", default: none)
     if named.len() > 0 {
       panic(
         "deixis: Unknown inline mark option(s) "
-          + repr(args.named().keys())
+          + repr(named.keys())
           + ". Use id to declare an annotation or of to reuse it.",
       )
     }
@@ -189,7 +191,7 @@
           let m-styles = _deixis-resolve-mark-styles(sys, "inline-mark", marker-position: marker-position,
             inline-mode: inline-mode, ..styles)
           let payload = (
-            numbering: _deixis-resolve-typed-param(sys, numbering, "numbering", "inline-mark"),
+            numbering: _deixis-resolve-typed-param(sys, numbering, "numbering", "inline-mark", family: family),
             data: data, marker: marker, mark-type: "inline",
             marker-style: _deixis-resolve-typed-param(sys, marker-style, "marker-style", "inline-mark", component: "mark"),
             marker-position: m-styles.marker-position, inline-mode: m-styles.inline-mode,
@@ -308,6 +310,7 @@
 /// - target (int, label, str): The specific block/minipage counter context this mark belongs to.
 /// - series (str): The counter series this mark belongs to. Defaults to `"default"`.
 /// - marker (auto, content): A hardcoded marker override (used for the body and outline, though invisible here).
+/// - ..args (arguments): Accepts no public arguments; a phantom mark has no body.
 ///
 /// -> content
 #let deixis-phantom-mark(
@@ -339,8 +342,14 @@
   /// A hardcoded marker override (used for the body and outline, though invisible here).
   /// -> auto | content
   marker: auto,
+  ..args,
 ) = {
   let render-with-order-hints() = {
+    let named = args.named()
+    // Private: the note wrapper that created this mark (numbering family).
+    let family = named.remove("_family", default: none)
+    assert(args.pos().len() == 0 and named.len() == 0,
+      message: "deixis: Unknown phantom mark argument(s) " + repr(named.keys()) + "; a phantom mark has no body.")
     _deixis-check-note-data(data, of: of)
     assert(id != none or of != none or data.len() == 0,
       message: "deixis: Phantom annotation data requires an original id.")
@@ -362,7 +371,7 @@
         deixis-system.update(sys => {
           let sys = _deixis-palette-next(sys)
           _deixis-register-mark(sys, id, _deixis-resolve-target(sys, target, scopes: scopes), series, (
-            numbering: _deixis-resolve-typed-param(sys, numbering, "numbering", "phantom-mark"),
+            numbering: _deixis-resolve-typed-param(sys, numbering, "numbering", "phantom-mark", family: family),
             data: data, marker: marker, mark-type: "phantom",
             marker-style: _deixis-resolve-typed-param(sys, auto, "marker-style", "phantom-mark", component: "mark"),
             styles: (:), has-mark-body: false,

@@ -576,7 +576,7 @@
       if mark-type == "region" {
         deixis-region-mark(
           mark-content,
-          id: target-id,
+          id: target-id, _family: "footnote",
           data: data,
           pins: pins,
           numbering: numbering,
@@ -596,7 +596,7 @@
         )
       } else if mark-type == "phantom" {
         deixis-phantom-mark(
-          id: target-id,
+          id: target-id, _family: "footnote",
           data: data,
           z-index: z-index,
           numbering: numbering,
@@ -607,7 +607,7 @@
       } else {
         deixis-inline-mark(
           mark-content,
-          id: target-id,
+          id: target-id, _family: "footnote",
           data: data,
           numbering: numbering,
           marker: marker,

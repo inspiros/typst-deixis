@@ -82,6 +82,8 @@
   /// uses the original mark's physical page and restarts the displayed ordinal.
   /// Assigned counters/query counts stay unchanged; reuse and attached bodies
   /// keep the original marker. Ordinary strings/functions keep assigned numbering.
+  /// Note-family keys such as `(footnote: "*", endnote: "i")` number the marks
+  /// those wrappers create, ahead of mark-type keys and rest.
   ///
   /// ```example
   /// #deixis-set(numbering: "i")

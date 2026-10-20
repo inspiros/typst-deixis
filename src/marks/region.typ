@@ -197,6 +197,8 @@
   let render-with-order-hints() = {
     _deixis-check-note-data(data, of: of)
     let named = args.named()
+    // Private: the note wrapper that created this mark (numbering family).
+    let family = named.remove("_family", default: none)
     if named.len() > 0 {
       panic(
         "deixis: Unknown named argument(s) "
@@ -302,7 +304,7 @@
           let resolved = _deixis-resolve-target(sys, target, scopes: scopes)
           let m-styles = _deixis-resolve-mark-styles(sys, "region-mark", marker-position: marker-position, ..styles)
           let payload = (
-            numbering: _deixis-resolve-typed-param(sys, numbering, "numbering", "region-mark"),
+            numbering: _deixis-resolve-typed-param(sys, numbering, "numbering", "region-mark", family: family),
             data: data, marker: marker, mark-type: "region",
             marker-style: _deixis-resolve-typed-param(sys, marker-style, "marker-style", "region-mark", component: "mark"),
             marker-position: m-styles.marker-position, styles: styles, mark-styles: m-styles,

@@ -36,6 +36,9 @@ from 0.1.1 or an earlier development snapshot.
   prefixed alias `deixis-configure`; `deixis-set` remains supported. The scoped
   container is `note-block`, preserving native `block`.
 
+- Per-family numbering such as `deixis-set(numbering: (footnote: "*", endnote: "i"))`;
+  a wrapper's family key precedes mark-type keys and `rest`.
+
 - Opt-in page-local display numbering with `numbering: (restart: "page", pattern: "1")`
   (including symbol patterns). Assigned counters remain stable; shared notes,
   references, outlines and split bodies keep their original marker.

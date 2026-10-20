@@ -466,15 +466,15 @@
     let series = if series == auto { "default" } else { series }
     let render-mark(owner) = {
       if mark-type == "region" {
-        deixis-region-mark(mark-content, id: owner, data: data, pins: pins, numbering: numbering,
+        deixis-region-mark(mark-content, id: owner, _family: "inline-note", data: data, pins: pins, numbering: numbering,
           marker: marker, target: target, series: series, marker-style: marker-style,
           marker-position: marker-position, stroke: stroke, fill: fill, radius: radius,
           z-index: z-index, padding: padding, region-shape: region-shape, layer: layer, inline: inline)
       } else if mark-type == "phantom" {
-        deixis-phantom-mark(id: owner, data: data, z-index: z-index, numbering: numbering,
+        deixis-phantom-mark(id: owner, _family: "inline-note", data: data, z-index: z-index, numbering: numbering,
           marker: marker, target: target, series: series)
       } else {
-        deixis-inline-mark(mark-content, id: owner, data: data, numbering: numbering, marker: marker,
+        deixis-inline-mark(mark-content, id: owner, _family: "inline-note", data: data, numbering: numbering, marker: marker,
           target: target, series: series, marker-style: marker-style, marker-position: marker-position,
           inline-mode: inline-mode, stroke: stroke, fill: fill, radius: radius, z-index: z-index)
       }
