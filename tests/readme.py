@@ -14,8 +14,8 @@ from pypdf import PdfReader
 
 ROOT = Path(__file__).resolve().parents[1]
 FRAGMENTS = ('text', 'equation', 'shared', 'diagram', 'editorial', 'footnote', 'outline', 'local')
-NAMES = ('reading', 'equation', 'review-draft', 'review-final', 'hero', 'review') + tuple(
-    'hero-' + kind for kind in FRAGMENTS)
+NAMES = ('reading', 'equation', 'review-draft', 'review-final', 'hero', 'review',
+         'slide-1', 'slide-2', 'slides') + tuple('hero-' + kind for kind in FRAGMENTS)
 
 
 def corner_alpha(path):
@@ -111,6 +111,12 @@ def main():
     for name in ('review-draft', 'review-final'):
         text = PdfReader(out / (name + '.pdf')).pages[0].extract_text()
         assert 'proposed method' in text and 'cited source remains in both builds' in text
+
+    # Reveal frames: the callout and second footnote appear only after the pause.
+    first, second = (PdfReader(out / f'slide-{page}.pdf').pages[0].extract_text() for page in (1, 2))
+    assert 'present in both frames' in first and 'present in both frames' in second
+    assert 'appear together' not in first and 'appears only in the second frame' not in first
+    assert 'appear together' in second and 'appears only in the second frame' in second
 
     corners = evaluate('examples/annotated-equation.typ', '''query(<deixis-body-corner>).map(m =>
       (id: m.value.identity, x: m.location().position().x.pt(), y: m.location().position().y.pt()))''')

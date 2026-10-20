@@ -25,7 +25,7 @@
       mark: "background",
       body: "foreground",
     ),
-    width: 175pt,
+    width: 190pt,
     dx: 300pt, dy: 40pt,
     fill: rgb("e8f3f6"),
     stroke: rgb("235c70"),

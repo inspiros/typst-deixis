@@ -16,10 +16,11 @@ SOURCES = ['examples/annotated-reading.typ', 'examples/annotated-equation.typ',
            'examples/editorial-review.typ', 'docs/maintainers/artwork/readme-hero.typ',
            'docs/maintainers/artwork/review-comparison.typ',
            'assets/logos/deixis-logo-horizontal.svg', 'scripts/render-readme.py',
-           'docs/maintainers/artwork/hero-fragments.typ']
+           'docs/maintainers/artwork/hero-fragments.typ', 'examples/touying-reveals.typ',
+           'docs/maintainers/artwork/slides-comparison.typ']
 FRAGMENTS = ('text', 'equation', 'shared', 'diagram', 'editorial', 'footnote', 'outline', 'local')
-NAMES = ('reading', 'equation', 'review-draft', 'review-final', 'hero', 'review') + tuple(
-    'hero-' + kind for kind in FRAGMENTS)
+NAMES = ('reading', 'equation', 'review-draft', 'review-final', 'hero', 'review',
+         'slide-1', 'slide-2', 'slides') + tuple('hero-' + kind for kind in FRAGMENTS)
 
 
 def digest(path):
@@ -60,8 +61,10 @@ def main():
     with tempfile.TemporaryDirectory(prefix='readme-stage-', dir=ROOT / 'target') as directory:
         stage = Path(directory)
 
-        def render(name, source, **values):
+        def render(name, source, page=None, **values):
             flags = [arg for key, value in values.items() for arg in ('--input', f'{key}={value}')]
+            if page is not None:  # One frame of a multi-page source; PDF tags need all pages.
+                flags += ['--pages', str(page), '--no-pdf-tags']
             base = [args.typst, 'compile', '--root', ROOT, '--jobs', '1',
                     '--package-path', packages / 'typst/packages', *flags, ROOT / source]
             run([*base, stage / (name + '-{p}.svg')])
@@ -79,9 +82,12 @@ def main():
         render('review-final', SOURCES[2], final='true')
         virtual = lambda name: '/' + (stage / (name + '.svg')).relative_to(ROOT).as_posix()
         for kind in FRAGMENTS:
-            render('hero-' + kind, SOURCES[-1], kind=kind)
+            render('hero-' + kind, SOURCES[7], kind=kind)
         render('hero', SOURCES[3], **{kind: virtual('hero-' + kind) for kind in FRAGMENTS})
         render('review', SOURCES[4], draft=virtual('review-draft'), final=virtual('review-final'))
+        for page in (1, 2):
+            render(f'slide-{page}', SOURCES[8], page=page)
+        render('slides', SOURCES[9], first=virtual('slide-1'), second=virtual('slide-2'))
         record = dict(compiler=run([args.typst, '--version']).strip(), inputs=inputs(),
                       assets={name + '.svg': digest(stage / (name + '.svg')) for name in NAMES})
         for path in stage.iterdir():

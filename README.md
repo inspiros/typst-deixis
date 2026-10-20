@@ -95,6 +95,18 @@ The comparison renders the same source twice, with `--input final=false` and
 [Draft/final guide](docs/guides/review-comments.md) ·
 [Editorial apparatus and glossaries](docs/guides/editorial-recipes.md)
 
+## Reveal Notes With Your Slides
+
+<img src="assets/readme/slides.svg" width="1000" alt="Two frames of a Touying slide: the first shows one footnoted line; after the pause, a highlighted idea, its connector and callout, and a second footnote appear together.">
+
+Annotations follow [Touying](https://typst.app/universe/package/touying) reveals.
+A highlight, its connector and callout, or a page footnote appears with the
+content it explains, while earlier notes stay on screen. Install setup in the
+slide setting and let the theme own the page layers.
+
+[Editable slides](examples/touying-reveals.typ) ·
+[Touying integration](docs/guides/rendering.md#presentation-frameworks)
+
 ## Install The Checkout
 
 ```sh
