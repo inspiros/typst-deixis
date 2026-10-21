@@ -255,7 +255,8 @@ def main():
                     inputs += [("--input", "value=reserved"), ("--input", "value=reserved-label")]
                 elif source.stem == "missing-setup":
                     inputs = [("--input", f"feature={feature}") for feature in
-                              ("pin", "attach", "mark", "body", "scope", "counter", "query", "connect", "scene")]
+                              ("pin", "attach", "mark", "body", "wrapper", "printer", "repeat",
+                               "scope", "counter", "query", "connect", "scene")]
                 elif source.stem == "helper-page":
                     inputs = [("--input", f"consumer={consumer}", "--input", f"sample={sample}")
                               for consumer in ("query",)
@@ -2091,6 +2092,15 @@ def main():
                 sys.path.insert(0, str(ROOT / "tests"))  # Also under python -I.
                 from html_endnotes import check_html_endnotes
                 check_html_endnotes(base, source, out)
+            elif source.parent.name == "integration" and source.stem == "nested-endnote-notes":
+                # Every mark and body, including those first run by the printer, is a live link target.
+                expression = '{ import "/tests/integration/nested-endnote-notes.typ": verify; verify() }'
+                check_pdf_links(pdf, json.loads(typst("eval", "--in", source, "--format", "json", expression)),
+                                minimum=14)
+                text = subprocess.run(["pdftotext", str(pdf), "-"], text=True,
+                                      capture_output=True, check=True).stdout
+                for snippet in ("Inner Margin Body.", "Named Margin Body.", "Inner Footnote Body.", "Outer Plain."):
+                    assert text.count(snippet) == 1, snippet
             elif source.stem == "page-notes":
                 assert values(source) == [["endnote", "footnote"]]
             elif source.stem == "overlay-invisibility":

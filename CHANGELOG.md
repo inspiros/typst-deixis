@@ -135,6 +135,9 @@ from 0.1.1 or an earlier development snapshot.
   same measurement.
 - Named marks and note wrappers printing a stray space before the marked
   passage, or between the surrounding words for named phantom marks.
+- Margin notes declared inside endnote or margin bodies, and Deixis footnotes or
+  inset notes inside endnotes in HTML, exceeding Typst's five-pass budget. Note
+  declarations now produce output from the first layout pass.
 
 ## [0.1.1] - 2026-06-04
 

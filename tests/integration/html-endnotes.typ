@@ -1,7 +1,6 @@
 // HTML placement and navigation regression for inspiros/typst-deixis#1.
-// The checker compiles supported cases with default and explicit backlinks.
-// case=nested reproduces the current embedded-Deixis-note convergence limit;
-// it is an opt-in strict check, never accepted as a warning-free success.
+// The checker compiles every case with default and explicit backlinks.
+// case=nested embeds Deixis footnote and margin notes in an endnote body.
 // This fixture also compiles as ordinary paged output without warnings.
 #import "../../src/lib.typ": *
 #show: deixis-setup-notes

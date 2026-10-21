@@ -9,9 +9,7 @@ import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
-# Embedded Deixis notes currently exceed Typst's HTML layout-pass budget. Keep
-# their reproducer opt-in and strict, rather than accepting convergence warnings.
-CASES = ("report", "series", "references", "page", "custom", "custom-native", "chicago", "native-nested")
+CASES = ("report", "series", "nested", "references", "page", "custom", "custom-native", "chicago", "native-nested")
 VOID = frozenset("area base br col embed hr img input link meta param source track wbr".split())
 
 
@@ -165,8 +163,7 @@ def main():
     parser.add_argument("--typst", default="typst")
     parser.add_argument("--package-path", type=Path, default=ROOT / "target/html-issue/pkg/typst/packages")
     parser.add_argument("--output", type=Path, default=ROOT / "target/html-issue/checks")
-    parser.add_argument("--case", action="append", choices=(*CASES, "nested"),
-                        help="Select a case (repeatable); nested is a known failing strict probe.")
+    parser.add_argument("--case", action="append", choices=CASES, help="Select a case (repeatable).")
     args = parser.parse_args()
     check_html_endnotes([args.typst, "--root", str(ROOT), "--package-path", str(args.package_path)],
                         ROOT / "tests/integration/html-endnotes.typ", args.output, cases=args.case or CASES)

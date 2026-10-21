@@ -15,7 +15,7 @@
   body-lbl: none,
   origin: none,
 ) = {
-  _deixis-check-setup-state()
+  _deixis-setup-guard()
 
   let render-formatting(content, inline-marker: none, is-left: false) = {
     if content == none { return none }

@@ -152,14 +152,14 @@ document's own `set page` rules. Typst also drops placed content (`place`,
 floating figures) from HTML, including annotations declared inside it. Page
 references (`form: "page"`) and Touying slides have no HTML equivalent.
 Page-local numbering has no page boundaries in HTML and displays one continuous
-sequence per counter owner and series. HTML footnotes cost Typst another layout
-pass, so documents near the convergence budget can fail in HTML even when paged
-output converges: a Deixis footnote embedded in an endnote body works in PDF but
-exceeds the budget in HTML, and can also report a missing native footer
-allocation there. A margin note embedded in an endnote body exceeds the budget in
-both PDF and HTML on 0.15.0 and 0.15.1. Keep margin notes out of collected
-bodies; inline and inset notes, and native Typst footnotes, work inside endnotes. Long forward-attachment chains and notes declared
-inside footnotes retain the same convergence limit.
+sequence per counter owner and series. Margin, inset and inline notes, Deixis
+footnotes and native footnotes declared inside an endnote body converge in PDF
+and HTML, as do margin notes inside margin bodies. HTML footnotes cost Typst
+another layout pass, so documents near the convergence budget can fail in HTML
+even when paged output converges: Deixis notes declared inside a Deixis footnote
+body work in PDF but exceed the budget in HTML, where a nested footnote can also
+report a missing native footer allocation. Long forward-attachment chains retain
+the same convergence limit.
 
 Tagged PDF output, including `--pdf-standard ua-1`, compiles without
 diagnostics. Native footnotes are tagged as notes beside their marks, and

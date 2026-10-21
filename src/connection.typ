@@ -1,7 +1,7 @@
 #import "core/visibility.typ": _deixis-metadata
 #import "core/declarations.typ": _deixis-replayable
 #import "core/state.typ": deixis-system
-#import "core/targets.typ": _deixis-check-setup-state
+#import "core/targets.typ": _deixis-setup-guard
 #import "core/config.typ": _deixis-resolve-typed-param
 #import "core/connectors.typ": _deixis-connector-options
 #import "core/endpoints.typ": _deixis-endpoint-selector
@@ -49,7 +49,7 @@
     let source = _deixis-endpoint-selector(from, "mark")
     let target = _deixis-endpoint-selector(to, "body")
     context {
-      _deixis-check-setup-state()
+      _deixis-setup-guard()
       let sys = deixis-system.get()
       let routing = _deixis-routing-policy()
       let line-style = _deixis-resolve-typed-param(sys, auto, "stroke", "connection", component: "connector", with-origin: true)

@@ -4,6 +4,21 @@
   panic("deixis: You must wrap your document with #show: deixis-setup-notes(..) before declaring any notes!")
 }
 
+// Typst's first layout pass has no introspection data: the setup flag still
+// reads false there. Panicking inline would drop that pass's live output and
+// delay everything depending on it by one pass; bodies first executed by a
+// later printer (nested notes in endnotes) then exceed the five-pass budget.
+// Content declarations defer the diagnostic to its own context instead. Setup
+// removes it from the second pass on; without setup, the final pass fails.
+// Value-returning readers, and repeats that cannot paint before the final
+// registry exists, keep the inline check and its diagnostic precedence.
+#let _deixis-setup-guard() = if not deixis-setup-state.get() { context _deixis-check-setup-state() }
+// For contexts with early returns, which would discard a joined guard.
+#let _deixis-setup-context(render) = context {
+  _deixis-setup-guard()
+  render()
+}
+
 // Public aliases are normalized separately from private instance/domain keys.
 // Encoding every namespace prevents a user name from impersonating another kind.
 #let _deixis-scope-key(kind, value) = repr((kind, value))

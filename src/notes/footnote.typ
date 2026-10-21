@@ -286,12 +286,11 @@
         prepared.declarations
         if id != none { deixis-system.update(sys => _deixis-register-standalone(sys, id, body, "footnote", data: data)) }
         _std-counter("deixis-celibate-note").step()
-        context {
-          _deixis-check-setup-state()
+        _deixis-setup-context(() => {
           let uid = if id == none { "celibate-" + str(_std-counter("deixis-celibate-note").get().first()) } else { "id-" + str(id) }
           if id == none { _deixis-palette-anonymous(deixis-system.get(), sys => render-celibate(sys, uid)) }
           else { render-celibate(deixis-system.get(), uid) }
-        }
+        })
       }
     }
 
@@ -300,9 +299,7 @@
     // Step at the declaration, before final mark association is known. A missing
     // mark must not introduce another counter update during a later layout pass.
     _std-counter("deixis-celibate-note").step()
-    context {
-      _deixis-check-setup-state()
-
+    _deixis-setup-context(() => {
       let sys = deixis-system.get()
       let final-sys = deixis-system.final()
 
@@ -391,7 +388,7 @@
 
       let meta = [#_deixis-metadata(note-data, <deixis-footnote>)]
       if resolved.render-id == "page" { [#meta#_deixis-page-footnote-entry(note-data)] } else { meta }
-    }
+    })
   }
   _deixis-replayable(none, [#_deixis-scope-target-hint(target)#_deixis-order-hints(z-index)#render-with-order-hints()], id: id, of: of, series: if series == auto { "default" } else { series })
 }

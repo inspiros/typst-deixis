@@ -69,14 +69,14 @@
   let extra-data = _deixis-pin-extra(extra-data)
   // A replayed heading/caption must not register the same pin again.
   _deixis-replayable(none, context {
-    _deixis-check-setup-state()
+    _deixis-setup-guard()
     _deixis-pin(name, scope: scope, padding: padding, extra-data: extra-data)
   })
 }
 
 #let _deixis-attach(body, pins: (:), prefix: auto, postfix: auto, pattern: auto,
   padding: auto, pin-padding: (:), inline: false, scope: none, node: none) = {
-  _deixis-check-setup-state()
+  _deixis-setup-guard()
 
   let prefix = if prefix == auto { "deixispin" } else { prefix }
   let postfix = if postfix == auto { "" } else { postfix }

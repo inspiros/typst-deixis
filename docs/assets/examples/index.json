@@ -1,6 +1,6 @@
 {
   "compiler": "typst 0.15.1 (unknown commit)",
-  "runtime_sha256": "a3ce1315e3f4bee8608b94d4bdf0407c8af857f25a562ad307688f4b419a3195",
+  "runtime_sha256": "8286cbc24ac174c7a7c4216737d19c7fa45e4fb0070f0bd3a0bb1f2e9a44f42a",
   "catalog_sha256": "0a937a582e1cfed47dcf309c94a992908159bfc168fe230c0dde474b43b0d3ef",
   "examples": [
     {

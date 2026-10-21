@@ -38,7 +38,10 @@ of registry size. Internal readers use `_deixis-registry(sys)`; writes use
 unboxed registry. Counter scope and series use separate dictionary keys.
 Settings resolution projects the selected stack/global values and accent into a
 pure cascade. Callbacks and relative values retain their evaluation contexts;
-executable body output must never be cached.
+executable body output must never be cached. Content declarations defer the
+missing-setup diagnostic to its own context: Typst's first layout pass reads the
+setup flag as false, and blanking that pass would delay bodies that a printer
+executes later, such as notes nested in endnotes, past the five-pass budget.
 
 Declaration preparation preserves source order and reset/settings/heading
 barriers. Series omission uses separate policy state so registration decisions
