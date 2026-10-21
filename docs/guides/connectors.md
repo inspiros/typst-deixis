@@ -1,6 +1,9 @@
 # Connectors and arrowheads
 
-This development API requires Typst 0.15.0 or newer. The package runtime has no
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
+Deixis requires Typst 0.15.0 or newer. The package runtime has no
 external drawing dependency. The native backend handles routes, measured node
 ports, endpoint heads, and page continuation decorations.
 

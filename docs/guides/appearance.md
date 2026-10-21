@@ -1,5 +1,8 @@
 # Annotation Appearance
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Factory marks and decorated bodies use a muted blue-gray accent (`#496579`),
 0.5pt borders and lightly tinted mark backgrounds. Passage and body text keep
 the document's text color. Margin bodies are plain by default; inset bodies use

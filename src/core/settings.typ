@@ -18,8 +18,9 @@
 /// A dictionary whose keys are all scope keys selects note types or components.
 /// Other dictionaries retain their native value shape; empty stroke/radius/position,
 /// connector, and arrowhead dictionaries are literal values.
-/// - Note-scope keys: #(deixis-mark-types + deixis-note-types).
-/// - Component-scope keys: #(deixis-note-components).
+/// - Type keys: `inline-mark`, `phantom-mark`, `region-mark`, `footnote`,
+///   `endnote`, `margin-note`, `inset-note`, `inline-note`, `connection`.
+/// - Component keys: `mark`, `body`, `connector`.
 ///   - `"nodes"` indicates both `"mark"` and `"body"` (excluding `"connector"`).
 /// - Wildcard key: `"rest"` indicates anything else.
 /// Body-only options (including renderers and containers) select the body/nodes
@@ -36,8 +37,8 @@
 /// Sidenotes are margin-note presets; use margin-note settings, not sidenote keys.
 /// ```
 ///
-/// - palette (auto, none, array): A nonempty color sequence; an array starts a fresh cycle in this Deixis scope, none disables later allocation and auto leaves it unchanged.
-/// - numbering (auto, str, function, dictionary): The numbering style for markers.
+/// - palette (auto, none, str, array): A built-in palette name or nonempty color sequence starts a fresh cycle in this Deixis scope; none disables later allocation and auto leaves it unchanged.
+/// - numbering (auto, none, str, function, dictionary): The numbering style for markers; none disables automatic markers and counter allocation.
 /// - marker-style (auto, function, dictionary): The styling function `(content) => content` for note markers.
 /// - body-style (auto, function, dictionary): The styling function `(content) => content` for note bodies.
 /// - backlink (auto, bool, str, dictionary): Enables or disables clickable backlinks from bodies to marks. Choices: `bool` | `"always"` | `"none"` | `"never"` | `"multiple"`.
@@ -62,7 +63,7 @@
 /// - layer (auto, str): The rendering layer for region marks and inset notes. Choices: `"flow"` | `"foreground"` | `"background"`.
 /// - render-single (auto, function, dictionary): Note body rendering function.
 /// - render-group (auto, function, dictionary): Group rendering function for grouped notes (footnote and endnote).
-/// - container-func (auto, function, dictionary): Note body container function with signature `(content, ..args) => content`.
+/// - container-func (auto, str, function, dictionary): A named body container or function `(content, ..args) => content`.
 ///
 /// -> content
 #let deixis-set(
@@ -82,7 +83,10 @@
   /// The numbering style for the marker. A literal `(restart: "page", pattern: "1")`
   /// uses the original mark's physical page and restarts the displayed ordinal.
   /// Assigned counters/query counts stay unchanged; reuse and attached bodies
-  /// keep the original marker. Ordinary strings/functions keep assigned numbering.
+  /// keep the original marker, including inside multi-page blocks. HTML has no
+  /// page boundaries and uses a continuous sequence. Ordinary strings/functions
+  /// keep assigned numbering. Resolved `none` takes no counter value and shows no
+  /// automatic marker; an explicit fixed marker may still display.
   /// Note-family keys such as `(footnote: "*", endnote: "i")` number the marks
   /// those wrappers create, ahead of mark-type keys and rest.
   ///
@@ -91,7 +95,7 @@
   /// #deixis-footnote[A note with roman numbering.]
   /// ```
   ///
-  /// -> auto | str | function | dictionary
+  /// -> auto | none | str | function | dictionary
   numbering: auto,
   /// The styling function `(content) => content` for note markers.
   ///
@@ -135,13 +139,13 @@
   backlink: auto,
   /// Mark marker placement.
   ///
-  /// See @deixis-inline-mark.marker-position and @deixis-region-mark.marker-position.
+  /// See `deixis-inline-mark.marker-position` and `deixis-region-mark.marker-position`.
   ///
   /// -> auto | alignment | dictionary
   marker-position: auto,
   /// The visual decoration applied to the marked inline text. Choices: `"highlight"` | `"box"` | `"parentheses"` | `"underline"` | `"text-fill"` | `"none"`.
   ///
-  /// See @deixis-inline-mark.inline-mode.
+  /// See `deixis-inline-mark.inline-mode`.
   ///
   /// -> auto | str
   inline-mode: auto,
@@ -282,25 +286,25 @@
   min-margin-width: auto,
   /// Strategy to select side for margin note. Choices: `"nearest"` | `"strict"`.
   ///
-  /// See @deixis-margin-note-body.side-strategy.
+  /// See `deixis-margin-note-body.side-strategy`.
   ///
   /// -> auto | str
   side-strategy: auto,
   /// How margin notes align vertically relative to their marks.
   ///
-  /// See @deixis-margin-note-body.mark-align.
+  /// See `deixis-margin-note-body.mark-align`.
   ///
   /// -> auto | alignment | dictionary
   mark-align: auto,
   /// How strictly to align margin notes to their marks. Choices: `"strict"` | `"loose"` | `"none"`.
   ///
-  /// See @deixis-margin-note-body.mark-align-strictness.
+  /// See `deixis-margin-note-body.mark-align-strictness`.
   ///
   /// -> auto | str
   mark-align-strictness: auto,
   /// Allow margin notes to spill over page boundaries.
   ///
-  /// See @deixis-margin-note-body.spillover.
+  /// See `deixis-margin-note-body.spillover`.
   ///
   /// -> auto | bool
   spillover: auto,
@@ -309,13 +313,13 @@
   overflow: auto,
   /// Shape drawing function for region marks.
   ///
-  /// See @deixis-region-mark.region-shape.
+  /// See `deixis-region-mark.region-shape`.
   ///
   /// -> auto | function
   region-shape: auto,
   /// The rendering layer for region marks and inset notes. Choices: `"flow"` | `"foreground"` | `"background"`.
   ///
-  /// See @deixis-region-mark.layer.
+  /// See `deixis-region-mark.layer`.
   ///
   /// -> auto | str
   layer: auto,
@@ -325,43 +329,47 @@
   z-index: auto,
   /// Note body rendering function.
   ///
-  /// `render-single` is used in combination with `render-group`. `deixis` provides a few basic render functions:
+  /// `render-single` formats each body; `render-group` arranges collected bodies.
+  /// The examples use endnotes so both settings apply. Page footnotes use the
+  /// native footer group and honor only their single renderer.
   /// - `native`: _Almost_ pixel-identical to `std.footnote`.
   /// ```example
   /// #deixis-set(
   ///   render-single: deixis-native-render-single,
   ///   render-group: deixis-native-render-group,
   /// )
-  /// #deixis-footnote[A normal note.]
-  /// #deixis-footnote(marker: [long marker])[A note with very long marker, and also a long body.]
+  /// #deixis-endnote[A normal note.]
+  /// #deixis-endnote(marker: [long marker])[A note with very long marker, and also a long body.]
+  /// #deixis-print-endnotes()
   /// ```
-  /// - `default`: Body markers are aligned, but the notes are still prose-printed.
+  /// - `aligned`: Body markers are aligned, but the notes are still prose-printed.
   /// ```example
   /// #deixis-set(
   ///   render-single: deixis-aligned-render-single,
   ///   render-group: deixis-aligned-render-group,
   /// )
-  /// #deixis-footnote[A normal note.]
-  /// #deixis-footnote(marker: [long marker])[A note with very long marker, and also a long body.]
+  /// #deixis-endnote[A normal note.]
+  /// #deixis-endnote(marker: [long marker])[A note with very long marker, and also a long body.]
+  /// #deixis-print-endnotes()
   /// ```
   /// - `grid`: Body markers and body content are structured in a `grid`.
   /// ```example
   /// #deixis-set(
   ///   render-group: deixis-grid-render-group,
   /// )
-  /// #deixis-footnote[A normal note.]
-  /// #deixis-footnote(marker: [long marker])[A note with very long marker, and also a long body.]
+  /// #deixis-endnote[A normal note.]
+  /// #deixis-endnote(marker: [long marker])[A note with very long marker, and also a long body.]
+  /// #deixis-print-endnotes()
   /// ```
   ///
   /// ```tip
-  /// For full control, you can (and should) draft your own render function.
-  /// `deixis` provides some handy helper functions for this purpose.
-  /// See @deixis-generate-backlinks, @deixis-generate-body-meta, and @deixis-generate-body-marker.
+  /// Custom renderers can combine `deixis-generate-body-marker`,
+  /// `deixis-generate-body-content` and `deixis-generate-backlinks`. Emit the body
+  /// content helper once to preserve navigation spans and nested annotations.
   /// ```
   ///
   /// ```example
   /// #let custom-render-func(note-data, ..args) = {
-  ///   let backlink = note-data.backlink
   ///   let body-marker = deixis-generate-body-marker(note-data + (body-marker-style: it => it))
   ///   rect(
   ///     ..note-data.styles,
@@ -372,7 +380,7 @@
   ///       fill: white,
   ///       radius: 1em,
   ///       body-marker))
-  ///     #note-data.body
+  ///     #deixis-generate-body-content(note-data)
   ///   ]
   /// }
   ///
@@ -387,11 +395,14 @@
   render-single: auto,
   /// Group rendering function for grouped notes (footnote and endnote).
   ///
-  /// See @deixis-set.render-single.
+  /// See `deixis-set.render-single`.
   ///
   /// -> auto | function | dictionary
   render-group: auto,
-  /// Note body container function with signature `(content, ..args) => content`.
+  /// A body-container name ("plain", "rect", "alert", "stripe", "tinted")
+  /// or function `(content, ..args) => content`. Type/component maps are supported.
+  /// "stripe" and "tinted" use the annotation accent; explicit body styles win.
+  /// Forward native/custom wrapper options through `container-args` on the note.
   ///
   /// ```example
   /// #import "@preview/colorful-boxes:1.4.3": stickybox
@@ -401,10 +412,10 @@
   ///
   /// ```tip
   /// `container-func` is only a wrapper around the rendered body of each note and does not have access to the raw notes' data.
-  /// For more sophisticated control, you should use @deixis-set.render-single or @deixis-set.render-group.
+  /// For more sophisticated control, you should use `deixis-set.render-single` or `deixis-set.render-group`.
   /// ```
   ///
-  /// -> auto | function | dictionary
+  /// -> auto | str | function | dictionary
   container-func: auto,
 ) = {
   let render-with-order-hints() = {

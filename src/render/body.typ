@@ -40,7 +40,7 @@
 
 #let _deixis-default-accent = rgb("496579")
 
-/// A simple container that renders the note body as a plain block.
+/// Returns the supplied body content without a wrapper.
 /// - body (content): The rendered note content.
 /// - ..args (arguments): Ignored formatting arguments.
 ///
@@ -309,7 +309,7 @@
 
 /// Returns the note's body content with live start/end metadata.
 ///
-/// Pair with @deixis-generate-body-marker or @deixis-generate-body-meta once in
+/// Pair with `deixis-generate-body-marker` or `deixis-generate-body-meta` once in
 /// a custom renderer to retain navigation, catalogue spans, page-note queries,
 /// and body-point connections. This helper does not add a marker, destination,
 /// text styling, or backlinks. It preserves anonymous palette decoration belonging

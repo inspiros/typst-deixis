@@ -1,5 +1,8 @@
 # Counters and resets
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Each numbered original mark advances one counter, selected by its **counter owner
 and series**. The first numbered original in an unused stream gets 1. Body
 attachments, standalone bodies, references, repeated marks, pins, and explicit
@@ -32,13 +35,12 @@ After `#show: deixis-setup-notes`:
 
 An unused stream reads as zero. The read returns an integer inside a native
 `context`; it is the current numbering value, not a total of all notes ever
-declared. Setting 10 makes the next original 11. Resetting to 0 makes it 1.
+declared. Setting 10 makes the next numbered original 11. Resetting to 0 makes it 1.
 Other series remain unchanged. A callback receives the current value and returns
 the replacement integer; keep it a pure calculation of that value.
 
-Direct values and callback results must be integers. Unreleased 0.2 now rejects
-floats, booleans, strings, `none`, and other results instead of silently converting
-or storing them. Convert a value deliberately before passing it if appropriate.
+Direct values and callback results must be integers. Floats, booleans, strings,
+`none`, and other results are rejected without coercion. Convert a value deliberately before passing it if appropriate.
 Signed integers remain supported: setting -1 permits a next value of 0, while
 negative displayed counts require a numbering callback that handles them.
 The standard numbering patterns require nonnegative counts.
@@ -177,9 +179,9 @@ Apply a native show rule after setup, selecting the heading level and series:
 }
 #let note = deixis-endnote.with(series: "notes")
 
-= First chapter
+= First Chapter
 Text#note[Starts at one.]
-= Second chapter
+= Second Chapter
 Text#note[Starts at one again.]
 ```
 
@@ -239,7 +241,8 @@ must be selected deliberately.
 
 Arbitrary custom show callbacks cannot be inspected before rendering. When such
 a callback changes note counters, put that state-dependent content in a native
-`context` to keep its declarations and generated updates in live order:
+`context` to keep its declarations and generated updates in live order. In
+this excerpt, `custom-content` is the callback's content:
 
 ```typst
 #deixis-inline-note-body(inline: false)[#context { custom-content }]

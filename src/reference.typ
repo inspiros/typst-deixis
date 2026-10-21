@@ -31,7 +31,7 @@
   /// Multiple reference: #deixis-ref(<note-a>, <note-b>, <note-c>)
   /// ```
   ///
-  /// - The last positional argument, if of type `content` or `str`, will be interpreted as @deixis-ref.supplement.
+  /// - The last positional argument, if of type `content` or `str`, will be interpreted as `deixis-ref.supplement`.
   /// ```example
   /// #deixis-ref(<note-b>)[Comment]
   /// ```

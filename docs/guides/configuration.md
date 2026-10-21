@@ -1,7 +1,10 @@
-# Configuration and renderer callbacks
+# Configuration And Renderer Callbacks
 
-`deixis-configure` and `deixis-set` are identical aliases. Existing calls remain
-valid; the optional [short API](getting-started.md#optional-short-names) uses
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
+`deixis-configure` and `deixis-set` are identical aliases. The optional
+[short API](getting-started.md#optional-short-names) uses
 `configure` and names the scoped container `note-block`, preserving native `block`.
 
 Start with direct options on a note. Use `deixis-set` for defaults shared by
@@ -203,16 +206,16 @@ live content should not be independently executed again inside a callback.
 Normal inline bodies use the same shared renderer entry as other adapters and
 include the selected `render-single` in their record, including standalone
 bodies. No unnecessary geometry arguments are added when there is no width to
-constrain. All six configurable function hooks (single/group renderer,
-container, body style, marker style, region shape) validate function values after
-scope selection and report the parameter name on invalid input.
+constrain. Single/group renderers, body and marker styles, and region shapes accept
+functions. Containers also accept the five [preset names](containers.md). These
+values are validated after scope selection, with the parameter named on invalid input.
 Ordinary style validation happens when a declaration selects the value; unused
 type branches are not eagerly resolved. Palette validation is eager because it
 defines a creation policy rather than a component style.
 
-Endnote printer single/group renderer, container, and body-style overrides accept
-`auto` or a function and validate before collecting bodies. Its marker-style
-override also retains component selection and validates the resolved callback.
+Endnote printer single/group renderer and body-style overrides accept `auto` or
+a function and validate before collecting bodies. Its `container-func` override
+also accepts a preset name. Its marker-style override also retains component selection and validates the resolved callback.
 Omitting printer overrides preserves the callbacks captured by each body.
 
 The default endnote grid paints cells directly for default aligned single
@@ -250,7 +253,8 @@ For factory appearance and a consistent accent across components, see
 [appearance and color](appearance.md) and the
 [annotation-colors recipe](../../examples/annotation-colors.typ).
 
-`palette` is a dedicated creation policy: a nonempty color array starts a new
-cycle, `none` disables it, and `auto` leaves it unchanged. Unlike style values,
-it does not take type/component dictionaries. See [automatic palettes](appearance.md#automatic-palettes)
+`palette` is a dedicated creation policy: a named palette (`"deixis"`,
+`"okabe-ito"`, `"tol-bright"`, `"tol-muted"`, or `"tableau"`) or a nonempty
+color array starts a new cycle, `none` disables it, and `auto` leaves it unchanged.
+Unlike style values, it does not take type/component dictionaries. See [automatic palettes](appearance.md#automatic-palettes)
 for scope restoration, forward/reused identities and explicit-style precedence.

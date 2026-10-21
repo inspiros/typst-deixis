@@ -7,7 +7,7 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 The 0.2.0 overhaul requires **Typst 0.15.0+**. See the
 [compatibility and migration guide](docs/guides/compatibility.md) before updating
-from 0.1.1 or an earlier development snapshot.
+from 0.1.1.
 
 ### Breaking
 
@@ -56,8 +56,8 @@ from 0.1.1 or an earlier development snapshot.
   a contribution by bluelightspirit (#2). The grid group renderer now stacks
   notes that use a custom single renderer.
 - Named body containers: `container-func: "stripe"` (accent rule over a tint) or
-  `"tinted"`, alongside `"plain"`, `"rect"` and `"alert"`; all follow the
-  note's accent and palette.
+  `"tinted"`, alongside `"plain"`, `"rect"` and `"alert"`. The new presets follow
+  the note's accent; explicit styles override their defaults.
 - Named palettes: `deixis-set(palette: "okabe-ito")`, plus `"tol-bright"`,
   `"tol-muted"`, `"tableau"` and the house `"deixis"` set.
 
@@ -104,13 +104,8 @@ from 0.1.1 or an earlier development snapshot.
   inset marker-to-body spacing is 0.25em. Explicit styles retain precedence.
 - Connector records merge field by field with scoped defaults. Connector layers
   are independent of body layers and default to foreground.
-- Registry and geometry indexes reduce repeated work in documents with hundreds
-  of notes. Reference, palette and margin preparation share stable evidence.
-- Typed settings resolution reuses a smaller cache key; local 400-note workloads
-  show a 1.20–1.25× margin speedup without changing rendered output.
-- Margin planning measures each body once per layout pass instead of once per
-  later page; identity lookups and internal state updates avoid redundant
-  hashing. Rendered output is unchanged.
+- Faster registration, reference lookup and margin planning in documents with
+  hundreds of notes, preserving rendered output.
 - Bodies preserve authored content and explicit breaks; inline decoration can
   wrap and paginate. Collections retain per-note typography and grouping rules.
 
@@ -135,9 +130,9 @@ from 0.1.1 or an earlier development snapshot.
   same measurement.
 - Named marks and note wrappers printing a stray space before the marked
   passage, or between the surrounding words for named phantom marks.
-- Margin notes declared inside endnote or margin bodies, and Deixis footnotes or
-  inset notes inside endnotes in HTML, exceeding Typst's five-pass budget. Note
-  declarations now produce output from the first layout pass.
+- Notes nested in endnote bodies and margin notes nested in margin bodies
+  exceeding Typst's layout-pass budget. These layouts converge in PDF and HTML;
+  notes inside a Deixis footnote body retain an HTML convergence limit.
 
 ## [0.1.1] - 2026-06-04
 

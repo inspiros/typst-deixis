@@ -1,5 +1,8 @@
 # Annotation data
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Use the optional `data: (...)` dictionary to describe an annotation for custom
 views. Fields can be titles, tags, review status, or values specific to your
 document. Deixis does not prescribe their names or types:

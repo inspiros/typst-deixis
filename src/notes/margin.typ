@@ -271,13 +271,14 @@
   /// Flow placement filters to the declaration page before selecting.
   /// -> none | str | dictionary
   anchor-pin: none,
-  /// A custom render function for the inner layout of the body.
-  /// -> auto | function
   /// Body layer; flow is immediate placement with no spillover or collision pass.
   /// -> auto | str | dictionary
   layer: auto,
+  /// A custom render function for the inner layout of the body.
+  /// -> auto | function
   render-single: auto,
-  /// A custom container wrapper for the body block.
+  /// A body wrapper function or preset name: "plain", "rect", "alert",
+  /// "stripe" or "tinted". Forward wrapper options through container-args.
   /// -> auto | str | function
   container-func: auto,
   /// Native/custom options forwarded only to the body container.
@@ -648,7 +649,7 @@
   marker-style: auto,
   /// Mark marker placement.
   ///
-  /// See @deixis-inline-mark.marker-position and @deixis-region-mark.marker-position.
+  /// See `deixis-inline-mark.marker-position` and `deixis-region-mark.marker-position`.
   ///
   /// -> auto | alignment | dictionary
   marker-position: auto,
@@ -667,37 +668,37 @@
   z-index: auto,
   /// The visual decoration applied to the marked inline text. Choices: `"highlight"` | `"box"` | `"parentheses"` | `"underline"` | `"text-fill"` | `"none"`.
   ///
-  /// See @deixis-inline-mark.inline-mode.
+  /// See `deixis-inline-mark.inline-mode`.
   ///
   /// -> auto | str
   inline-mode: auto,
   /// Array of pin names for the region mark.
   ///
-  /// See @deixis-region-mark.pins.
+  /// See `deixis-region-mark.pins`.
   ///
   /// -> array
   pins: (),
   /// Internal padding for the region mark.
   ///
-  /// See @deixis-region-mark.padding.
+  /// See `deixis-region-mark.padding`.
   ///
   /// -> auto | length | str | dictionary
   padding: auto,
   /// Shape drawing function for the region mark.
   ///
-  /// See @deixis-region-mark.region-shape.
+  /// See `deixis-region-mark.region-shape`.
   ///
   /// -> auto | function
   region-shape: auto,
   /// Rendering layer for the region mark. Choices: `"flow"` | `"foreground"` | `"background"`.
   ///
-  /// See @deixis-region-mark.layer.
+  /// See `deixis-region-mark.layer`.
   ///
   /// -> auto | str
   layer: auto,
   /// If `true`, force the region mark into an inline box.
   ///
-  /// See @deixis-region-mark.inline.
+  /// See `deixis-region-mark.inline`.
   ///
   /// -> bool
   inline: false,
@@ -719,49 +720,49 @@
   connector: auto,
   /// The width of the margin note body.
   ///
-  /// See @deixis-margin-note-body.width.
+  /// See `deixis-margin-note-body.width`.
   ///
   /// -> auto | length | relative
   width: 90%,
   /// Horizontal offset adjustment for the body.
   ///
-  /// See @deixis-margin-note-body.dx.
+  /// See `deixis-margin-note-body.dx`.
   ///
   /// -> auto | length
   dx: auto,
   /// Vertical offset adjustment for the body.
   ///
-  /// See @deixis-margin-note-body.dy.
+  /// See `deixis-margin-note-body.dy`.
   ///
   /// -> length
   dy: 0pt,
   /// Which margin to place the note in (`left` or `right`).
   ///
-  /// See @deixis-margin-note-body.side.
+  /// See `deixis-margin-note-body.side`.
   ///
   /// -> auto | alignment
   side: auto,
   /// Strategy to select side for margin note. Choices: `"nearest"` | `"strict"`.
   ///
-  /// See @deixis-margin-note-body.side-strategy.
+  /// See `deixis-margin-note-body.side-strategy`.
   ///
   /// -> auto | str
   side-strategy: auto,
   /// How the note aligns vertically relative to its mark.
   ///
-  /// See @deixis-margin-note-body.mark-align.
+  /// See `deixis-margin-note-body.mark-align`.
   ///
   /// -> auto | alignment | dictionary
   mark-align: auto,
   /// How strictly the engine attempts to keep the note exactly aligned with its mark. Choices: `"strict"` | `"loose"` | `"none"`.
   ///
-  /// See @deixis-margin-note-body.mark-align-strictness.
+  /// See `deixis-margin-note-body.mark-align-strictness`.
   ///
   /// -> auto | str
   mark-align-strictness: auto,
   /// Allow this note to spill over page boundary.
   ///
-  /// See @deixis-margin-note-body.spillover.
+  /// See `deixis-margin-note-body.spillover`.
   ///
   /// -> auto | bool
   spillover: auto,
@@ -771,14 +772,15 @@
   overflow: auto,
   /// A specific `#deixis-pin` name to anchor the body to, instead of the default layout logic.
   ///
-  /// See @deixis-margin-note-body.anchor-pin.
+  /// See `deixis-margin-note-body.anchor-pin`.
   ///
   /// -> none | str | dictionary
   anchor-pin: none,
   /// A custom render function for the inner layout of the body.
   /// -> auto | function
   render-single: auto,
-  /// A custom container wrapper for the body block.
+  /// A body wrapper function or preset name: "plain", "rect", "alert",
+  /// "stripe" or "tinted". Forward wrapper options through container-args.
   /// -> auto | str | function
   container-func: auto,
   /// Native/custom options forwarded only to the body container.
@@ -1263,8 +1265,8 @@
 #let deixis-sidenote = deixis-margin-note.with(side: "outside", mark-align-strictness: "loose")
 
 /// A review comment: a ```ref #deixis-margin-note``` in the `"review"` series
-/// with lettered markers and `author`/`status` fields. Omit the series for a
-/// final copy with `deixis-set(omit: (series: ("review",)))`.
+/// with lettered markers and `author`/`status` fields. Remove these comments
+/// from a final copy with `deixis-set(omit: (series: ("review",)))`.
 ///
 /// ```example
 /// The #deixis-comment(author: "Ada", status: "open")[proposed method][
@@ -1279,7 +1281,7 @@
 /// - numbering (auto, none, str, function, dictionary): Marker numbering; letters by default.
 /// - header (auto, none, function): Body heading. auto shows the present fields in bold, joined by " · ";
 ///   a function receives the merged data dictionary.
-/// - ..args (arguments): `[passage][comment]` and other margin-note options.
+/// - ..args (arguments): `[comment]` or `[passage][comment]` and other margin-note options. Creates an original; of is rejected.
 ///
 /// -> content
 #let deixis-comment(
@@ -1296,7 +1298,8 @@
   /// -> str
   series: "review",
   /// Marker numbering; letters keep comments apart from source notes.
-  /// -> auto | str | function | dictionary
+  /// `none` disables automatic markers and counter allocation.
+  /// -> auto | none | str | function | dictionary
   numbering: "A",
   /// Body heading: auto, none, or a function of the merged data.
   /// -> auto | none | function

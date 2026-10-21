@@ -253,7 +253,7 @@
   /// delimiter scanning. Use `pattern` for intentional regular expressions.
   ///
   /// ```info
-  /// Pins attached with regex scan will have `padding: "text"` by default. Use @deixis-attach.padding for customization.
+  /// Pins attached with regex scan will have `padding: "text"` by default. Use `deixis-attach.padding` for customization.
   /// ```
   ///
   /// ````example
@@ -298,7 +298,7 @@
   /// `auto` builds a pattern from literal prefix/postfix; `none` disables scanning.
   /// -> auto | regex | none
   pattern: auto,
-  /// Padding for pins replaced with @deixis-attach.prefix. It has no effect on pins defined with @deixis-attach.pins.
+  /// Padding for pins replaced with `deixis-attach.prefix`. It has no effect on pins defined with `deixis-attach.pins`.
   ///
   /// ```example
   /// Pythagorean theorem:

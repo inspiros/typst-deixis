@@ -1,5 +1,8 @@
 # Table And Figure Notes
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Use **`deixis-block` as the local owner**. It already gives a table, figure or
 other object independent numbering and an end collection. No new note type or
 setup function is needed. See the [complete example](../../examples/local-notes.typ).
@@ -95,11 +98,8 @@ fragment's bottom. It may continue across pages. All valid footnote body layers
 resolve to flow for this local collection; foreground does not make a local
 footer repeat on each table page. See [breakable blocks](blocks.md).
 
-## What We Are Keeping Separate
+## Collection Boundaries
 
-No automatic table/page-fragment footer mode is added. That needs allocation
-rules beyond a block-end collection. Row-level notes, caption notes, shared
-header marks and long collections already use the same public APIs.
-A convenience wrapper would be useful only if it could remove substantial
-boilerplate while preserving native figure options, captions and references;
-the current examples do not justify another public function.
+Table notes collect at the block's end, rather than in a footer on each table
+fragment. Row-level notes, caption notes, shared header marks and long
+collections use the same note APIs.

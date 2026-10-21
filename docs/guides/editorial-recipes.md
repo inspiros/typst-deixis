@@ -1,5 +1,8 @@
 # Editorial Apparatus And Glossaries
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Use `series` for independent numbering and collections, and `data` for the fields
 your document needs. These recipes use the existing note and query APIs.
 

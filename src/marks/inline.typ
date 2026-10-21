@@ -8,7 +8,7 @@
 /// An inline text mark with a visual marker.
 ///
 /// This function drops a numbered (or custom) marker into the text and registers its location in the
-/// state engine.
+/// annotation catalogue.
 /// With `of: id`, it reuses an annotation through `deixis-mark` instead;
 /// only a numbered original `id` declaration advances the counter. Reuse is forward-safe.
 ///
@@ -292,7 +292,8 @@
 
 /// A semantic mark that is registered without leaving _any_ visible trace in the text.
 ///
-/// Numbered phantom marks increment the counter (`numbering: none` does not) and register their position in the state engine, but leave
+/// Numbered phantom marks increment the counter (`numbering: none` does not)
+/// and register a reference destination, but leave
 /// no visual footprint in the paragraph.
 /// This is useful for creating semantic anchors or side-channel annotations that shouldn't disrupt the reading flow.
 /// With `of: id`, it reuses an annotation without advancing the counter. A named

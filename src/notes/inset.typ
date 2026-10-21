@@ -126,7 +126,7 @@
   dx: none,
   /// Absolute vertical offset for placing the note.
   ///
-  /// See @deixis-inset-note.dx.
+  /// See `deixis-inset-note.dx`.
   ///
   /// -> none | length
   dy: none,
@@ -152,7 +152,7 @@
   /// #lorem(3)#deixis-pin("anchor-pin")
   /// ```
   ///
-  /// See @deixis-pin.
+  /// See `deixis-pin`.
   ///
   /// Structured targets accept name, scope, select (all/first/last/unique), and
   /// page. Flow placement filters to its declaration page before selecting.
@@ -161,7 +161,7 @@
   /// The rendering layer context. Choices: `"flow"` | `"foreground"` | `"background"`.
   ///
   /// ```warning
-  /// Similar to @deixis-region-mark.layer, the `"flow"` layer will trigger a `#parbreak` and disrupt your paragraph.
+  /// Similar to `deixis-region-mark.layer`, the `"flow"` layer will trigger a `#parbreak` and disrupt your paragraph.
   /// However, it is still recommended to use `layer: "flow"` whenever possible for stability.
   /// ```
   ///
@@ -170,7 +170,8 @@
   /// A custom render function for the inner layout of the body.
   /// -> auto | function
   render-single: auto,
-  /// A custom container wrapper for the body block.
+  /// A body wrapper function or preset name: "plain", "rect", "alert",
+  /// "stripe" or "tinted". Forward wrapper options through container-args.
   /// -> auto | str | function
   container-func: auto,
   /// Native/custom options forwarded only to the body container.
@@ -602,37 +603,37 @@
   z-index: auto,
   /// Mark marker placement.
   ///
-  /// See @deixis-inline-mark.marker-position and @deixis-region-mark.marker-position.
+  /// See `deixis-inline-mark.marker-position` and `deixis-region-mark.marker-position`.
   ///
   /// -> auto | alignment | dictionary
   marker-position: auto,
   /// The visual decoration applied to the marked inline text. Choices: `"highlight"` | `"box"` | `"parentheses"` | `"underline"` | `"text-fill"` | `"none"`.
   ///
-  /// See @deixis-inline-mark.inline-mode.
+  /// See `deixis-inline-mark.inline-mode`.
   ///
   /// -> auto | str
   inline-mode: auto,
   /// Array of pin names for the region mark.
   ///
-  /// See @deixis-region-mark.pins.
+  /// See `deixis-region-mark.pins`.
   ///
   /// -> array
   pins: (),
   /// Internal padding for the region mark.
   ///
-  /// See @deixis-region-mark.padding.
+  /// See `deixis-region-mark.padding`.
   ///
   /// -> auto | length | str | dictionary
   padding: auto,
   /// Shape drawing function for the region mark.
   ///
-  /// See @deixis-region-mark.region-shape.
+  /// See `deixis-region-mark.region-shape`.
   ///
   /// -> auto | function
   region-shape: auto,
   /// If `true`, force the region mark into an inline box.
   ///
-  /// See @deixis-region-mark.inline.
+  /// See `deixis-region-mark.inline`.
   ///
   /// -> bool
   inline: false,
@@ -657,40 +658,40 @@
   width: auto,
   /// A custom floating placement function (e.g., Typst's native `#std.place`).
   ///
-  /// See @deixis-inset-note-body.placement.
+  /// See `deixis-inset-note-body.placement`.
   ///
   /// -> none | function
   placement: none,
   /// Absolute horizontal offset for placing the note.
   ///
-  /// See @deixis-inset-note-body.dx.
+  /// See `deixis-inset-note-body.dx`.
   ///
   /// -> none | length
   dx: none,
   /// Absolute vertical offset for placing the note.
   ///
-  /// See @deixis-inset-note-body.dy.
+  /// See `deixis-inset-note-body.dy`.
   ///
   /// -> none | length
   dy: none,
   /// A dictionary defining how the note aligns to its anchor point (e.g., `(mark: horizon + right, body: horizon + left)`).
   ///
-  /// See @deixis-inset-note-body.anchor.
+  /// See `deixis-inset-note-body.anchor`.
   ///
   /// -> dictionary
   anchor: (mark: horizon + right, body: horizon + left),
   /// A specific `#deixis-pin` name to anchor the inset note to.
   ///
-  /// See @deixis-inset-note-body.anchor-pin.
+  /// See `deixis-inset-note-body.anchor-pin`.
   ///
   /// -> none | str | dictionary | array
   anchor-pin: none,
   /// Rendering layer for the region mark and/or the body. Choices: `"flow"` | `"foreground"` | `"background"`.
   ///
-  /// See @deixis-region-mark.layer and @deixis-inset-note-body.layer.
+  /// See `deixis-region-mark.layer` and `deixis-inset-note-body.layer`.
   ///
   /// ```tip
-  /// Since both @deixis-region-mark and @deixis-inset-note-body shares this parameter, you can pass `layer: (mark: "flow", body: "foreground")` to assign different layer to each component.
+  /// Since both `deixis-region-mark` and `deixis-inset-note-body` shares this parameter, you can pass `layer: (mark: "flow", body: "foreground")` to assign different layer to each component.
   /// ```
   ///
   /// -> auto | str | dictionary
@@ -698,7 +699,8 @@
   /// A custom render function for the inner layout of the body.
   /// -> auto | function
   render-single: auto,
-  /// A custom container wrapper for the body block.
+  /// A body wrapper function or preset name: "plain", "rect", "alert",
+  /// "stripe" or "tinted". Forward wrapper options through container-args.
   /// -> auto | str | function
   container-func: auto,
   /// Native/custom options forwarded only to the body container.

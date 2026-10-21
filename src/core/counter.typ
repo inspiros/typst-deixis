@@ -30,8 +30,9 @@
 /// An unused stream starts at zero. This numbering value can be reset or changed;
 /// it is not the total number of registered notes.
 ///
-/// Because `deixis` relies on a custom state engine to track scoped notes, you cannot use Typst's native
-/// `counter()` function to read note counts. This function provides direct access to the internal engine.
+/// Use this function rather than native `counter()` for Deixis numbering.
+/// Unnumbered originals (`numbering: none`) take no counter value. Page-local
+/// display numbering does not change this assigned value.
 ///
 /// Note: Because it queries the document state, this function must be called within a `context` block.
 ///
@@ -60,12 +61,12 @@
 }
 
 /// Set or update the current counter value for one target scope and series.
-/// The next original mark increments that value. Resetting to zero makes the next
-/// original use one; earlier notes retain their assigned numbers and identities.
-/// Bodies, references, and reused marks do not increment it.
+/// The next numbered original mark increments that value. Resetting to zero makes
+/// the next numbered original use one; earlier notes retain their assigned numbers and identities.
+/// Unnumbered originals, bodies, references, and reused marks do not increment it.
 ///
-/// This is highly useful for manually resetting note counts at the start of a new chapter or section
-/// if you are not using an automatic minipage wrapper. It modifies the internal `deixis` state dictionary.
+/// Reset a stream at a chapter or section boundary, or use `deixis-block`
+/// for an independent local collection. Other series are unaffected.
 ///
 /// - value (int, function): Integer or a function `(current) => int`. Direct values and results must be integers; strings, floats, and booleans are not coerced. Negative displayed counts need a suitable numbering callback.
 /// - target (int, label, str): Current scope (0), ancestor (negative integer), named/forward scope, or global `"page"`. Updates affect all scopes synchronized with that counter owner.
@@ -80,7 +81,7 @@
 /// -> content
 #let deixis-update-note-counter(
   /// Integer or a function of the current value returning an integer. Use 0 to
-  /// restart the next original at 1. Values are not coerced.
+  /// restart the next numbered original at 1. Values are not coerced.
   /// -> int | function
   value,
   /// Current scope (0), ancestor (negative integer), named/forward scope, or "page".

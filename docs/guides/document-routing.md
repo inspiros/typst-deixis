@@ -1,5 +1,8 @@
 # Routing Objects In Place
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Use `deixis-attach` to register geometry where an object is rendered, and
 `deixis-connect` to declare each connection. Wrap the drawing in
 `deixis-routing` to plan its connections together after layout:
@@ -45,7 +48,8 @@ connections outside a routing wrapper retain their existing native routing.
 `connector.route` describes the path's geometry; `policy` chooses the planning
 rules. Optional `connector.crossings` chooses a visual crossing treatment.
 
-Use ordinary Typst show-rule scopes to change the policy midway:
+Use ordinary Typst show-rule scopes to change the policy midway. This excerpt
+uses attachments `<a>`, `<b>` and `<c>` already registered in the drawing:
 
 ```typst
 #show: deixis-routing.with(policy: "avoid")
@@ -77,7 +81,8 @@ geometry outside a routing wrapper retains its existing defaults.
 ## Deliberately Share A Lane
 
 Choose `manual` when the path itself must be literal. Two common pins and a
-polyline force the segment between them to coincide:
+polyline force the segment between them to coincide. This excerpt assumes
+registered attachments `<a>` through `<d>` and the two named pins:
 
 ```typst
 #deixis-routing(policy: "manual")[
@@ -133,7 +138,8 @@ registered page objects exist. Ordinary document ink is not discovered.
 ## Register Existing Notes And Pins
 
 The optional `nodes:` list adds selected existing geometry to this scope's
-scene, using the same node entries as `deixis-routing-scene`:
+scene, using the same node entries as `deixis-routing-scene`. This excerpt
+selects an existing note `<detail>` with a reused occurrence `<again>`:
 
 ```typst
 #show: deixis-routing.with(nodes: (

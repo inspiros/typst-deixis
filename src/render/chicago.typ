@@ -11,7 +11,7 @@
 /// Select with `deixis-print-endnotes(render-single: deixis-chicago-render-single)`
 /// or `deixis-set(render-single: (endnote: deixis-chicago-render-single))`.
 /// The default grid group stacks custom single renderers using the normal gap.
-/// HTML uses the existing native renderer fallback.
+/// HTML uses the native semantic renderer without paragraph indentation.
 ///
 /// -> content
 #let deixis-chicago-render-single(

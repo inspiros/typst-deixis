@@ -1,5 +1,8 @@
 # One body, several marks
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Declare a note once, then use `deixis-mark(of: ...)` or the equivalent
 `deixis-inline-mark(of: ...)` where another passage needs the same annotation:
 

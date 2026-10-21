@@ -1,5 +1,8 @@
 # Body containers and their options
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 The body renderer formats markers/content/backlinks. A container wraps that
 rendered content. Choose a name with `container-func`:
 
@@ -113,7 +116,7 @@ Move custom/native container keys such as `inset`, `outset`, or a callback's
 `token` from the note's top level into that dictionary. Existing valid note
 options, component styles, and calls with no extra container options are unchanged.
 `container-func` remains configurable through `deixis-set`; `container-args` is
-an explicit per-body or printer option in this slice.
+an explicit per-body or printer option.
 
 Functions remain supported for custom containers, with signature
 `(body, ..args) => content`. For example, `container-func: block` with

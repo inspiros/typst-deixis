@@ -1,5 +1,8 @@
 # Declaring, attaching, and reusing
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Use `id:` to declare a public identity and `of:` to select an existing annotation.
 The same ID works for references, body selection, and connections. There is no
 secondary body alias or `label:` option in 0.2.
@@ -20,7 +23,8 @@ Or declare the components separately:
 #deixis-mark(of: <idea>, inline-mode: "underline")[Another passage]
 ```
 
-There is one original mark, one counter value, and one body. Reuse can precede
+There is one original mark and at most one body. Numbered originals take one
+counter value; `numbering: none` takes none. Reuse can precede
 the original declaration, including in another scope or on another page. It
 inherits the original numbering, series, and counter scope. Two declarations
 with the same `id:` are an error; choose `of:` deliberately for reuse.
@@ -97,8 +101,9 @@ supported, including reuse across scopes and pages. For example:
 #deixis-mark(id: <idea>)[Original passage]
 ```
 
-Only the original advances the counter, at its declaration point. An earlier
-body or reused mark inherits that value; it does not reserve another number.
+Only a numbered original advances the counter, at its declaration point. An
+earlier body or reused mark inherits its marker; it does not reserve another
+number.
 Reuse may also precede a wrapper whose `id:` creates both the original and body.
 Inline, region, and phantom marks all follow this contract.
 
@@ -147,8 +152,8 @@ Content alone keeps the inline default. The specialized `deixis-inline-mark`,
 They share original/reuse behavior with the unified function.
 
 With neither `id:` nor `of:`, a mark is anonymous decoration and does not advance
-a counter. A wrapper without `id:` still creates a numbered note using a private
-identity. Give the wrapper an ID when it should be selected later.
+a counter. A wrapper without `id:` still creates an original note using an
+automatic identity; `numbering: none` makes it unnumbered. Give the wrapper an ID when it should be selected later.
 
 See [shared notes](shared-notes.md) for local/component styles, region geometry,
 occurrence names, and backlinks. Reused marks never create another body or

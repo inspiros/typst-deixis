@@ -1,5 +1,8 @@
 # Custom body renderers
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 For a border or background, use `container-func` and keep the built-in renderer.
 To replace the marker/body layout, supply `render-single`. A small complete
 renderer uses two helpers. Pass the record supplied to the renderer; semantic
@@ -30,7 +33,7 @@ annotation when it needs a second independently selectable body.
 metadata. It adds no marker, destination, container, styling, or backlink. Use it
 once where the body actually appears, rather than adding a second `note.body`.
 It is the same content path used by the built-in renderers. To transform the
-content, pass a copy with a replaced body:
+content inside a renderer, pass a copy with a replaced body:
 
 ```typst
 #deixis-generate-body-content(note + (body: emph(note.body),))
@@ -84,11 +87,11 @@ styling is retained, while their live destinations and body-link lookups are
 omitted. Their ordinary links remain in the actual rendered body. See
 [scopes inside notes](deferred-scopes.md).
 
-Margin bodies are measured once, in the context of their own note, and every
-page reuses that height when planning. Keep a margin renderer's size
-independent of the page it paints on (for example, do not scale it by
-`here().page()`): a spilled body would paint at a different height than it was
-planned for and could overlap its neighbours.
+Margin bodies are measured in their declaration context at the selected frame
+width. A spilled body is measured again if that width changes. Keep a margin
+renderer's size independent of the page it paints on (for example, do not scale
+it by `here().page()`): measurement and painting can otherwise disagree and
+packed bodies can overlap.
 
 Page-footnote allocation is checked independently of these helpers. A custom
 renderer may omit its destination/span or return empty content without being

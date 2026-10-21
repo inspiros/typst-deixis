@@ -7,30 +7,26 @@ These guides describe the **unreleased 0.2.0 checkout** for **Typst 0.15.0+**.
 [Install the local preview override](guides/installation.md) before compiling
 its `@preview/deixis:0.2.0` examples.
 
-## Choose A Starting Point
+## Start Here
 
-| I Want To… | Read | Try |
-| --- | --- | --- |
-| Install the checkout or configure my editor | [Installation](guides/installation.md) | [First Notes](../examples/first-notes.typ) |
-| Add my first notes | [Getting started](guides/getting-started.md) | [First Notes](../examples/first-notes.typ) |
-| Remove editorial notes from a final copy | [Review comments](guides/review-comments.md) | [Review Comments](../examples/review-comments.typ) |
-| Share one explanation among passages | [Identities](guides/identities.md) · [Shared notes](guides/shared-notes.md) | [Shared Notes](../examples/shared-notes.typ) |
-| Annotate a presentation | [Touying integration](guides/rendering.md#presentation-frameworks) | [Touying Reveals](../examples/touying-reveals.typ) |
-| Choose colors and containers | [Appearance](guides/appearance.md) · [Configuration](guides/configuration.md) | [Automatic Palettes](../examples/automatic-palette.typ) |
-| Draw connections around objects | [Routing objects in place](guides/document-routing.md) | [Routing In Place](../examples/routing-in-place.typ) |
-| Build a note index or custom view | [Outlines](guides/outlines.md) · [Queries](guides/queries.md) | [Note Catalogue](../examples/note-catalogue.typ) |
-| Annotate headings with outlines or running headers | [Repeated headings](guides/outlines.md#repeated-headings) | [Footnotes](guides/footnotes.md#headings-outlines-and-running-headers) |
+- [Installation](guides/installation.md): install the checkout and configure your editor.
+- [Getting started](guides/getting-started.md): add a first note, share it, and choose its appearance.
+
+Guide snippets continue a document with the package import and setup from
+[getting started](guides/getting-started.md#1-start-with-native-footnotes), unless
+they include their own. Fragments that require earlier declarations or a custom
+callback say so; linked editable examples provide complete documents.
 
 ## Notes, Marks, And Placement
 
+- [Footnotes and long bodies](guides/footnotes.md): native footer pagination and appearance, overlays, whitespace, breakable borders, and page/local ownership.
 - [Annotation identities](guides/identities.md): create with `id:`, attach/reuse with `of:`, and declare components in either order.
-- [Shared notes](guides/shared-notes.md): many inline, region, or phantom marks with one number and body.
+- [Shared notes](guides/shared-notes.md): many inline, region, or phantom marks with one marker and body.
 - [Body ownership](guides/ownership.md): what a body declaration controls for each adapter.
 - [Rendering paths](guides/rendering.md): immediate placement, overlays, and native collection.
 - [Regions and pins](guides/regions.md): highlight formulas/images and select spatial regions.
 - [References](guides/references.md): native references, ranges, page links, and return links.
 - [Table and figure notes](guides/local-notes.md): local block ownership, floated collections, and repeated headers.
-- [Footnotes and long bodies](guides/footnotes.md): native footer pagination and appearance, overlays, whitespace, breakable borders, and page/local ownership.
 - [Collected notes](guides/collected-notes.md): endnote printers, typography, groups, and pagination.
 - [Margin overflow](guides/margin-overflow.md): optional checking after margin packing/spillover.
 
@@ -44,8 +40,8 @@ its `@preview/deixis:0.2.0` examples.
 
 ## Connections And Drawings
 
-Begin with [connectors](guides/connectors.md) for note shorthand, or
-[routing objects in place](guides/document-routing.md) for your own objects.
+Begin with [Connectors](guides/connectors.md) for note shorthand, or
+[Routing objects in place](guides/document-routing.md) for your own objects.
 
 - [Connectors](guides/connectors.md): routes, side/sliding/pin ports, exact waypoints, native arrowheads, and optional cuts/crossing gaps.
 - [Independent connections](guides/independent-connections.md): connect pins, original/reused marks, frames, and live body points.
@@ -79,6 +75,20 @@ and [small portals](../examples/portal-continuations.typ).
 - [Annotation data](guides/note-data.md): custom titles, tags, status, and catalogue fields.
 - [Editorial recipes](guides/editorial-recipes.md): critical apparatus, independent source/editorial series, and first-use glossaries.
 
+## Find A Task
+
+| I Want To… | Read | Try |
+| --- | --- | --- |
+| Install the checkout or configure my editor | [Installation](guides/installation.md) | [First Notes](../examples/first-notes.typ) |
+| Add my first notes | [Getting started](guides/getting-started.md) | [First Notes](../examples/first-notes.typ) |
+| Remove editorial notes from a final copy | [Review comments](guides/review-comments.md) | [Review Comments](../examples/review-comments.typ) |
+| Share one explanation among passages | [Identities](guides/identities.md) · [Shared notes](guides/shared-notes.md) | [Shared Notes](../examples/shared-notes.typ) |
+| Annotate a presentation | [Touying integration](guides/rendering.md#presentation-frameworks) | [Touying Reveals](../examples/touying-reveals.typ) |
+| Choose colors and containers | [Appearance](guides/appearance.md) · [Configuration](guides/configuration.md) | [Automatic Palettes](../examples/automatic-palette.typ) |
+| Draw connections around objects | [Routing objects in place](guides/document-routing.md) | [Routing In Place](../examples/routing-in-place.typ) |
+| Build a note index or custom view | [Outlines](guides/outlines.md) · [Queries](guides/queries.md) | [Note Catalogue](../examples/note-catalogue.typ) |
+| Annotate headings with outlines or running headers | [Repeated headings](guides/outlines.md#repeated-headings) | [Footnotes](guides/footnotes.md#headings-outlines-and-running-headers) |
+
 ## Offline Reading And Compatibility
 
 The [downloadable manual](manual.pdf) combines a guided introduction, 23 worked
@@ -88,7 +98,7 @@ and conditional extension hooks. The [API reference](reference/README.md) suppli
 source-derived defaults; the [agent skill](../skills/deixis/SKILL.md) includes
 checked document recipes for coding agents.
 
-Use [compatibility and migration](guides/compatibility.md) for supported behavior,
+Use [Compatibility and migration](guides/compatibility.md) for supported behavior,
 remaining native/routing limits, and changes from 0.1.1. Maintained editable sources live in [examples](../examples/).
 
 ## Contributing

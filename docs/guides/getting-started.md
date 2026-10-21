@@ -77,9 +77,9 @@ After creating `<method>`, use `of:` to add another marked passage:
 See also @method.
 ```
 
-An annotation has one original mark, one number, and at most one attached body.
-A reused mark keeps that number and adds a return-link origin. It does not draw
-a new connector automatically. Set `backlink: true` on the original note/body
+An annotation has one original mark and at most one attached body.
+A reused mark keeps the original's marker and adds a return-link origin.
+It does not draw a new connector automatically. Set `backlink: true` on the original note/body
 to display return links; use `deixis-connect` for additional drawn edges.
 
 When the explanation is authored separately, declare the components directly:
@@ -91,7 +91,7 @@ When the explanation is authored separately, declare the components directly:
 ```
 
 The body and reused marks may precede the original. Only `id:` creates the
-numbered original; another `id:` with the same spelling is an error. A
+original; another `id:` with the same spelling is an error. A
 `-body(id: ...)` call instead creates a standalone body without a numbered mark.
 See [identities](identities.md) for the complete rules.
 
@@ -118,12 +118,13 @@ images, and pins in [regions and pins](regions.md).
 ## 5. Set A Consistent Appearance
 
 ```typst
-#deixis-set(palette: (rgb("3B6D9A"), rgb("387C69"), rgb("9A663F")))
+#deixis-set(palette: "deixis")
 ```
 
 Each new annotation gets one accent. Its reused marks and attached body retain
 that accent; explicit styles still win. Place this before the annotations you
-want to color. See [appearance](appearance.md) for cycling and scoped palettes.
+want to color. You can also pass an array of colors. See [appearance](appearance.md)
+for all five named palettes, cycling and scoped palettes.
 
 Use `deixis-set` for shared defaults. A `deixis-block` provides a local settings
 scope; ordinary Typst brackets do not. Start with scalar defaults and use

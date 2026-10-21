@@ -1,5 +1,8 @@
 # Collected layouts and pagination
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Endnotes are declared with the text and printed later. The default collection
 uses a grid with aligned markers:
 
@@ -65,7 +68,8 @@ preserves the declaration's paragraph settings, including leading and spacing,
 and retains configured backlinks, body styling and containers. Set the document's
 own paragraph leading for single-spaced notes; the renderer does not force a
 line height. The printer's `gap` controls space between notes, and its separator
-and clearance options continue to apply.
+and clearance options continue to apply. HTML export uses the semantic note
+list without Chicago paragraph indentation; see [output formats](compatibility.md#output-formats).
 
 See [the Chicago endnotes example](../../examples/chicago-endnotes.typ) for a
 short humanities text with Chicago-style citations. Citation wording and

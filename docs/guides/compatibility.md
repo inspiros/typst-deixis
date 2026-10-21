@@ -1,9 +1,8 @@
 # Compatibility, Limits And Migration
 
 This guide describes the supported contract of the **unreleased 0.2.0 checkout**.
-The published `@preview/deixis:0.1.1` has a different API. The manifest requires
-Typst **0.15.0 or newer**; the compiler matrix is 0.15.0 and 0.15.1, with separate
-Tinymist 0.15.10 editor checks and Touying 0.6.3/0.8.0 integration fixtures.
+The published `@preview/deixis:0.1.1` has a different API. Deixis requires
+Typst **0.15.0 or newer** and supports Touying 0.6.3 and 0.8.0.
 The supported behavior and remaining boundaries are described below.
 
 ## Supported Behavior
@@ -19,7 +18,7 @@ The supported behavior and remaining boundaries are described below.
 | Frames | Accepted single painted margin/inset frames and explicitly framed inline bodies provide rectangle ports. Native live body start/end points can select collected or paginated bodies. Partial, missing or duplicate geometry is diagnosed. |
 | Pins and attachments | Pins, attachment IDs and annotation IDs have separate namespaces. String/label spellings agree. Pin targets share scope/select/physical-page rules. Attachments capture one live frame; equal names or containing rectangles do not merge owners. |
 | Drawing order | Higher `z-index` paints later within an overlay layer. Equal priorities keep documented command/group order. Flow, foreground, background and host composition retain their separate order; grouped layouts can be atomic. |
-| Routing | `deixis-route` supplies native line/cubic geometry. Scenes register fixed accepted rectangles and opt-in avoid/ignore/cut/cross behavior. Numeric groups return plans; `deixis-routing` scopes collect individual document edges. These are supported APIs in the unreleased checkout, rather than disposable experimental imports. |
+| Routing | `deixis-route` supplies native line/cubic geometry. Scenes register fixed accepted rectangles and opt-in avoid/ignore/cut/cross behavior. Numeric groups return plans; `deixis-routing` scopes collect individual document edges. Use the public facade for these APIs. |
 | Host integration | Native hiding suppresses deferred visuals while retaining semantic identities/counters. Reapply setup after replacing native page layers, or let the host own both hooks. Touying frame-local IDs require the documented pre-layout callback recipe. |
 
 Use [identities](identities.md), [body ownership](ownership.md),
@@ -106,8 +105,8 @@ not its painted body; use a body selector for the latter.
 
 Typst has a finite contextual layout-pass budget. Deep deferred note/scope/
 collection chains, dense flow layouts and custom callbacks that need later
-geometry can still fail to converge. Supported fixtures cover documented bounded
-cases; the package does not promise arbitrary recursive layouts. Scoped native
+geometry can still fail to converge. Arbitrary recursive layouts are not
+guaranteed to converge. Scoped native
 page styles should use the host-owned hook pattern because captured decorations
 do not restore automatically through nested lexical page scopes.
 
@@ -169,26 +168,22 @@ flow content, without a note role. When explanations must be read beside their
 marks, prefer native footnotes or inline notes; endnotes read as a list where
 they are printed.
 
-## Known Limits And Future Directions
+## Known Limits
 
 - **HTML export:** upstream export remains experimental. Deixis preserves note
   bodies and navigation through a semantic fallback, while page geometry and
-  connectors are omitted. Broader HTML support depends on export maturity;
-  custom layouts and placed content retain the limits described above.
+  connectors are omitted. Custom layouts and placed content retain the limits
+  described above.
 - **Accessibility:** overlay bodies follow page-flow content in tagged PDFs and
-  lack a note role. Improving their reading order and semantic association is an
-  open direction; use native footnotes or inline notes when reading beside the
-  mark is essential.
+  lack a note role. Use native footnotes or inline notes when reading beside
+  the mark is essential.
 - **Margin collisions:** flow margins have no collision packing, and body layers
-  have no shared collision checks. More general packing remains future work;
-  overlay-margin packing already operates within existing frames.
-- **Shared margin planning:** document-wide planning could reduce repeated work,
-  but requires context-correct measurements and bounded feedback. A shared plan
-  is not part of the current contract; executable bodies cannot be cached safely.
+  have no shared collision checks. Overlay-margin packing operates within
+  existing frames.
 - **Convergence:** Typst's finite layout-pass budget bounds deep deferred scopes,
   forward attachments and geometry-dependent callbacks. Page-local numbering and
-  HTML footnotes also depend on layout passes. Reducing feedback depth remains a
-  direction for improvement, without a guarantee for arbitrary recursive layouts.
+  HTML footnotes also depend on layout passes. Arbitrary recursive layouts are
+  not guaranteed to converge.
 
 ## Migrate From 0.1.1
 
@@ -219,7 +214,7 @@ installer keeps the old `0.1.1` cache separate. See
 | `deixis-default-footnote-style` | Supply a `body-style` callback, such as `it => text(size: 0.85em, it)`. Page footnotes use native footer typography. |
 | `deixis-show-refs` | Use `#show: deixis-setup-notes`, which installs the reference bridge automatically. |
 | `deixis-place-anchored(internal-id: ...)` | Use public pin targets via `pin:`. Inset note adapters resolve original marks internally. |
-| `deixis-minipage(margin: ...)` | Preserved: `margin` supplies internal padding (`inset: margin`, `outset: 0pt`), as in 0.1.1. Earlier external-margin wording was incorrect. |
+| `deixis-minipage(margin: ...)` | Preserved: `margin` supplies internal padding (`inset: margin`, `outset: 0pt`), as in 0.1.1. It does not add external margins. |
 | Internal module paths or underscore helpers | Import the public facade `src/lib.typ` (or the package). Internal source paths, mutable state and private record shapes may change. |
 
 There are no compatibility aliases for removed `label:` or repeat-only calls.
@@ -241,5 +236,6 @@ red. Mark fills use 6% accent opacity. The margin/inset/inline marker-to-body ga
 of 0.05em; native-style footnotes retain 0.05em and endnotes keep 0.75em. The larger gap can affect wrapping,
 margin packing and footnote reservation. Explicit colors/gaps, body text styling
 and renderer precedence remain authoritative. See [appearance](appearance.md)
-for the earlier-default recipe. Automatic discrete palettes are opt-in through `deixis-set(palette: colors)`;
+for the earlier-default recipe. Named palettes and color arrays are opt-in through `deixis-set(palette: "deixis")`
+or `deixis-set(palette: colors)`;
 explicit styles retain precedence and ordinary no-palette appearance stays unchanged.

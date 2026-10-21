@@ -1,5 +1,8 @@
 # Revealing annotations
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 To remove editorial notes from a final copy while preserving their marked text,
 use [series-based omission](review-comments.md). Native hiding below keeps
 annotation identities and counter values.
@@ -17,7 +20,7 @@ and `uncover` work around complete annotations:
 
 See the [small two-frame example](../../examples/touying-reveals.typ). It reveals
 a highlighted passage, inset body, connector, and page footnote together. Both
-Touying 0.6.3 and 0.8.0 have maintained regression coverage.
+Touying 0.6.3 and 0.8.0 support this setup.
 
 ## Native hiding
 
@@ -36,9 +39,9 @@ visible when a hidden main-flow passage crosses a page break.
 | Endnote declaration | Its printer omits the covered entry |
 | Connection | No edge when its declaration or either selected endpoint is covered |
 
-Covered originals still advance their Deixis counter. Reused marks retain the
-original number. Native Typst footnote numbering stays independent. Native
-queries can still see hidden metadata and semantic identities; hiding does not
+Covered numbered originals still advance their Deixis counter; originals with
+`numbering: none` take no value. Reused marks retain the original marker. Native
+Typst footnote numbering stays independent. Native queries can still see hidden metadata and semantic identities; hiding does not
 remove declarations from the document. Flow bodies also keep native state
 effects while covered, whereas omitted deferred bodies do not execute their
 live callbacks.

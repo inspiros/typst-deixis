@@ -109,7 +109,10 @@ python3 tests/skill.py
 ```
 
 The website build runs a local link/search-coverage check and writes
-`target/site/`; it does not deploy. Open `http://127.0.0.1:8765/` after starting
+`target/site/`; it does not deploy. The Docs workflow publishes the same build to
+GitHub Pages (https://inspiros.github.io/typst-deixis/) when a `v*` tag is pushed,
+or on demand from the Actions tab; it sets the project URL prefix that the
+published 404 page needs. Open `http://127.0.0.1:8765/` after starting
 the server and stop it when finished. Use the build script so generated navigation
 and API pages are present. `book.toml` configures the site; theme/search assets
 are bundled locally. Review desktop and phone layouts after presentation changes.

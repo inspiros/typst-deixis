@@ -7,7 +7,7 @@ different API. Install the checkout locally before trying these examples.
 ## Install The Checkout
 
 ```sh
-git clone https://github.com/inspiros/typst-deixis
+git clone --branch overhaul-0.2.0 https://github.com/inspiros/typst-deixis
 cd typst-deixis
 python3 scripts/install.py --namespace preview --link --reinstall
 ```

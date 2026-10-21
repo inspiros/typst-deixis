@@ -1,5 +1,8 @@
 # Notes in breakable blocks
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 `deixis-block` gives notes a local rendering scope and, by default, independent
 counters. `deixis-minipage` uses the same engine, mapping `margin:` to internal
 `inset:` padding and fixing `outset: 0pt`, as in 0.1.1. A block can span physical pages;
@@ -80,8 +83,8 @@ To use an actual page footer, keep the mark local and explicitly target its body
 
 The mark keeps the block's counter owner. The explicit body target changes
 rendering ownership, and the body declaration allocates the native footer slot.
-For per-page footnotes, use this existing mechanism. A separate per-fragment
-block-footer mode would need a different allocation engine and is not provided.
+For per-page footnotes, use this mechanism. Block collections do not provide a
+footer on each page fragment.
 See [body ownership](ownership.md) and [rendering](rendering.md) for forward
 attachments, native allocation boundaries, and page overlays.
 
@@ -102,8 +105,7 @@ attachments, native allocation boundaries, and page overlays.
   automatically clip them. Neither native footers nor other overlay layers are
   general collision obstacles.
 
-Context-generated note IDs inside successive/nested blocks are supported by the
-scope-state fix. This does not remove Typst's finite pass limit for arbitrary
+Context-generated note IDs inside successive/nested blocks are supported. This does not remove Typst's finite pass limit for arbitrary
 context-generated registration/geometry chains. Prefer pre-layout host callbacks
 for [frame identities](touying-identities.md) when available.
 One synchronized child or several siblings work under an anonymous parent,

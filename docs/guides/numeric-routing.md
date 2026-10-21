@@ -1,5 +1,9 @@
 # Numeric routing
 
+Examples assume the package import from [getting started](getting-started.md#1-start-with-native-footnotes).
+Numeric geometry needs no setup; document selectors need the standard setup too.
+Excerpts with callback variables extend the surrounding example.
+
 When coordinates are already known, use `deixis-route` without notes, pins,
 setup, page overlays or a layout context. The
 [small example](../../examples/numeric-routing.typ) connects two custom cards.

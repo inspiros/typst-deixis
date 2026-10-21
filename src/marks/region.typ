@@ -82,7 +82,7 @@
   /// unique selection; select can be all, first, last, or unique, and page can
   /// restrict to a positive physical page number. Cannot also wrap a body.
   ///
-  /// See @deixis-pin and @deixis-attach.
+  /// See `deixis-pin` and `deixis-attach`.
   ///
   /// -> array
   pins: (),

@@ -1,5 +1,9 @@
 # Routing Scenes
 
+Examples assume the package import from [getting started](getting-started.md#1-start-with-native-footnotes).
+Numeric geometry needs no setup; document selectors need the standard setup too.
+Excerpts with callback variables extend the surrounding example.
+
 Use a prepared scene when routing between your own shapes or around fixed objects.
 Resolved `bounds` need no note setup, counters, pins or document queries. For
 existing content, the same constructor also accepts explicit mark, body and pin

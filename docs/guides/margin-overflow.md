@@ -1,5 +1,8 @@
 # Checking margin overflow
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Margin bodies can now check their final placement against their assigned frame:
 
 ```typst

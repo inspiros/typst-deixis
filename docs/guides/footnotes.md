@@ -1,5 +1,8 @@
 # Footnotes And Long Bodies
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 `deixis-footnote` places its body in the native page footer, just like
 `std.footnote`. Typst allocates and splits the live content; Deixis supplies
 the annotation identity, marker, styling and return links. Ordinary native
@@ -93,8 +96,8 @@ allocations at unsupported footnote boundaries. See [rendering](rendering.md#foo
 
 ## Containers Must Be Breakable
 
-`deixis-rect-container` is native `rect`, and the alert preset also uses `rect`.
-Both keep the entire body together. A body taller than a page can overflow and
+The `"rect"`, `"alert"`, `"stripe"` and `"tinted"` containers use native `rect`
+and keep the entire body together. A body taller than a page can overflow and
 be clipped **without a warning**, just as with `std.footnote(rect[...])`.
 Use a breakable native block for a long bordered note:
 

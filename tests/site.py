@@ -6,9 +6,11 @@ import json
 from pathlib import Path
 import re
 from urllib.parse import unquote, urlsplit
+import os
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'target/site'
+SITE_URL = os.environ.get('MDBOOK_OUTPUT__HTML__SITE_URL', '/').rstrip('/') + '/'
 
 
 class Page(HTMLParser):
@@ -45,6 +47,9 @@ def main():
             target = source
             if parsed.path:
                 relative = unquote(parsed.path)
+                # The Pages build sets a project prefix for its 404 page.
+                if relative.startswith(SITE_URL):
+                    relative = '/' + relative[len(SITE_URL):]
                 target = (SITE / relative.lstrip('/') if relative.startswith('/') else
                           source.parent / relative).resolve()
             if target.is_dir():

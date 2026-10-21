@@ -10,12 +10,14 @@
 /// with normal overflow limits when space runs out. Overlay packing does not
 /// subtract native page-footer reservations or create more pages.
 /// Counters are independent by default and can be shared or synchronized explicitly.
+/// With page-local numbering, displayed markers restart on each original mark
+/// page even when the block spans pages; its footnotes still collect at the end.
 ///
 /// ```example
 /// //| sandbox-mode: "page"
 /// #deixis-footnote[This is a page footnote.]
 /// #deixis-block(inset: 5pt, fill: gray.lighten(90%))[
-///   Inside a `#deixis-block`, notes have its own counter system and layout behaviors.
+///   Inside a `#deixis-block`, notes have their own counters and layout.
 ///   #deixis-footnote[This is a block-level footnote.]
 /// ]
 /// ```
@@ -85,7 +87,7 @@
   ///
   /// ````tip
   /// `thread` cannot be used to sync counters with the `"page"`.
-  /// For that purpose, use @deixis-block.sync-counters-with.
+  /// For that purpose, use `deixis-block.sync-counters-with`.
   /// `sync-counters-with` controls numbering; `thread` controls rendering ownership.
   /// Each block still owns its collected footnotes independently.
   /// ````
@@ -117,7 +119,7 @@
   /// ```
   ///
   /// ```tip
-  /// To sync counters of multiple blocks, it is more convenient to use @deixis-block.thread.
+  /// To sync counters of multiple blocks, it is more convenient to use `deixis-block.thread`.
   /// ```
   ///
   /// -> auto | int | label | str
@@ -143,7 +145,7 @@
   /// See #link("https://typst.app/docs/reference/layout/block/#parameters-inset")[`std.block.inset`].
   ///
   /// ```info
-  /// The left and right inset of a `#deixis-block` is where block-level @deixis-margin-note-body are rendered.
+  /// The left and right inset of a `#deixis-block` is where block-level `deixis-margin-note-body` are rendered.
   /// ```
   ///
   /// -> auto | length | dictionary
@@ -296,7 +298,7 @@
 /// Creates an isolated layout environment for notes, utilizing `margin` instead of `inset`/`outset`.
 ///
 /// This is just a convenience wrapper around `#deixis-block`.
-/// It forward calls to `#deixis-block` with `inset: margin` and `outset: 0pt` by default.
+/// It calls `#deixis-block` with `inset: margin` and `outset: 0pt` by default.
 ///
 /// See `#deixis-block` for details about parameters.
 ///

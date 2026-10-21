@@ -1,5 +1,8 @@
 # Block names, threads, and targets
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Most calls need no scope options. Notes outside a `deixis-block` use the document
 scope; notes inside one use its local scope. `deixis-minipage` is an alias for the
 same block engine. Give a block a name only when another call needs to select it.
@@ -94,8 +97,7 @@ override the adapter's placement rules; see [body ownership](ownership.md).
 The [breakable-block guide](blocks.md) describes page frames, block-end footnotes,
 and immediate-placement limits. Anonymous parents support counter sharing after
 earlier local/threaded collections and forward attachments; they do not need a
-public name for that layout. Their private serial is now captured before its
-native update, removing an unnecessary convergence dependency.
+public name for that layout.
 
 Native context-dependent registration still has a finite layout-pass budget.
 More deeply nested synchronized collections can exceed it, including when every

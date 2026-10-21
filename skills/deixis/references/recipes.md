@@ -30,7 +30,7 @@ The header can repeat the previous heading without creating its note again.
 Another claim#deixis-footnote[An independent explanation.] follows.
 ```
 
-## Margin-Noted Essay With Connectors
+## Margin Notes With Connectors
 
 Leave enough right margin for bodies. A repeated mark shares its body but needs
 an explicit connection when another edge is desired. The occurrence selector
@@ -42,7 +42,7 @@ names that second passage without creating a second annotation.
   margin: (left: 20mm, right: 60mm, y: 20mm))
 #set text(size: 10pt)
 #show: deixis-setup-notes
-#deixis-set(palette: (rgb("3B6D9A"), rgb("387C69")))
+#deixis-set(palette: "okabe-ito")
 
 = Reading An Argument
 A #deixis-margin-note(id: <claim>, side: right, width: 45mm,

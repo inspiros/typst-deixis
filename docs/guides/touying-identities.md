@@ -1,5 +1,8 @@
 # Shared notes across Touying frames
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Wrappers without `id:` already create a private annotation on each rendered
 frame. Use them for ordinary slides. An explicit literal such as `id: <idea>`
 still names one document-wide annotation; replaying that original on several

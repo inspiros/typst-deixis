@@ -1,5 +1,8 @@
 # Pins, coordinates, and padding
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 A pin is a named point with optional geometric padding. Use it to define region
 bounds or anchor a note. Simple names are document-wide strings or label values; repeated names
 produce several occurrences. Add `scope:` when a component needs its own pins.

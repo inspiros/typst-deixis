@@ -61,17 +61,13 @@ Both support cross-page routing. There is no connector `"flow"` layer, since a
 connection must be able to resolve its endpoints elsewhere in the document.
 See [connectors](connectors.md#connection-layer).
 
-## Design direction
+## Placement And Connection Sources
 
-Keep adapter-specific placement defaults and the simple note wrappers. Making
-native footnotes follow a distant mark would require a separate native reservation
-at that mark and could change pagination; it must be an explicit future feature,
-not a side effect of linking identities. A body declaration is not universally a
-positioning command, and a mark does not universally select the body's page.
+A body declaration is not universally a positioning command, and a mark does not
+universally select the body's page. Keep a native footnote body declaration on
+the page where it should reserve footer space. Use a margin body when the
+explanation should follow a distant mark.
 
-Shared endpoint selectors distinguish a body's placement anchor from a connection's
-source. `deixis-connect` can select a repeated occurrence for an extra connection
-without moving the body. If occurrence-based body anchoring is added later, it
-should be an explicit placement choice using the same identities. Avoid adding
-parallel, slightly different anchor syntaxes to every adapter. Scopes still
-control rendering domains, counter ownership, and available placement frames.
+`deixis-connect` can select a repeated occurrence as its source without moving
+the body. Scopes control rendering ownership, counters and available placement
+frames; connection endpoints control only the drawn edge.

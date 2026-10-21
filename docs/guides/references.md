@@ -1,5 +1,8 @@
 # References and backlinks
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 The usual entry point is a public annotation ID and Typst's `@id` syntax:
 
 ```typst
@@ -37,6 +40,8 @@ in one `deixis-ref` call display that note once. Non-Deixis targets retain nativ
 Typst reference behavior; arbitrary labelled metadata is not treated as a note.
 
 ## Lists and ranges
+
+These calls assume originals named `<first>`, `<second>` and `<third>`:
 
 ```typst
 #deixis-ref(<first>, <second>, <third>)[Notes]

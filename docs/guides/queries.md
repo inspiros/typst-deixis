@@ -1,5 +1,8 @@
 # Selecting and querying notes
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Start with the view that matches the task:
 
 | Function | What it selects | Default scope and order |
@@ -132,7 +135,8 @@ grouping, or summary callbacks. Unsupported scalar/array boundary types receive 
 collection-boundary diagnostic before native querying; a native function boundary
 must be an element function accepted by Typst's selector system.
 
-For example:
+For example, with `<start>` and `<end>` pins already declared in scope
+`<chapter>`:
 
 ```typst
 #deixis-print-endnotes(

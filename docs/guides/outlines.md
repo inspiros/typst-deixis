@@ -1,5 +1,8 @@
 # Outlines and custom note views
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 An annotation has one original mark, any number of reused marks, and at most one
 body. An outline keeps **one entry per annotation**. Reuse contributes locations
 to that entry instead of duplicating its explanation.
@@ -22,8 +25,8 @@ points rather than complete highlighted glyph ranges.
 
 The badge and excerpt link to the original mark. Each page link has its own mark
 destination. A standalone body links to its printed destination, or its
-declaration when still unprinted. Bodies shared by many marks keep one counter
-value, one outline entry, and one live execution.
+declaration when still unprinted. Bodies shared by many marks keep the original
+marker, one outline entry and one live execution.
 
 ## Repeated Headings
 

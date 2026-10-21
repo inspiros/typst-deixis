@@ -1,5 +1,8 @@
 # Regions and pins
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 A region encloses content in a rectangle and can share an annotation's identity
 with any note body. The simple form wraps its content:
 

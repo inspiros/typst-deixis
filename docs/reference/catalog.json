@@ -43,6 +43,7 @@
         "args": [
           "omit",
           "palette",
+          "numbering",
           "stroke",
           "marker-style",
           "connector",
@@ -50,7 +51,7 @@
           "render-single"
         ],
         "call": "deixis-set(palette: \"okabe-ito\")",
-        "note": "Top-level auto leaves settings unchanged. Type/component maps merge compatible branches; empty maps and branch auto have option-specific reset semantics. All accepted setting names are listed in the shared-options section. omit: (series: (\"todo\",)) removes selected annotations while preserving passages; none includes all series. `deixis-configure` is an identical alias; `short.configure` uses the same function.",
+        "note": "Top-level `auto` leaves settings unchanged. Type/component maps merge compatible branches; empty maps and branch `auto` have option-specific reset semantics. Resolved `numbering: none` takes no counter value; `deixis-set(numbering: (footnote: \"*\"))` selects a note family. Palette names are `\"deixis\"`, `\"okabe-ito\"`, `\"tol-bright\"`, `\"tol-muted\"` and `\"tableau\"`. `omit: (series: (\"todo\",))` removes selected annotations while preserving passages; `none` includes all series. `deixis-configure` and `short.configure` are identical aliases.",
         "returns": "content",
         "guide": "configuration.md"
       },
@@ -62,9 +63,9 @@
         "setup": "free",
         "args": [],
         "guide": "getting-started.md",
-        "call": "#import short: *",
+        "call": "#import \"@preview/deixis:0.2.0\": short\n#import short: *",
         "returns": "module",
-        "note": "Use short as dx for qualified calls. All function aliases preserve identity; configure replaces the keyword set and note-block preserves native block. See the getting-started guide for import syntax."
+        "note": "Import with `#import \"@preview/deixis:0.2.0\": short as dx` for qualified calls, or import `short` and then `#import short: *`. Wildcard aliases shadow native `footnote`/`ref` and math `attach`/`arrowhead`; use `std.footnote`, `std.ref`, `std.math.attach` and `std.sym.arrowhead`. `configure` avoids the `set` keyword; `note-block` preserves native `block`."
       }
     ]
   },
@@ -88,7 +89,7 @@
           "numbering"
         ],
         "call": "deixis-mark(id: <detail>)[A passage]",
-        "note": "mark-type: \"region\" highlights a passage or pins; \"phantom\" is a semantic origin. Set data on creation, not reuse. See shared options for styles, targets and region controls.",
+        "note": "mark-type: \"region\" highlights a passage or pins; \"phantom\" is a semantic origin. Set data on creation, not reuse. Resolved numbering: none takes no counter value; an explicit marker may still display. See shared options for styles, targets and region controls.",
         "returns": "content"
       },
       {
@@ -160,7 +161,7 @@
           "container-args"
         ],
         "call": "deixis-footnote[An explanation.]",
-        "note": "Native flow (the default) paginates long bodies and uses the footer's typography; separator/gap are native footnote.entry settings. Overlay footnotes reserve space but paint whole units. Local block footnotes collect at the block end. numbering: (restart: \"page\", pattern: \"1\") restarts displayed markers on each original page; assigned counts stay stable.",
+        "note": "Native flow (the default) paginates long bodies and uses the footer's typography; separator/gap are native footnote.entry settings. Overlay footnotes reserve space but paint whole units. Local block footnotes collect at the block end. numbering: (restart: \"page\", pattern: \"1\") restarts displayed markers on each original page; assigned counts stay stable. HTML uses the native footnote section for every layer. Notes nested in Deixis footnote bodies exceed the HTML layout-pass budget.",
         "returns": "content",
         "guide": "rendering.md"
       },
@@ -170,7 +171,7 @@
           "deixis-margin-note-body"
         ],
         "setup": "setup",
-        "summary": "Overlay bodies follow the original mark or anchor pin; native margin packing may spill onto later existing pages.",
+        "summary": "Overlay bodies follow the original mark or anchor pin; margin packing may spill onto later existing pages.",
         "args": [
           "width",
           "side",
@@ -183,7 +184,7 @@
           "anchor-pin"
         ],
         "call": "deixis-margin-note(width: 30mm, side: right)[Passage][Explanation.]",
-        "note": "Leave a wide page margin. Flow places exactly on the declaration page with no collision packing. overflow: \"error\" checks the final frame. Connector shorthand selects the original mark.",
+        "note": "Leave a wide page margin. Flow places exactly on the declaration page with no collision packing. overflow: \"error\" checks the final frame. Connector shorthand selects the original mark. HTML appends margin bodies to the document's notes list.",
         "returns": "content",
         "guide": "margin-overflow.md"
       },
@@ -217,7 +218,7 @@
           "header"
         ],
         "call": "deixis-comment(author: \"Ada\", status: \"open\")[Passage][Comment.]",
-        "note": "Omit the series for a final copy with deixis-set(omit: (series: (\"review\",))). Other options are margin-note options; of is rejected.",
+        "note": "Remove comments in the series for a final copy with `deixis-set(omit: (series: (\"review\",)))`. Other options are margin-note options; `of` is rejected. Pass `numbering: auto` to inherit configured numbering, or `numbering: none` for no automatic marker and no counter value.",
         "returns": "content",
         "guide": "review-comments.md"
       },
@@ -272,7 +273,7 @@
           "container-args"
         ],
         "call": "deixis-endnote[A collected explanation.]",
-        "note": "Wrapper series defaults to \"endnote\"; attachments inherit the original series. The printer controls where it appears. Body settings are retained until printing.",
+        "note": "Wrapper series defaults to \"endnote\"; attachments inherit the original series. The printer controls where it appears. Body settings are retained until printing. Margin, inset, inline and footnotes nested in endnote bodies converge in PDF and HTML within the documented layout limits.",
         "returns": "content",
         "guide": "collected-notes.md"
       },
@@ -291,7 +292,7 @@
           "container-args"
         ],
         "call": "deixis-print-endnotes()",
-        "note": "Omitted overrides retain body settings. Default grid bypasses single-note containers; select deixis-native-render-group to use them. after/before are exclusive source boundaries.",
+        "note": "Omitted overrides retain body settings. The grid bypasses per-note containers for default aligned singles; a series with a custom single renderer is stacked. Select `deixis-native-render-group` to use containers with default singles. `after`/`before` are exclusive source boundaries.",
         "returns": "content",
         "guide": "collected-notes.md"
       }
@@ -532,7 +533,7 @@
           "inset"
         ],
         "call": "deixis-block(id: <section>)[Local content.]",
-        "note": "Minipage maps margin to internal inset and fixes outset at 0pt. Named IDs are unique; automatic scopes stay private. Breakable blocks use per-page margin frames and collect local footnotes at the block end.",
+        "note": "Minipage maps margin to internal inset and fixes outset at 0pt. Named IDs are unique; automatic scopes stay private. Breakable blocks use per-page margin frames and collect local footnotes at the block end. Page-local numbering restarts displayed markers at each original page, including inside multi-page blocks. HTML prints local footnote lists where their block ends.",
         "returns": "content",
         "guide": "blocks.md"
       },
@@ -556,14 +557,14 @@
           "deixis-update-note-counter"
         ],
         "setup": "setup",
-        "summary": "Sets a stream to an integer or applies current \u2192 integer. The next original increments that value.",
+        "summary": "Sets a stream to an integer or applies current \u2192 integer. The next numbered original increments that value.",
         "args": [
           "value",
           "target",
           "series"
         ],
         "call": "deixis-update-note-counter(0)",
-        "note": "Bodies, references and reuse never increment. Earlier notes keep assigned numbers. Endnote wrappers use the \"endnote\" series; select it explicitly for their resets.",
+        "note": "Unnumbered originals, bodies, references and reuse never increment. Earlier notes keep assigned numbers. Endnote wrappers use the \"endnote\" series; select it explicitly for their resets.",
         "returns": "content",
         "guide": "counters.md"
       }
@@ -678,7 +679,7 @@
           "inner-width"
         ],
         "call": "deixis-print-endnotes(render-single: deixis-chicago-render-single)",
-        "note": "Defaults to a 0.5in first-line indent unless an explicit indent setting or printer override applies. Preserves inherited paragraph settings, backlinks, styles and containers. Unnumbered notes omit the marker and period. The default group stacks custom single renderers with the configured gap.",
+        "note": "Defaults to a 0.5in first-line indent unless an explicit indent setting or printer override applies. Preserves inherited paragraph settings, backlinks, styles and containers. Unnumbered notes omit the marker and period. The default group stacks custom single renderers with the configured gap. HTML uses the native semantic renderer without paragraph indentation.",
         "returns": "content",
         "extension": true,
         "guide": "collected-notes.md"
@@ -730,8 +731,8 @@
           "body",
           "..args"
         ],
-        "call": "deixis-inset-note(container-func: \"tinted\", container-args: (inset: 6pt))[Body]",
-        "note": "container-func accepts names plain, rect, alert, stripe and tinted, or a custom function. The first three select these existing exports; stripe and tinted are named-only accent presets. Explicit stroke/fill/radius and container-args override preset defaults. rect-container has native rect parameters. Alert doubles scalar border thickness on the left; native edge maps remain literal.",
+        "call": "deixis-alert-container(stroke: teal + 0.5pt)[Body]",
+        "note": "`container-func` accepts `\"plain\"`, `\"rect\"`, `\"alert\"`, `\"stripe\"` and `\"tinted\"`, or a custom function. The first three select these exports; `\"stripe\"` and `\"tinted\"` are named accent presets. Explicit body `stroke`/`fill`/`radius` override preset styles; `container-args` supplies options such as `inset`. `deixis-rect-container` has native `rect` parameters. Alert doubles scalar border thickness on the left; native edge maps remain literal. Built-in containers emit plain text in HTML.",
         "returns": "content",
         "extension": true,
         "guide": "containers.md"

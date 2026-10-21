@@ -1,5 +1,8 @@
 # Independent connections
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Use body `connector:` options for the usual original-mark-to-body connection.
 Use `deixis-connect` when a line needs its own source selection or configuration.
 The [small editable example](../../examples/independent-connections.typ) draws two

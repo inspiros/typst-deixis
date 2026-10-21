@@ -1,65 +1,33 @@
-# Public API Inventory
+# Public API Reference
 
-The compact PDF manual groups all public exports into task families. Each entry
-has a setup classification, a concise contract, selected parameters and a guide
-link. Shared note options and connector records are explained once.
+Import the package facade with `#import "@preview/deixis:0.2.0": *`. The reference
+covers its public functions, including renderer and layout extension hooks.
+Internal modules, state and underscore helpers are private.
 
-- `catalog.json`: curated grouping, setup badges, short explanations and examples.
-- `catalog.typ`: reads the public facade and parses current source documentation
-  with Tidy. Parameter names/defaults come from that parsed source. Coverage
-  assertions reject missing/duplicate exports and unknown selected arguments.
-- `../manual-reference.typ`: compact print presentation of that inventory.
-- `../manual-examples.typ`: exact source excerpts beside isolated SVG previews.
-- `../examples/catalog.json`: worked-example sources, setup badges and expected pages.
-- `../manual-style.typ`: typography, badges, code, headers and page furniture.
+Start with [getting started](../guides/getting-started.md) for a complete document,
+or use the [guide index](../README.md) to choose an API by task. The searchable
+website includes full signatures, defaults, parameter descriptions and guide
+links. The [PDF manual](../manual.pdf) provides a compact reference alongside
+23 worked examples.
 
-The catalogue covers the public facade, including low-level renderer/layout
-hooks. It is not a second set of API definitions: the source remains authoritative
-for full signatures, parameter types, descriptions and runtime validation.
-The `short` module has one import entry; its direct aliases share the prefixed
-functions' documentation. `deixis-configure` joins the `deixis-set` entry.
-Every export must have a parsed source description. The drawing APIs, page queries and four body primitives also have
-checked machine-readable parameter descriptions/types; documentation inside the
-argument list is needed for Tidy to extract them. A
-website combines this inventory with the complete parsed metadata through
-`scripts/export-api.py` and `scripts/build-docs.py`. It generates one page per
-catalogue entry, with each public name's own full parsed signature/defaults.
-Native aliases retain their source description rather than inventing a signature.
-The PDF deliberately selects parameters rather than repeating every shared
-argument on every note adapter. For grouped aliases/presets, displayed defaults
-belong to the first function; differences are explained in the entry.
+The opt-in `short` module exposes direct aliases with the same parameters and
+behavior. `configure` corresponds to `deixis-set` / `deixis-configure` and
+`note-block` to `deixis-block`. See [short names](../guides/getting-started.md#optional-short-names)
+for import syntax and native-name collisions. Grouped aliases and presets share
+an entry; differences in their defaults are explained there.
 
-The manual cover and README use the horizontal logo in `assets/logos/`, the
-canonical home for the wordmark and icon variants. The duplicate compatibility
-copy and unused old live-manual helper stack have been retired.
+Badges describe setup requirements. A separate Typst `context` can still be
+needed for relative typography or document lookup.
 
-Badges classify **setup requirements**, not whether Typst `context` is needed:
-
-| Badge | Contract |
+| Badge | Meaning |
 | --- | --- |
-| Setup Required | Uses the document annotation machinery; install setup first. |
-| No Setup | Can work with supplied content or resolved numeric geometry alone. |
-| Conditional | Numeric/supplied data is independent; document lookup/live annotation behavior needs setup. |
-| Installs Setup | Initializes the document machinery. |
-| Extension Hook | Additional marker for low-level callback/integration APIs. |
+| Setup Required | Install `deixis-setup-notes` before using the document API. |
+| No Setup | Works with supplied content or resolved numeric geometry alone. |
+| Conditional | Supplied data can be independent; document lookup and live annotations need setup. |
+| Installs Setup | Initializes the document annotation machinery. |
+| Extension Hook | A low-level callback or integration API. |
 
-Refresh the illustrated examples with `python3 scripts/render-manual-examples.py`.
-They compile in independent documents: no note state, labels or counters are
-replayed inside the manual. `--check` verifies source/runtime/catalogue/asset
-digests. The exact source excerpt is read at manual compilation, keeping the
-printed code aligned with the specimen; setup and page geometry stay in its
-editable file. SVG links are illustrative; open the standalone specimen PDF for
-working navigation.
-
-Keep explanations concise and allow enough pages for readable examples. There is
-no enforced page ceiling; further examples can extend beyond 50 pages, while a
-manual approaching 100 pages should prompt an editorial review.
-
-Check inventory/example coverage and freshness, PDF destinations and physical text bounds with
-`python3 tests/manual.py`. The maintained runner invokes it when the manual is
-selected. It needs Typst, Poppler and `pypdf`, as do the other PDF behavior checks.
-
-Build the manual with `python3 scripts/render-manual.py`; optional `--paper
-us-letter` and `--monochrome` exercise alternate print presentation (neutral text/code; illustrations keep their authored colors). Outputs stay
-in `target/` unless `--update-pdf` is explicitly selected. The checked-in manual
-PDF and curated README artwork are not regenerated by ordinary builds.
+Use the [custom-renderer guide](../guides/custom-renderers.md) before replacing
+body layout, and the [numeric-routing guide](../guides/numeric-routing.md) for
+independent drawings. [Compatibility and migration](../guides/compatibility.md)
+lists remaining layout limits and replacements for removed APIs.

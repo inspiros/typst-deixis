@@ -1,5 +1,9 @@
 # Routing A Group
 
+Examples assume the package import from [getting started](getting-started.md#1-start-with-native-footnotes).
+Numeric geometry needs no setup; document selectors need the standard setup too.
+Excerpts with callback variables extend the surrounding example.
+
 Use `deixis-route-group` when several connectors should be planned together.
 For ordinary document content, [routing objects in place](document-routing.md)
 collects individual `deixis-connect` calls and attached geometry automatically.

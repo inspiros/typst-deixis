@@ -1,5 +1,8 @@
 # Setup And Page Layers
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Use `#show: deixis-setup-notes` before document annotations. Setup installs live
 registration, reference conversion, hiding/visibility rules, final validation and
 (default) background/foreground composition. It does not reset note identities,
@@ -16,7 +19,7 @@ counters, scopes or `deixis-set` configuration when applied again.
 | Note references and `@note-id` | Notes need setup; setup also installs the native-reference bridge |
 | `deixis-route`, numeric `deixis-routing-scene`, `deixis-prepare-connector`, head/shaft painting | No setup for resolved numeric geometry; style/font lengths can still need a Typst `context` |
 | Scene selectors such as `(mark: ...)`, `(body: ...)`, `(pin: ...)` | Need setup and a layout context to read accepted document geometry |
-| `deixis-set` and pin-pattern configuration | Can precede setup; configuration alone does not initialize document features |
+| `deixis-set` | Can precede setup; configuration alone does not initialize document features |
 
 `deixis-page-overlay` is a painting hook, not an initializer. Host-owned page
 layers still need setup for the annotation machinery. Conversely, setup is useful
@@ -100,7 +103,7 @@ scoped themes, put the theme decoration directly beside these hooks. Automatic
 setup captures decoration in Deixis state, which does not follow the lexical
 restoration of native page properties when a nested setup ends. Use the host-owned
 pattern for that case rather than relying on nested setup to restore captured
-state. This preserves a compact API without an additional reset/refresh function.
+state.
 
 For Touying, install these hooks through the theme's `config-page` and use
 `deixis-setup-notes(page-overlays: false, body)` in the slide setting. That avoids

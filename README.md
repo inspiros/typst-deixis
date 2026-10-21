@@ -11,11 +11,10 @@ subjects, share one note across several passages, or connect the parts of an
 image, equation, or diagram. Use it in articles, edited texts, and presentation
 slides.
 
-[Get started](docs/guides/getting-started.md) · [Read the guide](docs/README.md) ·
+[Get started](docs/guides/getting-started.md) · [Website](https://inspiros.github.io/typst-deixis/) · [Read the guide](docs/README.md) ·
 [PDF manual](docs/manual.pdf?raw=true) · [Browse examples](examples/)
 
-> **Development checkout:** this README describes unreleased **0.2.0**, requiring
-> **Typst 0.15.0+**. Universe currently serves **0.1.1**. [Install the checkout](#install-the-checkout)
+> **Unreleased 0.2.0:** requires **Typst 0.15.0+**. Universe currently serves **0.1.1**. [Install the checkout](#install-the-checkout)
 > before trying these examples.
 
 ## Start With A Note
@@ -124,18 +123,20 @@ A useful result#footnote[A short explanation.]
 
 `configure` is `deixis-set`, and `note-block` is `deixis-block`, so native
 `set` and `block` keep working. A wildcard import shadows native `footnote` and
-`ref`; reach them through `std`, or import `short as dx` and write `dx.footnote`.
+`ref`; use `std.footnote` and `std.ref` for those functions. In math it also shadows `attach` and
+`arrowhead`; use `std.math.attach` and `std.sym.arrowhead`. Import
+`short as dx` to keep names separate and write `dx.footnote`.
 See [short names](docs/guides/getting-started.md#optional-short-names).
 
 ## Install The Checkout
 
 ```sh
-git clone https://github.com/inspiros/typst-deixis
+git clone --branch overhaul-0.2.0 https://github.com/inspiros/typst-deixis
 cd typst-deixis
 python3 scripts/install.py --namespace preview --link --reinstall
 ```
 
-This installs the development version for Typst CLI and VS Code/Tinymist while
+This installs 0.2.0 for Typst CLI and VS Code/Tinymist while
 keeping the old `0.1.1` cache separate. Omit `--link` for a copied installation.
 See [installation](docs/guides/installation.md) for editor setup and alternatives.
 
@@ -153,9 +154,9 @@ See [installation](docs/guides/installation.md) for editor setup and alternative
 
 The [PDF manual](docs/manual.pdf?raw=true) includes a guided introduction,
 23 worked examples with source beside output, and a reference for every public API.
-The local mdBook website shares those guides and examples, with searchable API
-pages generated from source; see [CONTRIBUTING](CONTRIBUTING.md#local-website-and-agent-skill)
-for build and serving commands. The
+The [searchable website](https://inspiros.github.io/typst-deixis/) combines the guides, examples, and API reference. See
+[CONTRIBUTING](CONTRIBUTING.md#local-website-and-agent-skill) for local build and
+serving commands. The
 [Deixis agent skill](skills/deixis/SKILL.md) includes checked authoring recipes.
 
 For development, checks and artwork generation, see [CONTRIBUTING](CONTRIBUTING.md).

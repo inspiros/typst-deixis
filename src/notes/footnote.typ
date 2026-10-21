@@ -203,7 +203,8 @@
   /// A custom render function for the inner layout of the body.
   /// -> auto | function
   render-single: auto,
-  /// A custom container wrapper for the body block.
+  /// A body wrapper function or preset name: "plain", "rect", "alert",
+  /// "stripe" or "tinted". Forward wrapper options through container-args.
   /// -> auto | str | function
   container-func: auto,
   /// Native/custom options forwarded only to the body container.
@@ -467,7 +468,7 @@
   marker-style: auto,
   /// Mark marker placement.
   ///
-  /// See @deixis-inline-mark.marker-position and @deixis-region-mark.marker-position.
+  /// See `deixis-inline-mark.marker-position` and `deixis-region-mark.marker-position`.
   ///
   /// -> auto | alignment | dictionary
   marker-position: auto,
@@ -486,37 +487,37 @@
   z-index: auto,
   /// The visual decoration applied to the marked inline text. Choices: `"highlight"` | `"box"` | `"parentheses"` | `"underline"` | `"text-fill"` | `"none"`.
   ///
-  /// See @deixis-inline-mark.inline-mode.
+  /// See `deixis-inline-mark.inline-mode`.
   ///
   /// -> auto | str
   inline-mode: auto,
   /// Array of pin names for the region mark.
   ///
-  /// See @deixis-region-mark.pins.
+  /// See `deixis-region-mark.pins`.
   ///
   /// -> array
   pins: (),
   /// Internal padding for the region mark.
   ///
-  /// See @deixis-region-mark.padding.
+  /// See `deixis-region-mark.padding`.
   ///
   /// -> auto | length | str | dictionary
   padding: auto,
   /// Shape drawing function for the region mark.
   ///
-  /// See @deixis-region-mark.region-shape.
+  /// See `deixis-region-mark.region-shape`.
   ///
   /// -> auto | function
   region-shape: auto,
   /// Rendering layer for the region mark. Choices: `"flow"` | `"foreground"` | `"background"`.
   ///
-  /// See @deixis-region-mark.layer.
+  /// See `deixis-region-mark.layer`.
   ///
   /// -> auto | str
   layer: auto,
   /// If `true`, force the region mark into an inline box.
   ///
-  /// See @deixis-region-mark.inline.
+  /// See `deixis-region-mark.inline`.
   ///
   /// -> bool
   inline: false,
@@ -526,7 +527,8 @@
   /// A custom render function for the inner layout of the body.
   /// -> auto | function
   render-single: auto,
-  /// A custom container wrapper for the body block.
+  /// A body wrapper function or preset name: "plain", "rect", "alert",
+  /// "stripe" or "tinted". Forward wrapper options through container-args.
   /// -> auto | str | function
   container-func: auto,
   /// Native/custom options forwarded only to the body container.

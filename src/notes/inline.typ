@@ -88,7 +88,7 @@
   /// Native flow retains its order. Component dictionaries are supported.
   /// -> auto | int | dictionary
   z-index: auto,
-  /// If `true`, the body is rendered as if it is @deixis-inline-mark.
+  /// If `true`, the body is rendered as if it is `deixis-inline-mark`.
   ///
   /// ```example
   /// The city streets were filled with the psithurism #deixis-inline-mark(id: <psithurism>) of swaying trees.
@@ -105,7 +105,8 @@
   /// A custom render function for the inner layout of the body.
   /// -> auto | function
   render-single: auto,
-  /// A custom container wrapper for the body block.
+  /// A body wrapper function or preset name: "plain", "rect", "alert",
+  /// "stripe" or "tinted". Forward wrapper options through container-args.
   /// -> auto | str | function
   container-func: auto,
   /// Native/custom options forwarded only to the body container.

@@ -1,5 +1,8 @@
 # Rendering paths and layers
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Deixis keeps annotation identity independent of placement. A mark chooses its
 counter scope; a body chooses its rendering scope. Both can be declared in either
 order: `id:` declares the original and `of:` attaches its body. A standalone
@@ -36,6 +39,9 @@ Margin bodies optionally accept `overflow: "error"` to check their final assigne
 frame after packing/spillover; the default `"allow"` preserves existing placement.
 This checks bounds, independently of collision handling. See
 [margin overflow](margin-overflow.md) for supported layouts and limits.
+
+HTML export uses semantic note lists instead of page layers and geometry; see
+[output formats](compatibility.md#output-formats) for navigation and nesting limits.
 
 ## Independent component settings
 
@@ -102,13 +108,12 @@ For shared marks or separate `id:`/`of:` components, use the
 [frame-local label recipe](touying-identities.md) through Touying's pre-layout
 callback. It also supports exact cross-frame references without changing the
 document-wide default.
-The integration fixtures cover Touying 0.6.3 and 0.8.0, including two pause frames
-and a following slide with repeated numbering. Host themes
-can compose additional content around the overlay hook in their own page layers.
+This setup supports Touying 0.6.3 and 0.8.0. Host themes can compose additional
+content around the overlay hook in their own page layers.
 See [counter resets](counters.md) for heading rules, stream/scope selection,
 and the distinction between a frame boundary and natural pagination.
 
-Default `pause`/`uncover` now hide deferred annotations together with their
+Default `pause`/`uncover` hide deferred annotations together with their
 declarations. Covered footnotes do not reserve footer space; region drawings,
 overlay bodies, and connections stay covered in both page layers. Native flow
 retains its footprint and execution. See [annotation visibility](visibility.md)
@@ -192,8 +197,9 @@ bold. Measurement and live rendering use the same context, including custom
 single-note renderers. Renderer and body-style overrides can still apply local
 settings inside it. This does not capture arbitrary surrounding show rules.
 The built-in grid group renderer also restores each cell's captured context and
-accepts an empty group. It lays out markers and bodies directly, bypassing
-per-note `render-single` and container wrappers.
+accepts an empty group. With default aligned singles it lays out cells directly,
+bypassing per-note containers; a series containing a custom single renderer
+uses native stacking instead.
 
 ## Collected endnotes
 
@@ -307,9 +313,8 @@ shows separate rendering ownership with shared thread numbering.
 Overlay body-only declarations emit registration and metadata without inserting
 spaces, inline boxes, or empty paragraphs. This applies to standalone bodies,
 forward/backward mark association, and wrappers used with an existing ID. The
-regression suite compares actual labelled content positions in inline, block,
-paragraph, and grid-cell contexts for both overlay layers. Collected endnote
-declarations follow the same rule.
+same rule holds in inline, block, paragraph and grid-cell contexts for both
+overlay layers. Collected endnote declarations follow it too.
 
 Explicit named targets, including blocks declared later, preserve the same
 neutrality for overlay margin/inset and collected endnote declarations. A
@@ -325,4 +330,4 @@ Immediate margin/inset bodies with `layer: "flow"` use native placement. A nativ
 `place` can interrupt paragraph layout; this remains a documented limitation of
 that rendering path. Choose an overlay when the body declaration must be strictly
 neutral to the current flow. Immediate collision avoidance and collision checks
-between layers remain deferred.
+between layers are unavailable.

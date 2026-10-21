@@ -1,5 +1,8 @@
 # Drawing order within page overlays
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 Use `z-index` when two annotations overlap. Higher integers paint later and
 therefore appear on top. The default is 0; negative values are allowed.
 

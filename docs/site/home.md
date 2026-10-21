@@ -10,7 +10,7 @@ Keep the main argument readable, with explanations where they belong.
 Deixis brings footnotes, margin notes, passage highlights, and connections to
 Typst documents and presentation slides.
 
-<p class="deixis-edition"><span class="deixis-badge">Development 0.2.0</span> <span class="deixis-badge free">Typst 0.15.0+</span></p>
+<p class="deixis-edition"><span class="deixis-badge">Unreleased 0.2.0</span> <span class="deixis-badge free">Typst 0.15.0+</span></p>
 
 <div class="deixis-actions">
 <a class="deixis-button" href="../guides/getting-started.md">Start Reading</a>
@@ -27,7 +27,7 @@ Typst Universe currently serves 0.1.1.
 
 ![Two colored margin notes, a shared explanation, and a native footnote.](../assets/first-notes.svg)
 
-<p class="deixis-caption">One annotation can serve several passages. Each explanation keeps its own identity, number, and accent.</p>
+<p class="deixis-caption">One annotation can serve several passages. Shared passages keep the same note identity, marker, and accent.</p>
 
 ## A First Annotation
 
@@ -39,7 +39,8 @@ A useful result#deixis-footnote[A short explanation.]
 is easier to read when its details have a place.
 ```
 
-A wrapper creates the mark and explanation together. Use a public name when
+A wrapper creates the mark and explanation together. Set `numbering: none`
+for an unnumbered aside. Use `id:` when
 several passages should share one note, or when you need to refer to it later.
 
 ## Choose Your Next Step

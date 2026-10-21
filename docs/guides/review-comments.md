@@ -1,5 +1,8 @@
 # Review Comments And Final Builds
 
+Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
+Excerpts with existing IDs or callback variables extend the surrounding example.
+
 `deixis-comment` writes an editorial comment in the `"review"` series. Choose
 whether to include that series at the start of the document:
 
@@ -17,11 +20,12 @@ needs supporting evidence#deixis-footnote[A source retained in both builds.].
 Compile normally for a draft; pass `--input final=true` to Typst for a final
 copy. See the [editable example](../../examples/review-comments.typ).
 
-A comment is a margin note with lettered markers, so its numbers stay apart from
-source notes. `author` and `status` are stored in `note.data` (as `none` when
-absent) and shown in bold above the comment; use `header: none` or a function of
-the data to change that line. Other margin-note options pass through. Any
-wrapper can carry comments instead: give it its own series, for example
+A comment is a margin note with lettered markers and an independent counter
+series, so it stays apart from source notes. `author` and `status` are stored
+in `note.data` (as `none` when absent) and shown in bold above the comment. Use
+`header: none` or a function of the data to change that line. Other margin-note options pass through. The call
+creates an original; to attach a body to an existing mark, use
+`deixis-margin-note-body(of: ...)`. Any wrapper can carry comments instead: give it its own series, for example
 `deixis-footnote(series: "todo")[...]`, and omit that series.
 
 In the final copy, “provisional claim” remains ordinary text. Its decoration,
@@ -36,7 +40,8 @@ Select omission where the original is created. Its attached body and every
 reused mark follow that decision, including forward declarations and calls in
 other scopes. Reused passages remain ordinary text; attached bodies disappear.
 Standalone bodies use their own `series:`. Endnotes default to `"endnote"`;
-other wrappers, marks, and standalone bodies default to `"default"`.
+comments default to `"review"`; other wrappers, marks, and standalone bodies
+default to `"default"`.
 
 `deixis-set(omit: none)` includes all subsequent series. A `deixis-block` restores
 its parent's policy when it ends; ordinary Typst brackets do not. `omit: auto`
@@ -59,7 +64,7 @@ linked list:
   let pending = deixis-query-notes(series: "review")
     .filter(n => n.data.author == "Ada" and n.data.status == "open")
   for n in pending {
-    block(link(n.dest)[#n.marker #n.data.title])
+    block(link(n.dest)[#n.marker #n.data.at("title", default: n.summary)])
   }
 }
 ```
@@ -81,6 +86,6 @@ notes keep their identity, counter value, and layout footprint. Omission removes
 the annotation while preserving the passage. Native outlines and `deixis-plain`
 still replay only the passage; they do not create another annotation.
 
-The same omission policy works inside a Touying slide setting. Use private
-wrapper identities or the existing [frame-local identity recipe](touying-identities.md)
+The same omission policy works inside a Touying slide setting. Omit `id:` on
+wrappers, or use the [frame-local identity recipe](touying-identities.md)
 for shared named comments across repeated subslides.
