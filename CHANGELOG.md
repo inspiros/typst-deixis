@@ -129,6 +129,8 @@ from 0.1.1 or an earlier development snapshot.
 - Custom margin renderers whose measured size depends on their location could
   be placed twice or not at all: every page now plans earlier notes with the
   same measurement.
+- Named marks and note wrappers printing a stray space before the marked
+  passage, or between the surrounding words for named phantom marks.
 
 ## [0.1.1] - 2026-06-04
 

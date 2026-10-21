@@ -82,9 +82,8 @@
 
 // Registration is semantic content, separate from the deferred painted mark.
 // Keeping the passage inspectable also preserves nested declaration order.
-#let _deixis-declaration(id, body, passage: none) = [
-  #metadata((id: id, body: body, passage: passage))<deixis-declaration>
-]
+// One element only: surrounding markup whitespace would print before the mark.
+#let _deixis-declaration(id, body, passage: none) = [#metadata((id: id, body: body, passage: passage))<deixis-declaration>]
 #let _deixis-live-declaration(it) = it.value.body
 
 // Inspect content that already exists; never execute contextual callbacks or
