@@ -58,6 +58,7 @@ def main():
             raise RuntimeError(result.stderr or result.stdout)
         return result.stdout
 
+    (ROOT / 'target').mkdir(exist_ok=True)  # Absent in a fresh clone.
     with tempfile.TemporaryDirectory(prefix='readme-stage-', dir=ROOT / 'target') as directory:
         stage = Path(directory)
 
