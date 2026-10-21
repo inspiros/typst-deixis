@@ -84,6 +84,12 @@ styling is retained, while their live destinations and body-link lookups are
 omitted. Their ordinary links remain in the actual rendered body. See
 [scopes inside notes](deferred-scopes.md).
 
+Margin bodies are measured once, in the context of their own note, and every
+page reuses that height when planning. Keep a margin renderer's size
+independent of the page it paints on (for example, do not scale it by
+`here().page()`): a spilled body would paint at a different height than it was
+planned for and could overlap its neighbours.
+
 Page-footnote allocation is checked independently of these helpers. A custom
 renderer may omit its destination/span or return empty content without being
 mistaken for a missing native entry. See [rendering](rendering.md#footnote-ownership).

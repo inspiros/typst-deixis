@@ -292,7 +292,7 @@
 
 /// A semantic mark that is registered without leaving _any_ visible trace in the text.
 ///
-/// Phantom marks do increment the counter and register their position in the state engine, but leave
+/// Numbered phantom marks increment the counter (`numbering: none` does not) and register their position in the state engine, but leave
 /// no visual footprint in the paragraph.
 /// This is useful for creating semantic anchors or side-channel annotations that shouldn't disrupt the reading flow.
 /// With `of: id`, it reuses an annotation without advancing the counter. A named

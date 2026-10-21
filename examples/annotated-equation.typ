@@ -21,7 +21,7 @@ Bayes' rule connects an updated belief to the evidence and the starting belief.
   #term[$P(H|D)$][*Posterior* \
     How plausible is the hypothesis after seeing the data?]
   #h(25pt) $=$ #h(25pt)
-  #term[$frac(P(D|H), P(D))$][*Evidence Update* \
+  #term(padding: (x: 9pt, top: 15pt, bottom: 10pt), dy: 37pt)[$frac(P(D|H), P(D))$][*Evidence Update* \
     The likelihood is normalized by the probability of the observed data.]
   #h(25pt) $times$ #h(25pt)
   #term[$P(H)$][*Prior* \

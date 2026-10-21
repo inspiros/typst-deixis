@@ -67,7 +67,7 @@ def main():
     destination = (data_dir / "typst/packages" / namespace / name).resolve() / version
     if destination == source or source.is_relative_to(destination):
         raise ValueError("The installation directory must not contain the source checkout.")
-    patterns = [".git", ".agents", ".codex", ".aws", "develop", "target", "__pycache__",
+    patterns = [".git", ".agents", ".claude", ".codex", ".aws", "develop", "target", "__pycache__",
                 *package.get("exclude", []), *([thumbnail] if thumbnail else []), *args.exclude]
     if destination.is_relative_to(source):
         relative = destination.relative_to(source)

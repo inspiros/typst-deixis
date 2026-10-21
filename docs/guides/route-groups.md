@@ -11,7 +11,7 @@ alone need no note setup:
   (from: (0pt, 0pt), to: (100pt, 0pt)),
   (from: (0pt, 1pt), to: (100pt, 1pt)),
 ))
-#for path in plan.routes {
+#context for path in plan.routes {
   if path.status == "ok" {
     let request = deixis-prepare-connector(path, heads: "triangle")
     place(top + left, dx: path.origin.first(), dy: path.origin.last(),
