@@ -42,7 +42,7 @@
     "src/layout/margin.typ": "a3b07f21a167f97680e0d59017c6bf5395f314d9b8f237eb2ab5984d77f9099f",
     "src/layout/placement.typ": "5ea4273abe5e047a34c64c5178d5a6e4b114f4df5096d71c46c7bdf8127886f9",
     "src/layout/scopes.typ": "0153be0d550cd1a56c554e880be31eba2de1fd87b69da1809693a294ce7302aa",
-    "src/lib.typ": "2f7100378ca65ba5579bcaa9a87d9062c2b61f64c4e8deaf1555351e045893b1",
+    "src/lib.typ": "2b058d0480f4fc9563aa5fe9cef0ad1a7a5d388e7e96c79f95080df403c76b1c",
     "src/marks/inline-paint.typ": "3c717ae414e1b8d5a84d6a7b26870ad3e298ec04260ab645612849a5cf818e12",
     "src/marks/inline.typ": "78c4feb98a50c6193896c7e25b7f9cf5ef12ef3a7c5f0c318054cb0c1a546405",
     "src/marks/mark.typ": "dcc28d614b0f66210db1608c13476e49adfe3d3e540c21da13d4c4b637e00e52",
@@ -50,7 +50,7 @@
     "src/marks/region-paint.typ": "4780a788d025dd3e987ec89a3e8ac51ca710acf08f95a7a1ead55a7ba623d712",
     "src/marks/region.typ": "2c45bb050435b7960eb2caa021333ab140120604e360e92bf2d06c627286865e",
     "src/marks/repeat.typ": "60f4ff70760f6d26beeb3f323e5a1ef7f05521f5fba09fa97858ab5b9bc51665",
-    "src/notes/endnote.typ": "824958fe2c588598fbe608815686038b793cd4dcb6d830d6ae90dc1960ae87d7",
+    "src/notes/endnote.typ": "2fec2ea3000905496d560cf57cd965d0cd9f73ac52c2e395ecdbff5a5d87b3de",
     "src/notes/footnote.typ": "6279f1f1a32d6a2afc8b855592112e4d4960249315c955f9f6f4d61928375a5d",
     "src/notes/inline.typ": "c4238aa386aee2b58e41c56158740ca02888db3a4ec98d7d8bd55b1e3250e6ef",
     "src/notes/inset.typ": "2ee65df01e58709bb68db89b81b366054da87e52ae6f1a2c1a8738fbcb0e712d",
@@ -58,7 +58,8 @@
     "src/outline.typ": "f1f29cbe581e64658cb81d85609fbbed0f24c09a9fbddc392e785185b5f2728f",
     "src/query.typ": "dfd9cdc9869f7c803c871df207d404713b2d97f373cecbe0b9ddb9f6c6d1db50",
     "src/reference.typ": "112dbab3057d3eca89a458f0d21cd141d099ece83afba2059f5b06d0aa9f9bff",
-    "src/render/body.typ": "c0afc40ff0fc65a8f3a1d5d3d6fb6b08bf97811995b9e5e653731c4f85cbf44b",
+    "src/render/body.typ": "53c9ca41bdf6aee89258f8f3b2e10565e3fbe8c0eb040736b7799a56a7ce22f2",
+    "src/render/chicago.typ": "9193299b25d2bf2c5c417789db3794306744365c2a22aaff7250034d43d73042",
     "src/render/commands.typ": "fa9eab473e02278fd97faa62d0cdcd83c0f9b671eafbfda68f59099d41c4dbf2",
     "src/render/overlay.typ": "992ca9fc58470bf227598ea014cb8dc2fc71f2ba31118c184a782508263ed7a6",
     "src/render/summary.typ": "6230972c062b94b989930eccf3f5fdd814960fd7c2fe65fd71a8b94a595f87d5",
@@ -106,7 +107,7 @@
     "src/routing/spec.typ": "429f1a81ec19ee3e2698ca5fa14e54f80eb57f922097a75aceda563831525b90",
     "src/routing/spill.typ": "73b258ecea8667a166eb7146a6ced244ae1a7173589673d0e9cfd45ee619cfc7",
     "src/setup.typ": "562c7762fec41e08b562f6ff6b5dc230ca05c79703a8b6895158b77a28f48bec",
-    "src/short.typ": "d12a11de57689e914fb46aa5313c7ce652e7083a1c457a72d36be97b76c9899e"
+    "src/short.typ": "65220a9c6515fb9d6b29d476b897e8d8da484be0e77d1df0803312c523892cf8"
   },
   "assets": {
     "reading.svg": "274485785483b050aaed61fec9c72aed6bf99919505edca98fbeab0d910fcdaa",

@@ -2087,6 +2087,10 @@ def main():
                 assert len(result["labels"]) == 5, result
             elif source.stem == "html-export":
                 check_html_export(base, source, out)
+            elif source.parent.name == "integration" and source.stem == "html-endnotes":
+                sys.path.insert(0, str(ROOT / "tests"))  # Also under python -I.
+                from html_endnotes import check_html_endnotes
+                check_html_endnotes(base, source, out)
             elif source.stem == "page-notes":
                 assert values(source) == [["endnote", "footnote"]]
             elif source.stem == "overlay-invisibility":

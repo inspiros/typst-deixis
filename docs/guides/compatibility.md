@@ -133,16 +133,33 @@ html`, Deixis keeps every annotation body and its navigation, and drops geometry
   edges, region shapes, pins, connectors and other page paint are omitted
   without diagnostics.
 
+See the [HTML endnote example](../../examples/html-endnotes.typ). After installing
+the unreleased 0.2.0 checkout, compile it with:
+
+```sh
+typst compile --features html --format html examples/html-endnotes.typ target/html-endnotes.html
+```
+
+The body marker itself is a return link even with the default backlink setting;
+`backlink: true` adds a separate return button. Each selected series has its own
+list, and separate printers retain print-once ownership.
+
 Built-in renderers and containers emit plain inline text. Custom renderers,
 containers and margin layouts, and direct drawing calls such as
 `deixis-render-connector` or `deixis-absolute-place`, run as written; Typst
 warns about layout elements in them that HTML ignores, as it does for the
 document's own `set page` rules. Typst also drops placed content (`place`,
 floating figures) from HTML, including annotations declared inside it. Page
-references (`form: "page"`), page-local numbering and Touying slides have no
-HTML equivalent. HTML footnotes cost Typst another layout pass, so documents near
-the convergence budget (long forward-attachment chains, or notes declared inside
-footnotes) can fail to converge in HTML even when paged output converges.
+references (`form: "page"`) and Touying slides have no HTML equivalent.
+Page-local numbering has no page boundaries in HTML and displays one continuous
+sequence per counter owner and series. HTML footnotes cost Typst another layout
+pass, so documents near the convergence budget can fail in HTML even when paged
+output converges: a Deixis footnote embedded in an endnote body works in PDF but
+exceeds the budget in HTML, and can also report a missing native footer
+allocation there. A margin note embedded in an endnote body exceeds the budget in
+both PDF and HTML on 0.15.0 and 0.15.1. Keep margin notes out of collected
+bodies; inline and inset notes, and native Typst footnotes, work inside endnotes. Long forward-attachment chains and notes declared
+inside footnotes retain the same convergence limit.
 
 Tagged PDF output, including `--pdf-standard ua-1`, compiles without
 diagnostics. Native footnotes are tagged as notes beside their marks, and
