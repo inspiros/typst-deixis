@@ -1,11 +1,9 @@
-# Collected layouts and pagination
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Collected Layouts And Pagination
 
 Endnotes are declared with the text and printed later. The default collection
 uses a grid with aligned markers:
 
+<!-- deixis-example: {"id": "collected-explanation", "setup": false} -->
 ```typst
 #show: deixis-setup-notes
 Text#deixis-endnote[A collected explanation.]
@@ -18,7 +16,7 @@ inset bodies do; page footnotes follow the native footer instead. A printer's `b
 those settings inside the renderer. Arbitrary surrounding show rules are not
 captured.
 
-## Choosing a group renderer
+## Choosing A Group Renderer
 
 | Renderer | Behavior |
 | --- | --- |
@@ -33,6 +31,7 @@ with `deixis-native-render-group`, preserving each renderer and the configured
 `gap`. For a custom container with the default single renderer, select a stacked
 renderer:
 
+<!-- deixis-example: {"id": "stacked-group", "prelude": "Text#deixis-endnote[A collected explanation.]"} -->
 ```typst
 #deixis-print-endnotes(render-group: deixis-native-render-group)
 ```
@@ -51,13 +50,14 @@ records, or use native layout such as columns.
 
 Use the Chicago single renderer with the ordinary printer:
 
+<!-- deixis-example: {"id": "chicago-endnotes", "prelude": "Text#deixis-endnote[A collected explanation that continues beyond a short first line to show the hanging paragraph layout.]"} -->
 ```typst
 #deixis-print-endnotes(render-single: deixis-chicago-render-single)
 ```
 
 To select it throughout the document, configure endnotes before declaring them:
 
-```typst
+```typst fragment
 #deixis-set(render-single: (endnote: deixis-chicago-render-single))
 ```
 
@@ -87,7 +87,7 @@ The default clearance resolves in that note's declaration context. An explicit
 printer clearance overrides it. A separator is emitted once for the collection;
 series retain the smaller existing inter-series clearance.
 
-## Long bodies
+## Long Bodies
 
 Native, aligned, and grid endnotes can continue across pages. A custom group can
 also use native columns and pagination. The first eligible printer owns a body;
@@ -103,7 +103,7 @@ individual numeric slots; a compatible group can paint inside that reservation.
 A custom overlay group must keep dimensions consistent with those slots. For
 arbitrary reflow or long splittable bodies, use native flow or endnotes.
 
-## Connections to printed bodies
+## Connections To Printed Bodies
 
 Explicit connections can select `(body: <note>, point: "start")` or `"end"`.
 The start uses the native location before live content; the end follows the
@@ -114,7 +114,7 @@ destination. These are content points, not continuation rectangles or glyph
 bounds. See [body point connections](independent-connections.md#connect-to-a-collected-or-paginated-body)
 and the [small example](../../examples/collected-connections.typ).
 
-## Pages with an automatic dimension
+## Pages With An Automatic Dimension
 
 Page frames record the final numeric width/height, including `height: auto` and
 `width: auto`. Placement, margin packing, region continuation bounds, and

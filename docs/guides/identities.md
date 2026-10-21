@@ -1,7 +1,4 @@
-# Declaring, attaching, and reusing
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Declaring, Attaching, And Reusing
 
 Use `id:` to declare a public identity and `of:` to select an existing annotation.
 The same ID works for references, body selection, and connections. There is no
@@ -9,6 +6,7 @@ secondary body alias or `label:` option in 0.2.
 
 Start with a wrapper when one call should create the mark and body:
 
+<!-- deixis-example: {"id": "example-1", "height": "180pt", "margin": "(left: 18pt, right: 130pt, y: 18pt)"} -->
 ```typst
 #deixis-margin-note(id: <idea>, backlink: true)[A passage][One explanation.]
 Another use: #deixis-mark(of: <idea>)[A related passage].
@@ -17,6 +15,7 @@ See also @idea.
 
 Or declare the components separately:
 
+<!-- deixis-example: {"id": "example-2", "height": "180pt", "margin": "(left: 18pt, right: 130pt, y: 18pt)"} -->
 ```typst
 #deixis-mark(id: <idea>)[First passage]
 #deixis-margin-note-body(of: <idea>)[One explanation.]
@@ -58,7 +57,7 @@ For repeated Touying frames, use private wrapper identities or the
 [frame-local label recipe](touying-identities.md). Literal IDs remain
 document-wide; a computed native label works with the same `id:`/`of:` API.
 
-## Note, attachment, and pin names
+## Note, Attachment, And Pin Names
 
 An attachment ID can coexist with a note ID, including the same spelling.
 They name different objects; selecting one never falls back to another namespace.
@@ -89,12 +88,13 @@ Use the body selector for its accepted painted geometry. Avoid/cut/cross nodes
 require positive rectangles. `behavior: "ignore"` permits an empty declaration
 frame, but does not give it the painted body's geometry.
 
-## Declaration order and forward lookup
+## Declaration Order And Forward Lookup
 
 An original mark (`id:`), its attached body (`of:`), and reused marks (`of:`)
 may appear in any order. All six orderings of those three operations are
 supported, including reuse across scopes and pages. For example:
 
+<!-- deixis-example: {"id": "example-3", "height": "180pt", "margin": "(left: 18pt, right: 130pt, y: 18pt)"} -->
 ```typst
 #deixis-mark(of: <idea>)[Earlier passage]
 #deixis-margin-note-body(of: <idea>)[One explanation.]
@@ -132,10 +132,11 @@ These rules still apply in either declaration order:
 - An unresolved `of:` is an error. Mixing `id:` and `of:` within a single call is
   also an error; the flexible order applies to separate calls.
 
-## Choosing a mark form
+## Choosing A Mark Form
 
 `deixis-mark` creates and reuses every current mark form:
 
+<!-- deixis-example: {"id": "example-4"} -->
 ```typst
 #deixis-mark(id: <term>)[An inline passage]
 #deixis-mark(id: <formula>, mark-type: "region", inline: true)[$x^2$]
@@ -159,10 +160,11 @@ See [shared notes](shared-notes.md) for local/component styles, region geometry,
 occurrence names, and backlinks. Reused marks never create another body or
 inherit the body's drawn connector.
 
-## Bodies and native references
+## Bodies And Native References
 
 A separate body can precede its original mark:
 
+<!-- deixis-example: {"id": "example-5"} -->
 ```typst
 #deixis-footnote-body(of: <detail>)[An explanation.]
 Here is the original#deixis-mark(id: <detail>).
@@ -170,8 +172,9 @@ Here is the original#deixis-mark(id: <detail>).
 
 An unresolved `of:` is an error. Use `id:` when a body is intentionally standalone:
 
+<!-- deixis-example: {"id": "example-6", "height": "180pt"} -->
 ```typst
-#deixis-inset-note-body(id: <aside>, layer: "foreground")[An independent aside.]
+#deixis-inset-note-body(id: <aside>, layer: "foreground", dy: 30pt)[An independent aside.]
 #link(<aside>)[Read the aside.]
 ```
 
@@ -203,12 +206,13 @@ location. `@idea`, `deixis-ref(<idea>)`, native `link(<idea>)[...]`, and
 extra destinations. Before a body is printed, package references can fall back
 to its original mark; a native public body label exists only after live painting.
 
-## Connections and occurrences
+## Connections And Occurrences
 
 Keep `connector:` on the body for the usual original-mark-to-body edge. It selects
 the original even when a reused mark appears first. Reuse has no automatic edge.
 Name an occurrence and select it explicitly when another connection is wanted:
 
+<!-- deixis-example: {"id": "example-7", "prelude": "#deixis-inset-note(id: <idea>, layer: \"foreground\", width: 100pt, dx: 150pt, dy: 45pt)[Original passage][One explanation.]", "height": "180pt"} -->
 ```typst
 #deixis-mark(of: <idea>, occurrence: <again>)[Another passage]
 #deixis-connect(from: (mark: <idea>, occurrence: <again>), to: <idea>)
@@ -218,7 +222,7 @@ Occurrence names are local to an annotation and do not create another public
 note identity. Extra explicit edges are additive. See
 [independent connections](independent-connections.md).
 
-## Marks inside note bodies
+## Marks Inside Note Bodies
 
 A body can contain another original mark with its own `id:` and body. Existing
 declarations register in source order at the body's declaration point; painting
@@ -230,7 +234,7 @@ Deixis state updates. Such declarations retain live ordering and Typst's finite
 layout-pass limit. Private internal keys are opaque; select annotations through
 public IDs.
 
-## Migrating to unreleased 0.2
+## Migrating To Unreleased 0.2
 
 For container, connector, pin and outline changes as well, see the consolidated
 [compatibility and migration guide](compatibility.md#migrate-from-011).

@@ -1,7 +1,4 @@
-# Revealing annotations
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Revealing Annotations
 
 To remove editorial notes from a final copy while preserving their marked text,
 use [series-based omission](review-comments.md). Native hiding below keeps
@@ -10,6 +7,7 @@ annotation identities and counter values.
 With the [Touying setup](rendering.md#presentation-frameworks), ordinary `pause`
 and `uncover` work around complete annotations:
 
+<!-- deixis-example: {"id": "example-1", "setup": false, "prelude": "#import \"@preview/touying:0.8.0\": *\n#import themes.simple: simple-theme, slide\n#import \"@preview/deixis:0.2.0\": *\n#show: simple-theme.with(aspect-ratio: \"16-9\", config-page(\n  background: deixis-page-overlay(layer: \"background\"),\n  foreground: deixis-page-overlay(),\n))\n#let annotations(body) = deixis-setup-notes(page-overlays: false, [\n  #deixis-update-note-counter(0)\n  #body\n])\n"} -->
 ```typst
 #slide(setting: annotations)[
   First idea.
@@ -22,7 +20,7 @@ See the [small two-frame example](../../examples/touying-reveals.typ). It reveal
 a highlighted passage, inset body, connector, and page footnote together. Both
 Touying 0.6.3 and 0.8.0 support this setup.
 
-## Native hiding
+## Native Hiding
 
 Deixis follows native `hide(...)`, including the default cover produced by Touying.
 Setup follows native hiding scope so page overlays and collected notes cannot
@@ -53,16 +51,18 @@ native execution and print-once ownership.
 Use Touying `only` when the complete annotation should be absent from other
 frames, including its declaration and counter increment:
 
+<!-- deixis-example: {"id": "example-2", "setup": false, "prelude": "#import \"@preview/touying:0.8.0\": *\n#import themes.simple: simple-theme, slide\n#import \"@preview/deixis:0.2.0\": *\n#show: simple-theme.with(aspect-ratio: \"16-9\", config-page(\n  background: deixis-page-overlay(layer: \"background\"),\n  foreground: deixis-page-overlay(),\n))\n#let annotations(body) = deixis-setup-notes(page-overlays: false, [\n  #deixis-update-note-counter(0)\n  #body\n])\n#slide(setting: annotations)[\n  First frame.\n  #pause\n", "postlude": "]"} -->
 ```typst
 #only("2-")[Text#deixis-footnote[Present from frame two onward.]]
 ```
 
-## Each component owns its declaration context
+## Each Component Owns Its Declaration Context
 
 A creating wrapper normally puts its mark and body in the same cover. With
 separate calls, a covered mark does not automatically hide a body declared
 outside that cover:
 
+<!-- deixis-example: {"id": "example-3", "height": "150pt"} -->
 ```typst
 #hide[#deixis-mark(id: <shared>)[Covered passage]]
 #deixis-inset-note-body(of: <shared>, layer: "foreground")[Visible explanation.]
@@ -78,7 +78,7 @@ A pin used as a connection endpoint follows its own declaration's hiding context
 A pin used only as a waypoint, socket, or region boundary supplies geometry;
 its hiding context does not implicitly cover the consuming component.
 
-## Other cover effects and frame identity
+## Other Cover Effects And Frame Identity
 
 This integration follows native hide. A non-hiding cover stays visible; ordinary
 inherited text color is captured with declaration typography by margin, inset,

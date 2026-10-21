@@ -1,7 +1,4 @@
-# Shared notes across Touying frames
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Shared Notes Across Touying Frames
 
 Wrappers without `id:` already create a private annotation on each rendered
 frame. Use them for ordinary slides. An explicit literal such as `id: <idea>`
@@ -13,6 +10,7 @@ compute an ordinary native label from a logical slide key, the subslide number,
 and the local note name. Touying supplies `self.subslide` before layout through
 its callback API:
 
+<!-- deixis-example: {"id": "example-1", "setup": false, "prelude": "#import \"@preview/touying:0.8.0\": *\n#import themes.simple: simple-theme, slide\n#import \"@preview/deixis:0.2.0\": *\n#show: simple-theme.with(aspect-ratio: \"16-9\", config-page(\n  background: deixis-page-overlay(layer: \"background\"),\n  foreground: deixis-page-overlay(),\n))\n#let annotations(body) = deixis-setup-notes(page-overlays: false, [\n  #deixis-update-note-counter(0)\n  #body\n])\n"} -->
 ```typst
 // Author helpers; these are not additional Deixis functions.
 #let frame-id(name, frame) = label(repr(("shared-slide", frame, str(name))))
@@ -44,10 +42,11 @@ on another slide, so give that slide another key. Serializing the tuple with
 `repr` also keeps names containing punctuation or separators distinct. String
 and label note names normalize through `str(name)`.
 
-## One label for every component
+## One Label For Every Component
 
 Use the computed label everywhere that selects the annotation:
 
+<!-- deixis-example: {"id": "example-2", "height": "180pt", "prelude": "#let shared = <idea>"} -->
 ```typst
 #deixis-mark(of: shared, occurrence: <again>)[A reused passage]
 #deixis-inset-note-body(of: shared, layer: "foreground")[One explanation.]
@@ -65,11 +64,11 @@ A covered deferred body has no native body label. A Deixis reference can fall
 back to its registered mark; a direct native body link requires a painted body.
 See [visibility](visibility.md) and [references](references.md).
 
-## Selecting another frame
+## Selecting Another Frame
 
 Choose that frame explicitly with the same helper:
 
-```typst
+```typst fragment
 #deixis-ref(frame-id(<idea>, 2))
 #ref(frame-id(<idea>, 2), form: "page")
 ```
@@ -80,7 +79,7 @@ mark whose original is absent from its frame remains an error. Put a complete
 annotation inside `only` when it should be absent from other frames, or gate all
 its components together in the host callback.
 
-## Visibility, scopes, and counters
+## Visibility, Scopes, And Counters
 
 Touying function callbacks control their own visibility. Placing a callback after
 `pause` does not automatically cover its result. Use `self.subslide` to choose or
@@ -96,7 +95,7 @@ while each frame has distinct annotations.
 Pins retain their own explicit scope. For a frame-local socket, the computed
 label can be its scope too:
 
-```typst
+```typst fragment
 #deixis-pin(<socket>, scope: shared)
 #deixis-connect(from: (pin: (name: <socket>, scope: shared)), to: shared)
 ```

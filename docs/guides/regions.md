@@ -1,11 +1,9 @@
-# Regions and pins
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Regions And Pins
 
 A region encloses content in a rectangle and can share an annotation's identity
 with any note body. The simple form wraps its content:
 
+<!-- deixis-example: {"id": "example-1"} -->
 ```typst
 #show: deixis-setup-notes
 #deixis-region-mark(inline: true, layer: "foreground", padding: 3pt)[$x^2 + y^2$]
@@ -24,13 +22,14 @@ For a highlight without an outline, use `stroke: none`. Add
 `region-shape: deixis-ellipse-region` for an ellipse; `deixis-rect-region` is
 the default shape. Both presets use the mark's fill and stroke.
 
+<!-- deixis-example: {"id": "example-2"} -->
 ```typst
-#deixis-region-mark(inline: true, stroke: none)[Rectangular highlight]
-#deixis-region-mark(inline: true, stroke: none,
+#deixis-region-mark(inline: true, layer: "background", stroke: none, fill: yellow.lighten(70%))[Rectangular highlight]
+#deixis-region-mark(inline: true, layer: "background", stroke: none, fill: yellow.lighten(70%),
   region-shape: deixis-ellipse-region)[Elliptical highlight]
 ```
 
-## Choosing a layer
+## Choosing A Layer
 
 - `"foreground"` paints over the page content, including opaque containers.
 - `"background"` paints under the content; opaque table/cell/container fills can
@@ -66,7 +65,7 @@ pages. Explicit corner entries override native side/rest radius defaults.
 For content moving between columns on one page, use a region per column and
 explicit pins when necessary. Same-page column fragments are not inferred.
 
-## Native transforms
+## Native Transforms
 
 Foreground/background automatic regions use all four native box corners. A
 surrounding `move`, scale, or rotation therefore follows the transformed content;
@@ -79,6 +78,7 @@ cannot describe every rotated rectangle's extrema.
 For flow regions, put a size-changing transform inside the region and enable
 native reflow:
 
+<!-- deixis-example: {"id": "example-3"} -->
 ```typst
 #deixis-region-mark(inline: true, layer: "flow", padding: 3pt)[
   #rotate(20deg, reflow: true, box[Rotated content])
@@ -91,10 +91,11 @@ coordinate system. That combination is not supported. Transforms with
 enclose that extent. Inline-marker typography remains an approximation under
 transforms; use a region mark for content whose exact transformed bounds matter.
 
-## Explicit pins
+## Explicit Pins
 
 Pins select the geometric bounds independently of the region declaration:
 
+<!-- deixis-example: {"id": "example-4"} -->
 ```typst
 #deixis-pin("begin")Important content#deixis-pin("end")
 #deixis-region-mark(pins: ("begin", "end"), layer: "foreground")
@@ -110,10 +111,11 @@ supports negative values, which shrink the bounds. Relative font lengths such as
 `0.2em` resolve where the pin or region is declared. Keep the resulting rectangle's
 width and height positive.
 
-## Pins attached to containers
+## Pins Attached To Containers
 
 `deixis-attach` places named pins relative to a content container:
 
+<!-- deixis-example: {"id": "example-5", "postlude": "#deixis-region-mark(pins: (\"start\", \"end\"), padding: 3pt)"} -->
 ```typst
 #deixis-attach(prefix: none, pins: (
   start: (dx: 0%, dy: 0%),
@@ -143,7 +145,7 @@ explicit `pattern` option for regex scanning. Geometry metadata fields are
 protected. See the [pin guide](pins.md) for padding semantics, alignment/offset
 shorthand, scopes, occurrence selection, validation, and migration.
 
-## Reusing an annotation
+## Reusing An Annotation
 
 `deixis-region-mark(of: id)` creates a new region for an existing annotation.
 It needs its own passage or pins and shares the number/body identity and

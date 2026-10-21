@@ -1,7 +1,4 @@
-# Local scopes inside note bodies
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Local Scopes Inside Note Bodies
 
 A note body can contain a `deixis-block`. Its local originals have independent
 numbering and rendering ownership, just as in ordinary document flow. This works
@@ -11,6 +8,7 @@ three layers. A scope can be named or anonymous.
 The [small example](../../examples/scoped-body.typ) puts a locally numbered inline
 explanation inside a callout:
 
+<!-- deixis-example: {"id": "scope-in-callout", "width": "420pt", "height": "150pt"} -->
 ```typst
 #deixis-mark(id: <reading>)[The main passage]
 #deixis-inset-note-body(of: <reading>, width: 260pt, dx: 20pt, dy: 40pt)[
@@ -28,7 +26,7 @@ and annotation IDs retain their normal document-wide namespace. A block does
 not introduce implicit local ID rebinding. See [scope names](scopes.md),
 [identities](identities.md), and [body ownership](ownership.md).
 
-## Measurement and links
+## Measurement And Links
 
 Margin, inset, and overlay footnote renderers measure their content before
 painting. Detached sizing retains nested inline marker text and `marker-style`,

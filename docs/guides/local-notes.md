@@ -1,8 +1,5 @@
 # Table And Figure Notes
 
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
-
 Use **`deixis-block` as the local owner**. It already gives a table, figure or
 other object independent numbering and an end collection. No new note type or
 setup function is needed. See the [complete example](../../examples/local-notes.typ).
@@ -13,6 +10,7 @@ For a nonfloating figure, put its body **and caption** in the block. Notes from
 both collect after the figure; the surrounding document's numbering resumes
 when the block ends.
 
+<!-- deixis-example: {"id": "example-1"} -->
 ```typst
 #deixis-block[
   #figure(caption: [Measured values.])[
@@ -33,6 +31,7 @@ document-wide, even when numbering is local.
 
 Float the entire local block, containing one ordinary native figure:
 
+<!-- deixis-example: {"id": "example-2", "height": "200pt"} -->
 ```typst
 #place(top, float: true, scope: "parent")[
   #deixis-block[
@@ -65,6 +64,7 @@ allocation and its [native float limits](footnotes.md#page-and-local-ownership).
 
 For a long table inside a native figure, allow both wrappers to break:
 
+<!-- deixis-example: {"id": "example-3", "height": "220pt"} -->
 ```typst
 #show figure: set block(breakable: true)
 #deixis-block(breakable: true)[

@@ -1,11 +1,9 @@
-# One body, several marks
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# One Body, Several Marks
 
 Declare a note once, then use `deixis-mark(of: ...)` or the equivalent
 `deixis-inline-mark(of: ...)` where another passage needs the same annotation:
 
+<!-- deixis-example: {"id": "example-1"} -->
 ```typst
 #show: deixis-setup-notes
 First#deixis-endnote(id: <shared>, backlink: "multiple")[One explanation.]
@@ -25,7 +23,7 @@ forward targets, names, and backlinks. `deixis-mark(id: ...)` also creates origi
 [annotation identities](identities.md) and the
 [mark/body example](../../examples/mark-and-body.typ).
 
-## Compared with a reference
+## Compared With A Reference
 
 Both `@shared` / `deixis-ref(<shared>)` and a repeat display the original number
 and register one return-link origin. For a bare number their visible result is
@@ -41,6 +39,7 @@ measured inline geometry for explicit connection selection.
 
 Forward use is allowed with an annotation ID declared later:
 
+<!-- deixis-example: {"id": "example-2"} -->
 ```typst
 Earlier#deixis-mark(of: <later>).
 Later#deixis-endnote(id: <later>)[The shared explanation.]
@@ -50,11 +49,12 @@ Later#deixis-endnote(id: <later>)[The shared explanation.]
 The original declaration remains the counter owner regardless of source order.
 An occurrence does not become the primary mark because it appears first.
 
-## All three mark forms
+## All Three Mark Forms
 
 `deixis-mark` supports every current mark type. Bare calls remain inline,
 independently of the original's type. Select another form explicitly:
 
+<!-- deixis-example: {"id": "example-3", "prelude": "#deixis-endnote(id: <shared>, backlink: \"multiple\")[One explanation.]", "postlude": "#deixis-print-endnotes()"} -->
 ```typst
 #deixis-mark(of: <shared>, mark-type: "region", inline: true,
   layer: "background")[$x^2 + y^2$]
@@ -89,6 +89,7 @@ It can repeat an inline, phantom, or region original as an inline marker. The
 surrounding text context belongs to this occurrence. Local decoration controls
 match inline marks:
 
+<!-- deixis-example: {"id": "example-4", "prelude": "#deixis-endnote(id: <shared>, backlink: \"multiple\")[One explanation.]", "postlude": "#deixis-print-endnotes()"} -->
 ```typst
 #deixis-mark(of: <shared>, inline-mode: "underline")[Another passage]
 #deixis-mark(of: <shared>, marker-style: it => strong(it))
@@ -103,6 +104,7 @@ The original mark's resolved stroke/fill/radius are retained even if defaults
 change before the repeat. Component dictionaries on supported styling parameters
 select the `mark` branch, with `nodes`/`rest` fallbacks as in ordinary marks:
 
+<!-- deixis-example: {"id": "example-5", "prelude": "#deixis-endnote(id: <shared>, backlink: \"multiple\")[One explanation.]", "postlude": "#deixis-print-endnotes()"} -->
 ```typst
 #deixis-mark(of: <shared>,
   stroke: (mark: blue, body: red),
@@ -122,7 +124,7 @@ options are rejected. Layer/padding/shape options apply only in region mode.
 A bare repeat of a region or phantom original remains inline; choose its other
 form explicitly.
 
-## Body and return links
+## Body And Return Links
 
 Repeated markers link to the body when it has been painted. Until then they show
 their marker without a dead link. `backlink: true` / `"always"` adds a return hook
@@ -143,10 +145,11 @@ connector, even when the body has `connector:` enabled. Placing copies of a body
 on several pages remains a separate extension. Ordinary
 `@label` / `deixis-ref` calls remain the simplest choice for prose references.
 
-## Named occurrence frames
+## Named Occurrence Frames
 
 Give an occurrence a name when it needs a stable identity and a measured frame:
 
+<!-- deixis-example: {"id": "example-6", "prelude": "#deixis-endnote(id: <shared>, backlink: \"multiple\")[One explanation.]", "postlude": "#deixis-print-endnotes()"} -->
 ```typst
 #deixis-mark(of: <shared>, occurrence: <later-use>)[Another short passage]
 ```

@@ -1,4 +1,4 @@
-# What a body declaration controls
+# What A Body Declaration Controls
 
 A mark owns the annotation's number and logical identity. A body owns its content,
 formatting, and placement policy. Its declaration captures body settings and
@@ -48,7 +48,7 @@ prints it, including a collected body's final continuation page. They do not
 change printer ownership, footnote reservation, or body placement. A connection
 to an unprinted collection is an error, not a request to print it.
 
-## Layers and placement are separate decisions
+## Layers And Placement Are Separate Decisions
 
 `layer: "flow"` currently chooses immediate/native behavior for a body. Overlay
 body layers allow document-wide geometry lookup. This is a rendering-path choice

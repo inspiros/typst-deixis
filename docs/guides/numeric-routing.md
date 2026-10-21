@@ -1,4 +1,4 @@
-# Numeric routing
+# Numeric Routing
 
 Examples assume the package import from [getting started](getting-started.md#1-start-with-native-footnotes).
 Numeric geometry needs no setup; document selectors need the standard setup too.
@@ -11,6 +11,7 @@ For measured document content, keep using [pin connections](independent-connecti
 For several sharp orthogonal fragments, use [group routing](route-groups.md) to
 share a scene and run checked congestion repair before the same painting step.
 
+<!-- deixis-example: {"id": "example-1", "height": "100pt"} -->
 ```typst
 #let path = deixis-route(from: (0pt, 0pt), to: (120pt, 40pt), route: "hobby")
 #context {
@@ -32,7 +33,7 @@ prepared shaft/heads. Preparing again is only necessary when preparation inputs
 change. Stroke-only halo passes can reuse the request as described in the
 [painter guide](connectors.md#a-custom-connector-painter).
 
-## Input plane and constraints
+## Input Plane And Constraints
 
 All points, including B-spline controls and points inside sections, use one
 caller-defined plane: x increases rightward and y downward. Supply pairs of finite
@@ -43,6 +44,7 @@ Resolve those in your own adapter first. The numeric entry does not read
 
 An endpoint is a point or `(point: ..., normal: ...)`:
 
+<!-- deixis-example: {"id": "example-2", "height": "150pt", "postlude": "#context {\n  let drawing = deixis-prepare-connector(path, stroke: teal + 1pt, heads: \"triangle\")\n  place(top + left, dx: path.origin.first(), dy: path.origin.last(), deixis-render-connector(drawing))\n}"} -->
 ```typst
 #let path = deixis-route(
   from: (point: (20pt, 30pt), normal: right),
@@ -75,7 +77,7 @@ it does not cut an unchanged interpolating curve midway. Use `cuts` at preparati
 for that. Page continuation belongs to the document adapter. Optional `scene`
 and `page` arguments add [page-local nodes and avoidance](routing-scenes.md).
 
-## Geometry result
+## Geometry Result
 
 The result has `kind: "deixis-route"` and
 `frame: "source-local-x-right-y-down"`. It contains only numeric geometry:
@@ -102,7 +104,7 @@ limits. Degenerate segments and hard-point duplicates within `0.00001pt` are
 cleaned up. Coincident endpoints can still form a nonempty returning path.
 Native overflow limits still apply to extreme coordinates and algorithm settings.
 
-## Preparation and placement
+## Preparation And Placement
 
 `deixis-prepare-connector` accepts a geometry result. Defaults are black 1pt,
 no heads, no cuts and no gap marks. Heads use the existing shape/custom-head and
@@ -121,6 +123,7 @@ context. It includes `route`, `shaft`, `manual-shaft`, `uncut-shaft`, `cuts`,
 The native painter does not apply `origin` automatically. To draw in the original
 input plane, position its output yourself:
 
+<!-- deixis-example: {"id": "example-3", "height": "150pt", "prelude": "#let path = deixis-route(from: (20pt, 30pt), to: (180pt, 90pt), route: \"hobby\", via: ((80pt, 10pt),))"} -->
 ```typst
 #context {
   let drawing = deixis-prepare-connector(path, heads: "triangle")

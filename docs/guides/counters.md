@@ -1,7 +1,4 @@
-# Counters and resets
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Counters And Resets
 
 Each numbered original mark advances one counter, selected by its **counter owner
 and series**. The first numbered original in an unused stream gets 1. Body
@@ -22,15 +19,19 @@ Both counter functions default to `"default"`. Pass `series: "endnote"` when
 reading or resetting that stream. Series names are literal strings, including
 punctuation and empty strings, with no reserved edge/component words.
 
-## Read, set, or update
+## Read, Set, Or Update
 
 After `#show: deixis-setup-notes`:
 
+<!-- deixis-example: {"id": "counter-updates"} -->
 ```typst
-#context deixis-note-counter(series: "notes")
+Current: #context deixis-note-counter(series: "notes")
 #deixis-update-note-counter(10, series: "notes")
+After setting: #context deixis-note-counter(series: "notes")
 #deixis-update-note-counter(n => n + 2, series: "notes")
+After updating: #context deixis-note-counter(series: "notes")
 #deixis-update-note-counter(0, series: "notes")
+After resetting: #context deixis-note-counter(series: "notes")
 ```
 
 An unused stream reads as zero. The read returns an integer inside a native
@@ -50,7 +51,7 @@ heading rule restarts one series for each section while another continues.
 There is no separate reset function: updating to 0 supplies it. For independent
 local collections, see [scoped notes](../../examples/scoped-notes.typ).
 
-## Counter ownership
+## Counter Ownership
 
 `target: 0` selects the current scope. Negative integers select ancestors;
 going beyond the available stack falls back to the document. `target: "page"`
@@ -81,7 +82,7 @@ Page-note queries retain native body order after resets, and outlines retain
 original source order. Neither sorts entries by their displayed count; see
 [selection and queries](queries.md).
 
-## Ordering and placement
+## Ordering And Placement
 
 Place a reset in the main flow before the originals it should affect, usually
 at a section boundary. A later reset does not renumber an earlier original, body,
@@ -94,6 +95,7 @@ explicit boundaries remain useful for resetting the assigned counter itself.
 
 Keep the simple wrapper and opt in through `numbering`:
 
+<!-- deixis-example: {"id": "page-markers", "height": "140pt"} -->
 ```typst
 #let note = deixis-footnote.with(
   numbering: (restart: "page", pattern: "1"),
@@ -168,10 +170,11 @@ size. Ordinary assigned numbering remains the default. Touying restarts per
 physical frame; the existing slide-setting recipe remains available for
 explicit host-controlled counter resets.
 
-## Restart at a heading
+## Restart At A Heading
 
 Apply a native show rule after setup, selecting the heading level and series:
 
+<!-- deixis-example: {"id": "chapter-resets"} -->
 ```typst
 #show heading.where(level: 1): it => {
   deixis-update-note-counter(0, target: "page", series: "notes")
@@ -183,6 +186,8 @@ Apply a native show rule after setup, selecting the heading level and series:
 Text#note[Starts at one.]
 = Second Chapter
 Text#note[Starts at one again.]
+
+#deixis-print-endnotes(series: "notes")
 ```
 
 The reset runs before the heading's title, so a new mark in that title gets 1
@@ -197,13 +202,13 @@ reset. A native rule applies to every matching heading in its scope, including
 headings inside notes or custom output. If only selected headings should restart
 numbering, put the update and heading together in a small wrapper instead.
 
-## Slides and explicit page boundaries
+## Slides And Explicit Page Boundaries
 
 For Touying, reset at the start of the slide's setting function, before its
 body. The [presentation integration](rendering.md#presentation-frameworks)
 shows the full setup and host-owned page overlays. Select each stream explicitly:
 
-```typst
+```typst fragment
 #let annotations(body) = deixis-setup-notes(page-overlays: false, [
   #deixis-update-note-counter(0, target: "page", series: "default")
   #body
@@ -223,7 +228,7 @@ does not reset note numbering. This recipe does not cover pages formed by natura
 pagination. Page headers and overlays run in native rendering order and are not
 a general substitute for a reset at an original's boundary.
 
-## Resets inside live bodies
+## Resets Inside Live Bodies
 
 Updates inside live body content retain native evaluation order. They are
 barriers to nested-original preparation: a mark is not extracted past a reset.
@@ -244,7 +249,7 @@ a callback changes note counters, put that state-dependent content in a native
 `context` to keep its declarations and generated updates in live order. In
 this excerpt, `custom-content` is the callback's content:
 
-```typst
+```typst fragment
 #deixis-inline-note-body(inline: false)[#context { custom-content }]
 ```
 

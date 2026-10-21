@@ -1,13 +1,11 @@
 # Footnotes And Long Bodies
 
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
-
 `deixis-footnote` places its body in the native page footer, just like
 `std.footnote`. Typst allocates and splits the live content; Deixis supplies
 the annotation identity, marker, styling and return links. Ordinary native
 footnotes keep their own numbering. See [Long Footnotes](../../examples/long-footnote.typ).
 
+<!-- deixis-example: {"id": "native-footnote", "setup": false, "height": "140pt"} -->
 ```typst
 #show: deixis-setup-notes
 A passage#deixis-footnote[A long explanation.] continues here.
@@ -34,8 +32,10 @@ footnote declared in a heading, in bold text or in a large passage still
 prints as an ordinary footnote. The separator, clearance and gap between entries
 belong to the native footer; configure them once, at document level:
 
+<!-- deixis-example: {"id": "footer-separator", "height": "140pt"} -->
 ```typst
 #set footnote.entry(separator: line(length: 40%, stroke: 0.5pt + gray), gap: 0.6em)
+A passage#deixis-footnote[An explanation beneath the custom separator.]
 ```
 
 `deixis-set` controls the marker, body style, indentation, colors and container
@@ -61,6 +61,7 @@ attaches to the preceding word even if the call starts on the next source line;
 the following space is preserved. A blank paragraph before the call starts a
 new paragraph, as with native `std.footnote`.
 
+<!-- deixis-example: {"id": "inline-whitespace", "height": "190pt"} -->
 ```typst
 This is not#deixis-footnote[Attached to “not”.] a long
 #deixis-footnote[Attached to “long”.]
@@ -72,6 +73,7 @@ sentence.
 Body whitespace also follows native layout. These first two bodies start on the
 marker's line; the third deliberately starts a new paragraph:
 
+<!-- deixis-example: {"id": "body-whitespace", "height": "190pt"} -->
 ```typst
 #deixis-footnote[No line break.]
 #deixis-footnote[
@@ -101,6 +103,7 @@ and keep the entire body together. A body taller than a page can overflow and
 be clipped **without a warning**, just as with `std.footnote(rect[...])`.
 Use a breakable native block for a long bordered note:
 
+<!-- deixis-example: {"id": "breakable-container", "height": "140pt"} -->
 ```typst
 #deixis-footnote(
   container-func: block,

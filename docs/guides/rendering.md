@@ -1,7 +1,4 @@
-# Rendering paths and layers
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Rendering Paths And Layers
 
 Deixis keeps annotation identity independent of placement. A mark chooses its
 counter scope; a body chooses its rendering scope. Both can be declared in either
@@ -13,7 +10,7 @@ body instead uses its own `id:` and has no original mark. Use
 See [body ownership](ownership.md) for the distinction between a declaration's
 location, the placement anchor, and native page allocation.
 
-## Choosing a rendering path
+## Choosing A Rendering Path
 
 | Component | `flow` | `foreground` / `background` |
 | --- | --- | --- |
@@ -43,8 +40,9 @@ This checks bounds, independently of collision handling. See
 HTML export uses semantic note lists instead of page layers and geometry; see
 [output formats](compatibility.md#output-formats) for navigation and nesting limits.
 
-## Independent component settings
+## Independent Component Settings
 
+<!-- deixis-example: {"id": "example-1"} -->
 ```typst
 #show: deixis-setup-notes
 #deixis-footnote(
@@ -76,13 +74,14 @@ The background hook also publishes physical page geometry. See
 [setup and page layers](setup.md) for the setup requirement matrix, retained
 options, host-owned/scoped styles and a small example.
 
-## Presentation frameworks
+## Presentation Frameworks
 
 A theme that owns page settings can install the overlay content itself. This
 avoids changing page styles halfway through a physical slide, which can create
 extra pages. For Touying, configure page layers through the theme and initialize
 annotations in the slide setting:
 
+<!-- deixis-example: {"id": "example-2", "setup": false} -->
 ```typst
 #import "@preview/touying:0.8.0": *
 #import themes.simple: simple-theme, slide
@@ -121,7 +120,7 @@ for component ownership, `only`, custom-cover limits, frame identity, and the
 [small reveal example](../../examples/touying-reveals.typ). Counter resets and
 visibility remain independent.
 
-## Footnote ownership
+## Footnote Ownership
 
 See [footnotes and long bodies](footnotes.md) for whitespace, native controls and
 a breakable-border recipe. Choose native flow for long notes or complex contextual content. Typst handles
@@ -134,6 +133,7 @@ entries in Typst 0.15. This applies to flow and overlay bodies alike; switching
 layers does not repair that native limitation. Keep the mark in a parent-scope
 figure and its body declaration in the surrounding main flow:
 
+<!-- deixis-example: {"id": "example-3"} -->
 ```typst
 #figure(placement: top, scope: "parent")[
   Diagram#deixis-inline-mark(id: <diagram-note>).
@@ -162,6 +162,7 @@ stay strictly flow-neutral; Deixis diagnoses missing reservations instead of
 silently omitting these bodies. Put the declaration before visible content in the
 same paragraph, or use `layer: "flow"`:
 
+<!-- deixis-example: {"id": "example-4"} -->
 ```typst
 #deixis-footnote-body(of: <term>)[The explanation.]
 #deixis-inline-mark(id: <term>)[The term].
@@ -201,7 +202,7 @@ accepts an empty group. With default aligned singles it lays out cells directly,
 bypassing per-note containers; a series containing a custom single renderer
 uses native stacking instead.
 
-## Collected endnotes
+## Collected Endnotes
 
 `deixis-print-endnotes()` collects eligible bodies declared before that call.
 Use `series`, `target`, and `after`/`before` to print a subset. String bounds refer
@@ -223,7 +224,7 @@ contracts.
 The [small grouped-endnotes example](../../examples/endnote-groups.typ) shows
 series filtering and a later collection that prints only newly added bodies.
 
-## Scope and page boundaries
+## Scope And Page Boundaries
 
 `"page"` means document-level ownership; it does not reset a counter every physical
 page. Named blocks, ancestor targets, threads, and counter synchronization remain
@@ -287,7 +288,7 @@ cannot cross pages. The [region guide](regions.md) covers automatic page-spannin
 wrappers, nested containers, and attached pins. Intrinsic pages use their final numeric dimensions; overlays still do not enlarge
 the native page. See [intrinsic page geometry](collected-notes.md#pages-with-an-automatic-dimension).
 
-## Safe note outlines
+## Safe Note Outlines
 
 `deixis-note-outline()` reads static text from note bodies; it does not render
 their bodies again. Formatting wrappers and raw text contribute plain text,
@@ -308,7 +309,7 @@ source boundaries, including marks on the same line. Scope and series filters
 also apply to standalone marks. The [scoped-notes example](../../examples/scoped-notes.typ)
 shows separate rendering ownership with shared thread numbering.
 
-## Invisible declarations
+## Invisible Declarations
 
 Overlay body-only declarations emit registration and metadata without inserting
 spaces, inline boxes, or empty paragraphs. This applies to standalone bodies,

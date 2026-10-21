@@ -1,12 +1,10 @@
-# Annotation data
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Annotation Data
 
 Use the optional `data: (...)` dictionary to describe an annotation for custom
 views. Fields can be titles, tags, review status, or values specific to your
 document. Deixis does not prescribe their names or types:
 
+<!-- deixis-example: {"id": "example-1", "postlude": "#deixis-print-endnotes()"} -->
 ```typst
 #deixis-endnote(id: <method>, data: (
   title: [Explain the method], tags: ("method", "review"), status: "open",
@@ -19,7 +17,7 @@ document. Deixis does not prescribe their names or types:
 [small review example](../../examples/note-data.typ) uses it for titles, a
 filtered table, and usage counts. An annotation without custom data has `(:)`.
 
-## Ownership and forward declarations
+## Ownership And Forward Declarations
 
 | Declaration | Where `data` belongs |
 | --- | --- |
@@ -36,6 +34,7 @@ omission. Each annotation has one owner, independently of its body rendering
 scope and counter series. To attach an explanation with data, declare it on the
 original:
 
+<!-- deixis-example: {"id": "example-2", "postlude": "#deixis-print-endnotes()"} -->
 ```typst
 #deixis-endnote-body(of: <method>)[Why the method works.]
 #deixis-mark(id: <method>, data: (title: "Method",))[The method]
@@ -48,11 +47,12 @@ option or mutable metadata setter. Custom body renderers receive the same
 dictionary under their existing record's `data` field; physical page-body records
 also retain it.
 
-## Titles, grouping, and filtering
+## Titles, Grouping, And Filtering
 
 Data has no automatic rendering or selection semantics. The default outline
 continues to show safe static body excerpts. Choose a title explicitly:
 
+<!-- deixis-example: {"id": "example-3", "prelude": "#deixis-endnote(id: <method>, data: (title: [Explain the method], status: \"open\"))[Why the method works.]\n#deixis-mark(of: <method>)[Another use]\n"} -->
 ```typst
 #deixis-note-outline(
   summary: note => note.data.at("title", default: note.summary),
@@ -63,6 +63,7 @@ For status headings, use `group-by: note => note.data.at("status", default:
 "Unsorted")`. A group callback must return a string. Filter tags/status or sort
 custom fields with ordinary array operations:
 
+<!-- deixis-example: {"id": "example-4", "prelude": "#deixis-endnote(id: <method>, data: (title: [Explain the method], status: \"open\"))[Why the method works.]\n#deixis-mark(of: <method>)[Another use]\n"} -->
 ```typst
 #context {
   let pending = deixis-query-notes().filter(note =>

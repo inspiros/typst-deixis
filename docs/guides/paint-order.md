@@ -1,11 +1,9 @@
-# Drawing order within page overlays
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Drawing Order Within Page Overlays
 
 Use `z-index` when two annotations overlap. Higher integers paint later and
 therefore appear on top. The default is 0; negative values are allowed.
 
+<!-- deixis-example: {"id": "example-1", "height": "160pt"} -->
 ```typst
 #deixis-inset-note(layer: "foreground", z-index: 2)[Passage][Explanation.]
 ```
@@ -15,11 +13,12 @@ Choose an overlay layer first: inset bodies and page footnotes default to native
 The [small example](../../examples/z-order.typ) fixes two overlapping callouts in
 place so changing one integer shows the stacking effect.
 
-## Separate body and connector priorities
+## Separate Body And Connector Priorities
 
 A scalar applies to the applicable overlay components of a creating wrapper.
 Use the existing component dictionaries for independent control:
 
+<!-- deixis-example: {"id": "example-2", "height": "160pt"} -->
 ```typst
 #deixis-inset-note(
   layer: "foreground",
@@ -36,7 +35,7 @@ can override it locally, without changing the original, body, or connections.
 
 Set defaults through the usual type/component cascade:
 
-```typst
+```typst fragment
 #deixis-set(z-index: (inset-note: (body: 2, connector: -1)))
 ```
 
@@ -46,7 +45,7 @@ scalar replaces them. This does not attach another connection to a reused mark.
 
 An explicit `connector.z-index` overrides the link component. `auto` inherits it:
 
-```typst
+```typst fragment
 #deixis-connect(from: "source", to: "destination",
   connector: (route: "curve", z-index: 3))
 ```
@@ -54,7 +53,7 @@ An explicit `connector.z-index` overrides the link component. `auto` inherits it
 An independent connection owns its own priority. Custom connector renderers can
 read the resolved integer at `request.route.document.z-index`.
 
-## Equal priorities and groups
+## Equal Priorities And Groups
 
 Equal values preserve the existing order within an overlay: regions, connections,
 page footnotes, insets, then margins. Ties inside each adapter retain its existing
@@ -92,7 +91,7 @@ members. Native page footnotes from several text columns can share one footer
 column; text columns do not automatically create separate ordering groups.
 Foreground and background groups are separate.
 
-## Layer and state boundaries
+## Layer And State Boundaries
 
 Priority orders drawings **within one Deixis page overlay**. Background remains
 below native flow, and foreground remains above it. Native flow bodies, immediate

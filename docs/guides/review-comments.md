@@ -1,11 +1,9 @@
 # Review Comments And Final Builds
 
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
-
 `deixis-comment` writes an editorial comment in the `"review"` series. Choose
 whether to include that series at the start of the document:
 
+<!-- deixis-example: {"id": "example-1", "width": "480pt", "height": "220pt", "setup": false} -->
 ```typst
 #import "@preview/deixis:0.2.0": *
 #set page(margin: (right: 45mm))
@@ -59,6 +57,7 @@ Store static fields such as `author`, `status`, and `title` in the original's
 keeps all comments in the draft but shows only Ada's open comments in a custom
 linked list:
 
+<!-- deixis-example: {"id": "example-2", "width": "480pt", "height": "220pt", "prelude": "#import \"@preview/deixis:0.2.0\": *\n#set page(margin: (right: 45mm))\n#show: deixis-setup-notes\n#let final = sys.inputs.at(\"final\", default: \"false\") == \"true\"\n#deixis-set(omit: if final { (series: (\"review\",)) } else { none })\n\nA #deixis-comment(author: \"Ada\", status: \"open\")[provisional claim][Check this wording.]\nneeds supporting evidence#deixis-footnote[A source retained in both builds.].\n"} -->
 ```typst
 #context {
   let pending = deixis-query-notes(series: "review")

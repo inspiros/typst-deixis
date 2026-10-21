@@ -1,7 +1,4 @@
-# Independent connections
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Independent Connections
 
 Use body `connector:` options for the usual original-mark-to-body connection.
 Use `deixis-connect` when a line needs its own source selection or configuration.
@@ -13,6 +10,7 @@ endpoint. A [routing wrapper](document-routing.md) collects individual connectio
 and plans them together, using attached obstacles. Existing selectors below
 remain available inside that wrapper.
 
+<!-- deixis-example: {"id": "example-1", "height": "180pt"} -->
 ```typst
 #deixis-inset-note(id: <shared>, connector: none,
   layer: "foreground", width: 100pt, dx: 120pt, dy: 50pt,
@@ -38,7 +36,7 @@ semantic point; a hidden inline repeat still has no drawable frame. See
 To choose a live body content boundary instead of a frame, use
 `(body: id, point: "start")` or `"end"`.
 
-## Connect pins without creating notes
+## Connect Pins Without Creating Notes
 
 If coordinates are already known, [numeric routing](numeric-routing.md) builds
 the same native geometry without setup or document declarations. Pins remain
@@ -46,7 +44,7 @@ useful for measuring actual placed content and selecting its page.
 
 Pin connections also support a control polygon, without declaring any note:
 
-```typst
+```typst fragment
 #deixis-connect(from: (pin: <source>), to: (pin: <destination>),
   connector: (route: (kind: "b-spline", controls: ((pin: <bend>),))))
 ```
@@ -63,7 +61,7 @@ crossing gaps, layers, and custom painters with note connectors. The
 [card example](../../examples/pin-connections.typ) is a small complete drawing.
 No note mark or body is required; setup supplies the page overlays and lookup.
 
-```typst
+```typst fragment
 #deixis-connect(from: (pin: <out>), to: (pin: <in>),
   connector: (route: "curve", via: ((pin: <bend>),)))
 ```
@@ -97,7 +95,7 @@ Without a split, waypoints belong to the source side. Wrong-page or intermediate
 pins are diagnosed instead of reusing their coordinates on another page. The
 connection retains its existing endpoint-only page-continuation policy.
 
-## Ownership and defaults
+## Ownership And Defaults
 
 Each declaration draws one additional edge. It does not replace, deduplicate, or
 restyle the body's implicit connection. Use `connector: none` on the body when
@@ -120,7 +118,7 @@ Settings and typography come from the connection declaration, independently of
 the destination body. Configure explicit connections through the `connection`
 type in `deixis-set`, for example:
 
-```typst
+```typst fragment
 #deixis-set(
   connector: (connection: (route: "curve", heads: (body: "circle"))),
   stroke: (connection: teal + 0.8pt),
@@ -133,7 +131,7 @@ outline entry, or PDF return-link origin. They are metadata-only in the document
 flow. `connector: none` disables the declaration and skips endpoint resolution;
 its selector shapes are still checked.
 
-## Supported endpoints and pages
+## Supported Endpoints And Pages
 
 - Sources: original inline, phantom, or region marks, plus visible named repeated
   inline frames. Original inline marks keep the existing typographic marker-bound
@@ -164,11 +162,12 @@ An inset whose live boundaries fall outside its proposed frame cannot be selecte
 as a whole body; this includes continuation into another column on the same page.
 Choose an explicit start/end point for such a body.
 
-## Connect to a collected or paginated body
+## Connect To A Collected Or Paginated Body
 
 Choose a body's live content boundary to connect to an endnote or footnote,
 including a long body that continues across pages:
 
+<!-- deixis-example: {"id": "example-5", "height": "170pt"} -->
 ```typst
 #deixis-endnote(id: <detail>)[An explanation printed later.]
 #deixis-connect(from: <detail>,
@@ -206,11 +205,12 @@ deferred. Start/end points also follow bodies that continue between columns on
 the same page, in either text direction. A matching start/end page alone does
 not mean the body fits one frame.
 
-## Connect to a body in normal flow
+## Connect To A Body In Normal Flow
 
 Inline bodies can supply a complete frame without changing their declaration's
 placement role. Opt into one native nonbreaking frame with `breakable: false`:
 
+<!-- deixis-example: {"id": "example-6"} -->
 ```typst
 #deixis-mark(id: <idea>)[A new idea]
 #deixis-inline-note-body(of: <idea>, inline: true,
@@ -239,7 +239,7 @@ should keep native pagination; a nonbreaking body can overflow an undersized
 page, as native nonbreaking containers do. Fragment selection remains separate
 work. See the [small editable example](../../examples/connected-inline-bodies.typ).
 
-## Routing limits
+## Routing Limits
 
 Explicit edges use the generic port/waypoint router. Margin body shorthand keeps
 its existing lane staggering and spillover relay heuristics; extra independent

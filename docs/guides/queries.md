@@ -1,7 +1,4 @@
-# Selecting and querying notes
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Selecting And Querying Notes
 
 Start with the view that matches the task:
 
@@ -27,6 +24,7 @@ catalogue defaults: paired annotations in original source order, including
 unprinted explanations. A physical-page selection instead includes standalone
 bodies and follows their native rendered order:
 
+<!-- deixis-example: {"id": "example-1", "prelude": "#deixis-endnote[First explanation.]\n#deixis-endnote[Second explanation.]\n#deixis-print-endnotes()"} -->
 ```typst
 #context {
   let notes = deixis-query-notes(
@@ -85,7 +83,7 @@ headings, filter `note.marks` with `mark => mark.original`.
 The illustrated header uses physical source page numbers. For a linked native
 page label, standard Typst provides:
 
-```typst
+```typst fragment
 #let page-link(dest) = link(dest, numbering(
   if dest.page-numbering() == none { "1" } else { dest.page-numbering() },
   ..counter(page).at(dest),
@@ -102,11 +100,12 @@ strings. `auto`, where supported, means unrestricted. An empty inclusion selects
 nothing; an empty exclusion excludes nothing. Duplicates never repeat entries.
 Unknown names select nothing; invalid scalar/mixed-array values fail.
 
+<!-- deixis-example: {"id": "example-3", "prelude": "#deixis-endnote(series: \"editor\")[An editorial note.]\n#deixis-endnote(series: \"translation\")[A translation note.]"} -->
 ```typst
 #deixis-print-endnotes(series: ("editor", "translation"))
 #deixis-note-outline(include-types: "endnote", exclude-types: ())
 #context deixis-query-notes(page: here().page(),
-  include-types: ("footnote", "endnote"))
+  include-types: ("footnote", "endnote")).map(note => note.marker).join([, ])
 ```
 
 Canonical body types are `inline-note`, `footnote`, `endnote`, `margin-note`, and
@@ -115,7 +114,7 @@ Canonical body types are `inline-note`, `footnote`, `endnote`, `margin-note`, an
 `include-unpaired: "mark"` or `true`; a body-page filter naturally excludes marks
 without a body.
 
-## Source boundaries
+## Source Boundaries
 
 Printer and outline `after:`/`before:` bounds are exclusive native source-order
 boundaries, including within one line:
@@ -138,7 +137,7 @@ must be an element function accepted by Typst's selector system.
 For example, with `<start>` and `<end>` pins already declared in scope
 `<chapter>`:
 
-```typst
+```typst fragment
 #deixis-print-endnotes(
   after: (name: <start>, scope: <chapter>),
   before: (name: <end>, scope: <chapter>),
@@ -155,7 +154,7 @@ outline has no upper boundary. An explicit future `before:` can include bodies
 declared after the printer. The first eligible printer owns each body; overlapping
 or repeated printers do not print it again. An empty filter claims nothing.
 
-## Rendering scope and counter ownership
+## Rendering Scope And Counter Ownership
 
 Printers default to the calling rendering scope. An outline defaults to all
 scopes; `target: 0` restricts it to the calling rendering scope. A named block

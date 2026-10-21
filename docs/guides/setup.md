@@ -1,8 +1,5 @@
 # Setup And Page Layers
 
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
-
 Use `#show: deixis-setup-notes` before document annotations. Setup installs live
 registration, reference conversion, hiding/visibility rules, final validation and
 (default) background/foreground composition. It does not reset note identities,
@@ -39,6 +36,7 @@ annotations use foreground.
 For ordinary document-level changes, reapply setup **after** setting the new
 page layer:
 
+<!-- deixis-example: {"id": "example-1", "height": "180pt", "setup": false} -->
 ```typst
 #set page(foreground: [Draft])
 #show: deixis-setup-notes
@@ -59,7 +57,7 @@ safe too; decorations and note bodies are not duplicated.
 Each setup call uses its own option values. Capture nondefault options once if
 they should apply on each reapplication:
 
-```typst
+```typst fragment
 #let annotations = deixis-setup-notes.with(override-page-footnotes: true)
 #show: annotations
 // ... page break and new native foreground/background ...
@@ -83,6 +81,7 @@ editable example.
 For a theme or frequent/scoped layer changes, initialize once with
 `page-overlays: false` and compose both hooks in the host's page settings:
 
+<!-- deixis-example: {"id": "example-3", "height": "180pt", "setup": false} -->
 ```typst
 #show: deixis-setup-notes.with(page-overlays: false)
 #set page(

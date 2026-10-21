@@ -1,12 +1,10 @@
 # Routing Objects In Place
 
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
-
 Use `deixis-attach` to register geometry where an object is rendered, and
 `deixis-connect` to declare each connection. Wrap the drawing in
 `deixis-routing` to plan its connections together after layout:
 
+<!-- deixis-example: {"id": "connected-nodes", "setup": false, "height": "100pt"} -->
 ```typst
 #import "@preview/deixis:0.2.0": *
 #show: deixis-setup-notes
@@ -51,6 +49,7 @@ rules. Optional `connector.crossings` chooses a visual crossing treatment.
 Use ordinary Typst show-rule scopes to change the policy midway. This excerpt
 uses attachments `<a>`, `<b>` and `<c>` already registered in the drawing:
 
+<!-- deixis-example: {"id": "policy-selection", "height": "150pt", "prelude": "#grid(columns: (auto, 1fr, auto), deixis-attach(id: <a>)[A], [], deixis-attach(id: <b>)[B])\n#v(50pt)\n#align(right, deixis-attach(id: <c>)[C])"} -->
 ```typst
 #show: deixis-routing.with(policy: "avoid")
 // Subsequent connections avoid registered objects but may share corridors.
@@ -84,7 +83,7 @@ Choose `manual` when the path itself must be literal. Two common pins and a
 polyline force the segment between them to coincide. This excerpt assumes
 registered attachments `<a>` through `<d>` and the two named pins:
 
-```typst
+```typst fragment
 #deixis-routing(policy: "manual")[
   #let lane = ((pin: <lane-start>), (pin: <lane-end>))
   #deixis-connect(from: (node: <a>), to: (node: <b>),
@@ -141,7 +140,7 @@ The optional `nodes:` list adds selected existing geometry to this scope's
 scene, using the same node entries as `deixis-routing-scene`. This excerpt
 selects an existing note `<detail>` with a reused occurrence `<again>`:
 
-```typst
+```typst fragment
 #show: deixis-routing.with(nodes: (
   (body: <detail>),
   (mark: <detail>, occurrence: <again>, behavior: "ignore"),
@@ -209,10 +208,14 @@ See the [identity namespaces](identities.md#note-attachment-and-pin-names).
 Use the existing `connector.ports` for socket direction, percentage, gap or a
 custom attached pin:
 
+<!-- deixis-example: {"id": "named-outlet", "height": "140pt"} -->
 ```typst
-#deixis-attach(id: <card>, pins: (
-  outlet: (anchor: horizon + right),
-))[Card]
+#grid(columns: (auto, 1fr, auto),
+  deixis-attach(id: <card>, pins: (
+    outlet: (anchor: horizon + right),
+  ))[Card], [],
+  deixis-attach(id: <target>)[Target],
+)
 #deixis-connect(from: (node: <card>), to: (node: <target>), connector: (
   ports: (mark: (pin: <outlet>, side: right)),
   heads: "triangle",
@@ -303,6 +306,7 @@ Enabled margin/inset body connectors capture the policy at their **body
 declaration** and join explicit connections in the same page/layer group. No
 additional routing switch or note ID is required:
 
+<!-- deixis-example: {"id": "searched-margin-connector", "height": "150pt", "prelude": "#set page(margin: (left: 18pt, right: 130pt, top: 18pt, bottom: 18pt))"} -->
 ```typst
 #show: deixis-routing.with(policy: "avoid")
 #deixis-margin-note(
@@ -361,7 +365,7 @@ exact `via` points and pin visits work. These policies do not combine
 policy or ordinary connectors for an explicit scene, or the numeric APIs for
 custom plans.
 
-```typst
+```typst fragment
 deixis-routing(body, policy: "separate", nodes: (), clearance: 4pt, escape: 4pt, bend-cost: 12pt,
   spacing: 3pt, weight: 4, max-detour: 25%, rounds: 2,
   max-searches: 64, max-expansions: 50000, max-cells: 65536)

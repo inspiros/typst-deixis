@@ -14,8 +14,9 @@ its `@preview/deixis:0.2.0` examples.
 
 Guide snippets continue a document with the package import and setup from
 [getting started](guides/getting-started.md#1-start-with-native-footnotes), unless
-they include their own. Fragments that require earlier declarations or a custom
-callback say so; linked editable examples provide complete documents.
+they include their own. Most show their compiled output below the source, with a
+link to the complete preview document. Blocks labeled as fragments show
+configuration or excerpts that need surrounding code.
 
 ## Notes, Marks, And Placement
 

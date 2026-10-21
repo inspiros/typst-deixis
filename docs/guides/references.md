@@ -1,10 +1,8 @@
-# References and backlinks
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# References And Backlinks
 
 The usual entry point is a public annotation ID and Typst's `@id` syntax:
 
+<!-- deixis-example: {"id": "example-1"} -->
 ```typst
 #show: deixis-setup-notes
 Text#deixis-endnote(id: <claim>)[The explanation.]
@@ -16,11 +14,12 @@ See @claim.
 The [small reference example](../../examples/references.typ) shows ordinary
 references, a numeric range, and return links.
 
-## Identity and destinations
+## Identity And Destinations
 
 An explicit `id:` declares the annotation. A separate body attaches with `of:`.
 The same identity names the painted body for native links and queries:
 
+<!-- deixis-example: {"id": "example-2"} -->
 ```typst
 #deixis-inline-mark(id: <claim>)[A claim]
 #deixis-endnote-body(of: <claim>)[The explanation.]
@@ -39,10 +38,11 @@ code should use public IDs. Several targets selecting the same note
 in one `deixis-ref` call display that note once. Non-Deixis targets retain native
 Typst reference behavior; arbitrary labelled metadata is not treated as a note.
 
-## Lists and ranges
+## Lists And Ranges
 
 These calls assume originals named `<first>`, `<second>` and `<third>`:
 
+<!-- deixis-example: {"id": "example-3", "prelude": "#deixis-endnote(id: <first>)[Evidence for first.]\n#deixis-endnote(id: <second>)[Evidence for second.]\n#deixis-endnote(id: <third>)[Evidence for third.]\n#deixis-endnote(id: <claim>)[Evidence for claim.]\n#deixis-print-endnotes()"} -->
 ```typst
 #deixis-ref(<first>, <second>, <third>)[Notes]
 #deixis-ref(<first>, supplement: [Comment], marker-style: it => strong(it))
@@ -64,11 +64,12 @@ including scoped settings. An explicit `marker-style` on the reference overrides
 it. Mixed-style lists use plain separators. Empty calls, including a lone trailing
 supplement, produce no output.
 
-## Page references and show rules
+## Page References And Show Rules
 
 Typst's native page form selects the same painted body, with a fallback to the
 mark when the body has not been printed:
 
+<!-- deixis-example: {"id": "example-4", "postlude": "#deixis-endnote(id: <first>)[Evidence for first.]\n#deixis-endnote(id: <second>)[Evidence for second.]\n#deixis-endnote(id: <third>)[Evidence for third.]\n#deixis-endnote(id: <claim>)[Evidence for claim.]\n#deixis-print-endnotes()"} -->
 ```typst
 #set page(numbering: "1")
 #ref(<claim>, form: "page")
@@ -88,6 +89,7 @@ A functional supplement receives the selected note's metadata element; its
 callback can be supplied through `set ref(supplement: ...)` for `@label` calls.
 An empty result omits the prefix and its joining space:
 
+<!-- deixis-example: {"id": "example-5", "prelude": "#deixis-endnote(id: <first>)[Evidence for first.]\n#deixis-endnote(id: <second>)[Evidence for second.]\n#deixis-endnote(id: <third>)[Evidence for third.]\n#deixis-endnote(id: <claim>)[Evidence for claim.]\n#deixis-print-endnotes()"} -->
 ```typst
 #deixis-ref(<claim>, supplement: element => [Note])
 ```
@@ -96,7 +98,7 @@ Non-Deixis headings, figures, equations, footnotes, and bibliography references
 keep their native behavior and existing show rules. A later show rule can wrap
 the original reference to decorate both native and Deixis output:
 
-```typst
+```typst fragment
 #show: deixis-setup-notes
 #show ref: it => text(fill: blue, it)
 ```
@@ -105,7 +107,7 @@ Returning replacement text from a later rule replaces that reference, as in
 ordinary Typst. Keep `it` in a decorating rule when the note bridge should still
 format and link it.
 
-## Return links
+## Return Links
 
 `backlink` controls the extra return-link hooks after a body:
 

@@ -1,7 +1,4 @@
-# Notes in breakable blocks
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Notes In Breakable Blocks
 
 `deixis-block` gives notes a local rendering scope and, by default, independent
 counters. `deixis-minipage` uses the same engine, mapping `margin:` to internal
@@ -34,7 +31,7 @@ repeated headers reuse marks rather than declaring notes again. See
 [table and figure notes](local-notes.md) and the
 [editable example](../../examples/local-notes.typ).
 
-## Margin notes
+## Margin Notes
 
 Reserve enough horizontal inset for the note width and its offset. Both overlay
 layers use the same frame geometry. Continuation frames repeat the block's and
@@ -55,7 +52,7 @@ Overlay painting cannot create another page. If there is no available frame, a
 final body can extend beyond its frame. Immediate margins do not participate in
 collision packing or checks against overlay layers.
 
-## Footnotes belong to the whole block
+## Footnotes Belong To The Whole Block
 
 A block footnote is an end collection for that block, even when its mark appears
 on an earlier page. It is not repeated at the bottom of every fragment. Each
@@ -71,6 +68,7 @@ per-page footer policy. Prefer automatic height for ordinary flowing content.
 
 To use an actual page footer, keep the mark local and explicitly target its body:
 
+<!-- deixis-example: {"id": "page-footer-in-block", "height": "160pt"} -->
 ```typst
 #deixis-block(breakable: true, inset: 12pt)[
   A passage#deixis-mark(id: <source>).
@@ -88,7 +86,7 @@ footer on each page fragment.
 See [body ownership](ownership.md) and [rendering](rendering.md) for forward
 attachments, native allocation boundaries, and page overlays.
 
-## Boundaries to account for
+## Boundaries To Account For
 
 - The continuation-frame model covers page breaks in one column. Same-page
   column fragments need additional geometry; use separate blocks per column.

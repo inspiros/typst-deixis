@@ -19,6 +19,9 @@ STAGE = ROOT / 'target/site-source'
 SPEC = importlib.util.spec_from_file_location('export_api', ROOT / 'scripts/export-api.py')
 API = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(API)
+GUIDE_SPEC = importlib.util.spec_from_file_location('guide_examples', ROOT / 'scripts/render-guide-examples.py')
+GUIDES = importlib.util.module_from_spec(GUIDE_SPEC)
+GUIDE_SPEC.loader.exec_module(GUIDES)
 
 
 def source_prose(text):
@@ -194,6 +197,37 @@ def example_pages():
     return [{'Overview': 'gallery/README.md'}, *nav]
 
 
+def guide_examples():
+    """Keep Markdown fences for mdBook's copy controls; pair with checked SVGs."""
+    stamp = GUIDES.check_assets()
+    previews = {item['key']: item for item in stamp['examples']}
+    for path in sorted((STAGE / 'docs/guides').glob('*.md')):
+        text = path.read_text()
+        records = GUIDES.parse_markdown(text, path)
+        for record in reversed(records):
+            key = record['key']
+            # Complete inputs make hidden setup discoverable and copyable.
+            full = STAGE / 'docs/assets/guides' / (key + '.typ')
+            full.write_text(GUIDES.example_source(record))
+            alt = record['guide'].replace('-', ' ').capitalize() + ': ' + record['id'].replace('-', ' ')
+            lines = [f'<div class="deixis-example deixis-guide-example" id="example-{record["id"]}">',
+                     '<div class="deixis-example-source">', '',
+                     '<p class="deixis-example-label">Source</p>', '',
+                     '```typst', record['code'].rstrip(), '```', '',
+                     f'[Complete source and preview setup](../assets/guides/{key}.typ)', '',
+                     '</div>', '<div class="deixis-example-output">', '',
+                     '<p class="deixis-example-label">Output · Select To Enlarge</p>', '']
+            for number, asset in enumerate(previews[key]['assets'], 1):
+                lines += [f'[![{alt}, page {number}](../assets/guides/{asset})](../assets/guides/{asset})', '']
+            lines += ['</div>', '</div>', '']
+            text = text[:record['start']] + '\n'.join(lines) + text[record['end']:]
+        # Fragments are deliberately code-only, with a visible explanation.
+        text = re.sub(r'^```typst fragment\s*$',
+                      '<p class="deixis-fragment-label">Fragment · Requires surrounding code</p>\n\n```typst',
+                      text, flags=re.M)
+        path.write_text(text)
+
+
 def book_summary(api_nav, examples):
     """Every Markdown page needs a chapter to become HTML in mdBook."""
     lines = ['# Summary', '']
@@ -240,6 +274,7 @@ def main():
     print(subprocess.check_output([args.mdbook, '--version'], text=True).strip(), flush=True)
     # Refuse stale illustrative output before presenting it on the website.
     subprocess.run([sys.executable, ROOT / 'scripts/render-manual-examples.py', '--check'], check=True)
+    subprocess.run([sys.executable, ROOT / 'scripts/render-guide-examples.py', '--check'], check=True)
     data = API.export_api(args.typst)
     if STAGE.exists():
         shutil.rmtree(STAGE)
@@ -275,6 +310,7 @@ def main():
         index += ['']
         api_nav.append({group['title']: children})
     (STAGE / 'api/README.md').write_text('\n'.join(index))
+    guide_examples()
     (STAGE / 'SUMMARY.md').write_text(book_summary(api_nav, example_pages()))
     for path in STAGE.rglob('*.md'):
         if path.name != 'SUMMARY.md':

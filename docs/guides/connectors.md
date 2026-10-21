@@ -1,7 +1,4 @@
-# Connectors and arrowheads
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Connectors And Arrowheads
 
 Deixis requires Typst 0.15.0 or newer. The package runtime has no
 external drawing dependency. The native backend handles routes, measured node
@@ -13,16 +10,18 @@ automatically. Use [`deixis-connect`](independent-connections.md) to draw
 independently configured edges from originals or named repeats to a measured
 margin/inset body. Both use the same `connector` option.
 
-## Start with one option
+## Start With One Option
 
 After importing Deixis and enabling `deixis-setup-notes`, a route name is enough:
 
+<!-- deixis-example: {"id": "automatic-curve", "height": "150pt", "prelude": "#set page(margin: (left: 18pt, right: 130pt, top: 18pt, bottom: 18pt))"} -->
 ```typst
 #deixis-margin-note(connector: "curve")[An annotation with automatic placement and ports.]
 ```
 
 Add an arrow with one more option:
 
+<!-- deixis-example: {"id": "stealth-head", "height": "150pt", "prelude": "#set page(margin: (left: 18pt, right: 130pt, top: 18pt, bottom: 18pt))"} -->
 ```typst
 #deixis-margin-note(connector: (route: "curve", heads: "stealth"))[The arrow points to this note.]
 ```
@@ -35,7 +34,7 @@ Use `deixis-set(connector: "curve")` to share a route across notes.
 The [simple example](../../examples/connectors.typ) demonstrates these calls.
 The sections below explain the controls available when a drawing needs them.
 
-## A complete connector
+## A Complete Connector
 
 A connector record collects every edge option. Defaults come from
 `deixis-set(connector: ...)`, which can be scoped by note type, such as
@@ -45,6 +44,7 @@ route; `connector: none` disables the edge. A note's component `stroke`/`radius`
 (for example `stroke: (connector: gray)`) styles its connector unless the record sets
 `stroke`/`radius`.
 
+<!-- deixis-example: {"id": "orthogonal-ports", "height": "150pt"} -->
 ```typst
 #deixis-inset-note(
   layer: "foreground", width: 100pt, dx: 140pt, dy: 30pt,
@@ -63,12 +63,13 @@ The fields are `route`, `ports`, `via` or `segments`, `heads`, `cuts`, `crossing
 `render`, `layer`, and `z-index`. A connector needs an enabled route; specifying a head alone does not
 turn the default `"none"` route into a visible line.
 
-## Connection layer
+## Connection Layer
 
 Margin and inset connections share one rule: the default/`auto` layer is
 `"foreground"`, independently of the body's layer. Use `connector.layer` to
 select `"background"` or `"foreground"` explicitly:
 
+<!-- deixis-example: {"id": "background-curve", "height": "150pt", "prelude": "#set page(margin: (left: 18pt, right: 130pt, top: 18pt, bottom: 18pt))"} -->
 ```typst
 #deixis-margin-note(layer: "flow",
   connector: (route: "curve", layer: "background"),
@@ -91,7 +92,7 @@ background too. Body placement, footer reservations, and collision groups are
 unchanged. Direct margin-layout hooks used without Deixis setup still paint
 their own connections locally; install setup/page overlays for layer control.
 
-## Routes and ports
+## Routes And Ports
 
 | Route | Behavior |
 | --- | --- |
@@ -124,13 +125,20 @@ explicit pin visits use the much smaller numeric geometry tolerance.
 Curve, Catmull–Rom and Hobby interpolate their knots. B-spline controls have
 different semantics, described below.
 
-### Curve settings
+### Curve Settings
 
 A string keeps the defaults. A route record groups controls for its algorithm:
 
+<!-- deixis-example: {"id": "curve-tension", "height": "240pt"} -->
 ```typst
-connector: (route: (kind: "curve", tension: 2))
-connector: (route: (kind: "catmull-rom", parameterization: "uniform", tension: 1.5))
+#deixis-inset-note(width: 130pt, dx: 120pt, dy: 30pt,
+  connector: (route: (kind: "curve", tension: 2)),
+)[Curve][A tension-controlled curve.]
+
+#v(85pt)
+#deixis-inset-note(width: 130pt, dx: 120pt, dy: 30pt,
+  connector: (route: (kind: "catmull-rom", parameterization: "uniform", tension: 1.5)),
+)[Spline][A Catmull–Rom curve.]
 ```
 
 For `curve` and Catmull–Rom, `tension` defaults to `1` and divides the
@@ -160,7 +168,7 @@ or tension. Type/component configuration maps remain available around these
 literal values. The [small handle comparison](../../examples/route-settings.typ)
 shows three tensions on the same knots.
 
-### Hobby interpolation
+### Hobby Interpolation
 
 Start with `connector: (route: "hobby")`, using ordinary exact `via` knots. Hobby
 solves tangent directions across the whole section before constructing its
@@ -168,8 +176,11 @@ cubics; a later knot can affect an earlier bend. It offers a different style
 from local Catmull–Rom interpolation. The
 [small comparison](../../examples/hobby-curves.typ) shows both on the same knots.
 
+<!-- deixis-example: {"id": "hobby-curve", "height": "150pt"} -->
 ```typst
-connector: (route: (kind: "hobby", tension: 1.5, curl: (mark: 0, body: 1)))
+#deixis-inset-note(width: 130pt, dx: 120pt, dy: 45pt,
+  connector: (route: (kind: "hobby", tension: 1.5, curl: (mark: 0, body: 1))),
+)[A passage][An explanation.]
 ```
 
 Tension defaults to `1` and must be finite and at least `0.75`. Larger values
@@ -204,11 +215,11 @@ custom painters share its cubic geometry. Per-knot tensions/directions, cyclic
 closure and MetaPost's `atleast` policy are not options in this API. Extreme
 finite inputs that cannot be represented receive a numerical-boundary diagnostic.
 
-### Influence-point curves
+### Influence-Point Curves
 
 Put influence points in the route's `controls`, leaving `via` for exact visits:
 
-```typst
+```typst fragment
 connector: (route: (kind: "b-spline", controls: ((pin: <bend>),)))
 ```
 
@@ -223,11 +234,14 @@ a wholly coincident polygon produces no shaft or heads.
 Controls accept `(x, y)` coordinate pairs, framed points, or `(pin: target,
 offset: (dx, dy))` records. They share the usual coordinate/frame rules:
 
+<!-- deixis-example: {"id": "spline-controls", "height": "150pt"} -->
 ```typst
-connector: (route: (kind: "b-spline", controls: (
-  (relative-to: "mark", offset: (40pt, -30pt)),
-  (relative-to: "body", offset: (-40pt, -30pt)),
-)))
+#deixis-inset-note(width: 130pt, dx: 120pt, dy: 45pt,
+  connector: (route: (kind: "b-spline", controls: (
+    (relative-to: "mark", offset: (40pt, -30pt)),
+    (relative-to: "body", offset: (-40pt, -30pt)),
+  ))),
+)[A passage][An explanation.]
 ```
 
 Mark/body/page anchors and offsets work as for waypoints. A coordinate pair is
@@ -252,7 +266,7 @@ margin body placement and port selection keep their existing behavior.
 Each B-spline section has its endpoints and its own control polygon. To visit an
 exact interior knot, end a section there and choose the following route:
 
-```typst
+```typst fragment
 segments: (
   (route: (kind: "b-spline", controls: ((pin: <bend>),)),
     via: ((pin: <joint>),)),
@@ -277,9 +291,12 @@ shows exact knots beside influence points.
 Line appearance is independent of the route. Use a native stroke for dashed or
 dotted lines, caps, joins, thickness, and paint:
 
+<!-- deixis-example: {"id": "dashed-stroke", "height": "150pt"} -->
 ```typst
-connector: (route: "orthogonal", radius: 4pt,
-  stroke: stroke(paint: blue, thickness: 1pt, dash: "dashed", cap: "round"))
+#deixis-inset-note(width: 130pt, dx: 120pt, dy: 45pt,
+  connector: (route: "orthogonal", radius: 4pt,
+    stroke: stroke(paint: blue, thickness: 1pt, dash: "dashed", cap: "round")),
+)[A passage][An explanation.]
 ```
 
 A port may be a side alignment/string or `(side: ..., at: ..., gap: ...)`.
@@ -319,12 +336,12 @@ and marker width. Region frames use recorded pins; body frames use measured
 bounds. Arbitrary glyph outlines and arbitrary container silhouettes are not
 available as routing obstacles.
 
-## Pins as custom ports
+## Pins As Custom Ports
 
 A pin supplies a custom attachment point on any content, including inside a
 rendered note body:
 
-```typst
+```typst fragment
 connector: (
   route: "curve",
   ports: (body: (pin: "socket", side: left, gap: 2pt)),
@@ -350,11 +367,11 @@ arrowheads belong only to actual endpoints. Use `via` for deliberate extra bends
 See [pin endpoints](independent-connections.md#connect-pins-without-creating-notes)
 and the [small example](../../examples/pin-connections.typ).
 
-## Waypoints and mixed routes
+## Waypoints And Mixed Routes
 
 Structured points state their reference frame:
 
-```typst
+```typst fragment
 via: (
   (relative-to: "mark", anchor: bottom + right, offset: (12pt, 8pt)),
   (relative-to: "previous", offset: (0pt, 20pt)),
@@ -371,7 +388,7 @@ mark and body. Coordinates use positive x right and positive y down.
 
 A pin waypoint visits its recorded location, with an optional length offset:
 
-```typst
+```typst fragment
 via: ((pin: <bend>), (pin: (name: "bend", scope: "diagram"), offset: (2pt, 0pt)))
 ```
 
@@ -389,12 +406,17 @@ validated. Prefer structured points when mixing absolute and relative rules.
 
 Use segment records to change algorithms deliberately:
 
+<!-- deixis-example: {"id": "mixed-segments", "height": "150pt"} -->
 ```typst
-segments: (
-  (route: (kind: "curve", tension: 2), via: ((relative-to: "mark", offset: (30pt, 20pt)),)),
-  (route: "polyline", via: ((relative-to: "body", offset: (-20pt, 0pt)),)),
-  (route: "orthogonal"),
-)
+#deixis-inset-note(width: 130pt, dx: 120pt, dy: 45pt,
+  connector: (route: "polyline", ports: (mark: right, body: left),
+    segments: (
+      (route: (kind: "curve", tension: 2), via: ((relative-to: "mark", offset: (30pt, 20pt)),)),
+      (route: "polyline", via: ((relative-to: "body", anchor: left + horizon, offset: (-20pt, 0pt)),)),
+      (route: "orthogonal"),
+    ),
+  ),
+)[A passage][An explanation.]
 ```
 
 The last segment reaches the body. Do not combine `segments` with `via`.
@@ -436,7 +458,7 @@ no shaft or endpoint arrowhead for that fragment.
 
 Most calls need no extra setting. Override the interval when needed:
 
-```typst
+```typst fragment
 connector: (spill: "content", continuation: "portal")
 connector: (spill: "page")
 connector: (spill: (left: 20%, right: 80%))
@@ -471,7 +493,7 @@ independent of endpoint heads and internal cut/crossing indicators. The default
 `connector.continuation: auto` preserves the native dots. `none` suppresses them.
 Use `"portal"` for a small hollow ring, or `"dot"` for the filled dot explicitly:
 
-```typst
+```typst fragment
 connector: (heads: "stealth", continuation: "portal")
 ```
 
@@ -484,7 +506,7 @@ arc-length basis. Real endpoint heads stay separate from continuation markers.
 
 Use a dictionary when needed:
 
-```typst
+```typst fragment
 continuation: (shape: "portal", size: 5pt, link: "counterpart")
 ```
 
@@ -506,7 +528,7 @@ A disabled shaft (`stroke: none`) has no automatic dot or native preset.
 A native preset also stays absent at an undrawn endpoint section. A custom continuation
 renderer can still deliberately paint with a disabled shaft:
 
-```typst
+```typst fragment
 connector: (
   continuation: request => place(center + horizon,
     text(size: 8pt, [→ p. #request.peer-page])),
@@ -527,7 +549,7 @@ including margin bodies that spill past an intermediate page. `peer` describes
 the real opposite node: `page`, page-space center `point`, and `destination`
 (a native page/x/y link destination). For example:
 
-```typst
+```typst fragment
 continuation: request => {
   if request.peer != none {
     place(center + horizon, link(request.peer.destination,
@@ -544,7 +566,7 @@ The same callback runs on both endpoint pages, so each marker can link to its
 opposite real node. For a direct link to the other **accepted spill point**, call
 the lazy `counterpart` function instead:
 
-```typst
+```typst fragment
 continuation: request => {
   let other = (request.counterpart)()
   if other != none {
@@ -684,12 +706,15 @@ Clearance concerns centerlines. Custom marker labels, heads and arbitrary text
 ink need suitable registration, padding or placement; the allocator does not
 measure a marker callback or guarantee its visual bounds.
 
-## Cuts along the finished route
+## Cuts Along The Finished Route
 
 To hide a middle section while preserving the curve on either side:
 
+<!-- deixis-example: {"id": "manual-cut", "height": "150pt"} -->
 ```typst
-connector: (route: "curve", cuts: (at: 50%, length: 12pt))
+#deixis-inset-note(width: 130pt, dx: 120pt, dy: 45pt,
+  connector: (route: "curve", cuts: (at: 50%, length: 12pt)),
+)[A passage][An explanation.]
 ```
 
 Cuts are optional and disabled by default (`none` or an empty array). They act
@@ -700,7 +725,7 @@ interpolation into separately constructed curves.
 
 Use either a center and length or an interval; use an array for several cuts:
 
-```typst
+```typst fragment
 cuts: (from: 40%, to: 60%)
 cuts: ((at: 30%, length: 1em), (from: 65%, to: 75%))
 ```
@@ -736,11 +761,11 @@ Automatic crossing gaps require a separate explicit setting below. Bridges and
 jump indicators remain future features and will also be optional/configurable;
 enabling manual cuts does not enable detection.
 
-## Automatic gaps at line crossings
+## Automatic Gaps At Line Crossings
 
 Add `crossings: "gap"` to each participating line:
 
-```typst
+```typst fragment
 connector: (route: "polyline", crossings: "gap")
 ```
 
@@ -754,7 +779,7 @@ background instead of painting a background-colored band.
 
 Use a dictionary for a separate diagram or different spacing:
 
-```typst
+```typst fragment
 crossings: (group: <diagram>, gap: 10pt, clearance: 4pt)
 ```
 
@@ -807,15 +832,20 @@ cuts or custom painting. These controls never enable automatic body movement.
 See the [small priority example](../../examples/automatic-crossings.typ) and
 [curve comparison](../../examples/curve-crossings.typ).
 
-## Head styles and custom heads
+## Head Styles And Custom Heads
 
 `connector.heads` selects the head at each endpoint:
 
+<!-- deixis-example: {"id": "custom-heads", "height": "150pt"} -->
 ```typst
-heads: (
-  mark: "circle",
-  body: deixis-arrowhead(shape: "diamond", length: 8pt, width: 6pt, fill: none, stroke: blue),
-)
+#deixis-inset-note(width: 130pt, dx: 120pt, dy: 45pt,
+  connector: (route: "curve",
+    heads: (
+      mark: "circle",
+      body: deixis-arrowhead(shape: "diamond", length: 8pt, width: 6pt, fill: none, stroke: blue),
+    ),
+  ),
+)[A passage][An explanation.]
 ```
 
 Shapes are `stealth`, `triangle`, `vee`, `circle`, `diamond`, and `bar`. A shape or
@@ -857,7 +887,7 @@ note state or registration: it describes reusable drawing content and geometry.
 paths. The CeTZ example imports CeTZ itself and translates its canvas back to the
 local tip. The package does not import CeTZ.
 
-## A custom connector painter
+## A Custom Connector Painter
 
 When your own code already has coordinates, [numeric routing](numeric-routing.md)
 provides line/cubic geometry without setup or page lookup. Separate preparation
@@ -893,6 +923,7 @@ callback. It paints the trimmed shaft, optional gap marks, then prepared heads, 
 repeating geometry, sizing, or head callbacks. This halo recipe first paints a
 wider shaft without heads, then paints the original connector:
 
+<!-- deixis-example: {"id": "halo-painter", "height": "150pt"} -->
 ```typst
 #let halo(request) = {
   deixis-render-connector(request + (
@@ -902,7 +933,9 @@ wider shaft without heads, then paints the original connector:
   ))
   deixis-render-connector(request)
 }
-// connector: (route: "curve", render: halo, z-index: 1)
+#deixis-inset-note(width: 130pt, dx: 120pt, dy: 45pt,
+  connector: (route: "curve", render: halo, z-index: 1),
+)[A passage][An explanation.]
 ```
 
 This assumes an enabled shaft and a white background. Overriding the painter's
@@ -937,7 +970,7 @@ Deixis should construct, trim, and cut the native path before your painter runs.
 Its returned content is placed at the source. It owns geometry and
 painting; `connector.render` is preferable when Deixis should retain routing.
 
-## Underpasses, gaps, and obstacles
+## Underpasses, Gaps, And Obstacles
 
 To pass behind an opaque native object, use `connector.layer: "background"`.
 For Deixis objects in the same overlay, priorities control their paint order.
@@ -956,11 +989,14 @@ that endpoint's head. Exact pin visits retain corners on rounded routes.
 
 To make a longer deliberate break visible, add one option:
 
+<!-- deixis-example: {"id": "gap-marks", "height": "150pt"} -->
 ```typst
-connector: (
-  route: "polyline", gap-marks: "slash",
-  via: ((30pt, 0pt), "none", (20pt, 0pt), "polyline"),
-)
+#deixis-inset-note(width: 130pt, dx: 120pt, dy: 45pt,
+  connector: (
+    route: "polyline", gap-marks: "slash",
+    via: ((30pt, 0pt), "none", (20pt, 0pt), "polyline"),
+  ),
+)[A passage][An explanation.]
 ```
 
 Your existing route switches stay valid. `gap-marks` defaults to `none`, leaving

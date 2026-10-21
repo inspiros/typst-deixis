@@ -10,6 +10,7 @@ collects individual `deixis-connect` calls and attached geometry automatically.
 It returns sharp orthogonal routes through fixed page geometry. Coordinates
 alone need no note setup:
 
+<!-- deixis-example: {"id": "example-1", "height": "100pt", "prelude": "#v(12pt)"} -->
 ```typst
 #let plan = deixis-route-group((
   (from: (0pt, 0pt), to: (100pt, 0pt)),
@@ -69,7 +70,7 @@ single native curves, mixed sections or smoothing.
 
 Use the same scene socket for an intentional shared junction:
 
-```typst
+```typst fragment
 #let plan = deixis-route-group(scene: scene, (
   (from: (node: <hub>, side: right), to: <first>),
   (from: (node: "hub", side: right), to: <second>),
@@ -90,7 +91,7 @@ There is no additional public junction-name namespace.
 
 ## Options And Work Limits
 
-```typst
+```typst fragment
 deixis-route-group(edges, scene: none, spacing: 3pt, weight: 4,
   max-detour: 25%, rounds: 2, max-searches: 64, max-expansions: 50000)
 ```

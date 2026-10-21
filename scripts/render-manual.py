@@ -21,6 +21,8 @@ def manual_source_digest(root=ROOT):
                             ('docs/reference', '*.json'), ('docs/examples', '*.json'),
                             ('docs/assets', '**/*.svg')):
         files.update((root / folder).glob(pattern))
+    # Guide previews belong only to the website, not the downloadable manual.
+    files = {path for path in files if not path.is_relative_to(root / 'docs/assets/guides')}
     digest = hashlib.sha256()
     for path in sorted(files):
         digest.update(path.relative_to(root).as_posix().encode() + b'\0')

@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 import re
 import sys
+import subprocess
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -69,6 +70,7 @@ def main():
         sources += sorted((ROOT / 'docs' / section).rglob('*.md'))
     sources += [ROOT / name for name in
               ('README.md', 'CHANGELOG.md', 'AGENTS.md', 'CLAUDE.md', 'CONTRIBUTING.md')]
+    subprocess.run([sys.executable, ROOT / 'scripts/render-guide-examples.py', '--check'], check=True)
     failures = []
     checked = 0
     anchor_cache = {}

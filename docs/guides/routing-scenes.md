@@ -10,6 +10,7 @@ existing content, the same constructor also accepts explicit mark, body and pin
 selectors in a `context` with `deixis-setup-notes`. These read accepted geometry;
 they do not render or measure the content again.
 
+<!-- deixis-example: {"id": "example-1", "height": "140pt", "postlude": "#context {\n  for bounds in ((left: 0pt, top: 20pt, right: 40pt, bottom: 50pt), (left: 200pt, top: 20pt, right: 240pt, bottom: 50pt), (left: 80pt, top: 10pt, right: 120pt, bottom: 70pt)) {\n    place(top + left, dx: bounds.left, dy: bounds.top, rect(width: bounds.right - bounds.left, height: bounds.bottom - bounds.top, fill: luma(95%)))\n  }\n  let request = deixis-prepare-connector(path, stroke: teal + 1pt, heads: \"triangle\")\n  place(top + left, dx: path.origin.first(), dy: path.origin.last(), deixis-render-connector(request))\n}"} -->
 ```typst
 #let scene = deixis-routing-scene(nodes: (
   (id: <a>, bounds: (left: 0pt, top: 20pt, right: 40pt, bottom: 50pt)),
@@ -31,7 +32,7 @@ should consider each other's shafts. Separate `deixis-route` calls remain indepe
 
 Use selectors instead of `bounds` to borrow existing document geometry:
 
-```typst
+```typst fragment
 #context {
   let scene = deixis-routing-scene(nodes: (
     (id: <source>, pin: <figure-port>),
@@ -106,7 +107,7 @@ become obstacles. Existing note connectors do not silently opt into this engine.
 Add `scene` to an ordinary note's `connector` or to `deixis-connect`. The small
 [Notes Around Figures example](../../examples/scene-connectors.typ) uses:
 
-```typst
+```typst fragment
 connector: (
   route: "orthogonal", radius: 0pt, heads: "triangle",
   scene: _ => deixis-routing-scene(nodes: (
@@ -238,7 +239,7 @@ a midpoint port on the side facing the other endpoint's center, choosing the
 larger horizontal/vertical displacement (horizontal wins ties). This is a stable
 simple choice, not a search over all possible ports. Specify a side when needed:
 
-```typst
+```typst fragment
 from: (node: <a>, side: right, at: 25%),
 to: (node: <b>, side: left),
 ```
@@ -266,7 +267,7 @@ physical page planes; coordinates always start at that page's own origin.
 Unpaged nodes do not become global obstacles on physical pages. Equal coordinates
 on two pages never imply a collision between them.
 
-```typst
+```typst fragment
 #let scene = deixis-routing-scene(
   nodes: (
     (id: <a>, page: 1, bounds: first-box),

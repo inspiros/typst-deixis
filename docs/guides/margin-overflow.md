@@ -1,10 +1,8 @@
-# Checking margin overflow
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Checking Margin Overflow
 
 Margin bodies can now check their final placement against their assigned frame:
 
+<!-- deixis-example: {"width": "480pt", "height": "200pt", "margin": "(left: 18pt, right: 150pt, y: 24pt)", "id": "example-1"} -->
 ```typst
 #deixis-margin-note(overflow: "error")[An explanation.]
 ```
@@ -17,7 +15,7 @@ settings follow the normal body configuration cascade.
 
 See the small [two-page example](../../examples/margin-overflow.typ).
 
-## What is checked
+## What Is Checked
 
 The check uses the accepted logical body rectangle after the built-in layout has
 chosen its side, offsets, packing, and spillover frame. A rejected provisional
@@ -37,7 +35,7 @@ frame does not promise clearance from native page footers or arbitrary page
 objects. Glyph ink, shadows, connector heads, and painting beyond a custom
 renderer's logical box are outside the check.
 
-## What happens on overflow
+## What Happens On Overflow
 
 `"error"` stops compilation when the final rectangle exceeds its frame. Shorten
 the body, adjust its width/offset, or provide another eligible frame for overlay

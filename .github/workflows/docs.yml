@@ -32,6 +32,8 @@ jobs:
           echo "$RUNNER_TEMP/mdbook" >> "$GITHUB_PATH"
       - name: Fetch Typst packages
         run: typst compile --root . scripts/fetch-packages.typ "$RUNNER_TEMP/fetch.pdf"
+      - run: python -m unittest discover -s tests -p 'test_highlighting.py'
+      - run: python scripts/render-guide-examples.py --check
       - run: python scripts/build-docs.py
         env:
           MDBOOK_OUTPUT__HTML__SITE_URL: /typst-deixis/

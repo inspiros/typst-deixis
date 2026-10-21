@@ -1,7 +1,4 @@
-# Pins, coordinates, and padding
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Pins, Coordinates, And Padding
 
 A pin is a named point with optional geometric padding. Use it to define region
 bounds or anchor a note. Simple names are document-wide strings or label values; repeated names
@@ -11,6 +8,7 @@ Pins also supply [connection endpoints](independent-connections.md#connect-pins-
 exact [waypoints and custom ports](connectors.md#pins-as-custom-ports). These use
 the recorded point, without region padding, and require one selected occurrence.
 
+<!-- deixis-example: {"id": "example-1"} -->
 ```typst
 #deixis-pin("start", padding: 0pt)Marked text#deixis-pin("end", padding: 0pt)
 #deixis-region-mark(pins: ("start", "end"), padding: 3pt)
@@ -29,7 +27,7 @@ Attachment IDs, pin names and note IDs are independent namespaces; the same
 spelling may coexist in all three. Attachment `scope:` does not change note
 identity. See [identity selection and wrapped notes](identities.md#note-attachment-and-pin-names).
 
-## Reusable components and private pins
+## Reusable Components And Private Pins
 
 `deixis-pin` and `deixis-attach` accept an optional `scope:`. A scope can be a
 nonempty string or native label for deliberate sharing, or a native location for
@@ -44,6 +42,7 @@ label or an annotation reference destination.
 Use `here()` once inside a component's `context` to give each invocation a
 different scope. Select those pins with ordinary dictionary values:
 
+<!-- deixis-example: {"id": "example-2"} -->
 ```typst
 #let card(body) = context {
   let local = here()
@@ -67,11 +66,11 @@ uses `deixis-pin("anchor", scope: local)`. This is explicit pin isolation: it do
 not change annotation IDs, counters, or note scopes, and it does not implicitly
 scope independent pin calls or nested attachments in the body.
 
-## Select occurrences consistently
+## Select Occurrences Consistently
 
 Every pin consumer accepts a structured target:
 
-```typst
+```typst fragment
 (name: "anchor", scope: "diagram", select: "last", page: 2)
 ```
 
@@ -119,7 +118,7 @@ Collection boundaries retain their native-label shorthand: `after: <anchor>`
 selects a native Typst label. To select a pin by label-valued name, use
 `after: (name: <anchor>)`, optionally with scope/selection/page fields.
 
-## Padding is geometry
+## Padding Is Geometry
 
 Pin padding is preserved. It expands the point used by a region, without adding
 space or moving content. A pin at `(x, y)` contributes these bounds:
@@ -151,8 +150,9 @@ point has no width/height to supply their basis. Use percentage coordinates on
 an attached container instead. Transformed overlay padding remains in page axes,
 as explained in [regions](regions.md#native-transforms).
 
-## Attach points to a container
+## Attach Points To A Container
 
+<!-- deixis-example: {"id": "example-4"} -->
 ```typst
 #deixis-attach(prefix: none, pins: (
   corner: (anchor: top + right, offset: (2pt, -1pt)),
@@ -178,10 +178,11 @@ vertical ratios retain the first-fragment behavior. The coordinate form does
 not infer proportional positions across a whole paginated body or columns on
 one page.
 
-## Scan text and raw code
+## Scan Text And Raw Code
 
 Delimiter strings are now literal, so punctuation is safe:
 
+<!-- deixis-example: {"id": "example-5", "postlude": "#deixis-region-mark(pins: (\"begin\", \"end\"))"} -->
 ```typst
 #deixis-attach(prefix: "[", postfix: "]", padding: 0pt)[
   #text("[begin]Marked text[end]")
@@ -198,6 +199,7 @@ For intentional regex scanning, use `pattern` with exactly one capture for the
 pin name. Use noncapturing groups for other grouping. The capture must be nonempty
 when it matches; custom regex captures can include Unicode names.
 
+<!-- deixis-example: {"id": "example-6", "postlude": "#deixis-region-mark(pins: (\"begin\", \"end\"))"} -->
 ```typst
 #deixis-attach(pattern: regex("@([a-z]+)!"), padding: 0pt)[
   #text("@begin!Text@end!")
@@ -210,6 +212,7 @@ pin carries its own `padding` field.
 
 Use `pin-padding` for per-name overrides and `padding` for the uniform default:
 
+<!-- deixis-example: {"id": "example-7", "postlude": "#deixis-region-mark(pins: (\"left\", \"rest\", \"end\"))"} -->
 ```typst
 #deixis-attach(prefix: "[", postfix: "]", padding: 2pt,
   pin-padding: (left: 5pt, rest: none),
@@ -223,7 +226,7 @@ padding value, rather than merging its edges with the uniform default. Coordinat
 pins are unaffected. Legacy unambiguous per-name maps in `padding` remain accepted,
 but cannot be combined with `pin-padding`; migrate them to the explicit spelling.
 
-## Custom metadata and migration
+## Custom Metadata And Migration
 
 `extra-data` accepts custom fields such as `(role: "diagram-input")`. `name`,
 `scope`, `padding`, `dx`, `dy`, `type`, and `hidden` belong to the pin engine and cannot be replaced.

@@ -17,6 +17,7 @@ and Tinymist. See [installation](installation.md) for alternatives.
 
 ## 1. Start With Native Footnotes
 
+<!-- deixis-example: {"id": "example-1"} -->
 ```typst
 #import "@preview/deixis:0.2.0": *
 #show: deixis-setup-notes
@@ -33,6 +34,7 @@ use the native page footer, so long ones paginate like `std.footnote`. Omit
 
 Give the page a wide margin and let the note follow its marked passage:
 
+<!-- deixis-example: {"id": "example-2", "height": "220pt", "margin": "(left: 18pt, right: 130pt, y: 18pt)", "width": "600pt"} -->
 ```typst
 #import "@preview/deixis:0.2.0": *
 #set page(margin: (left: 25mm, right: 50mm, y: 25mm))
@@ -59,7 +61,7 @@ example, including a palette and a reused passage.
 Make margin and inset notes unnumbered while footnotes and endnotes keep their
 own 1, 2, 3 sequences:
 
-```typst
+```typst fragment
 #deixis-set(numbering: (margin-note: none, inset-note: none))
 ```
 
@@ -72,6 +74,7 @@ unnumbered notes. Use `numbering: none` on one call for a single aside.
 
 After creating `<method>`, use `of:` to add another marked passage:
 
+<!-- deixis-example: {"id": "example-4", "height": "180pt", "margin": "(left: 18pt, right: 130pt, y: 18pt)", "prelude": "#deixis-margin-note(id: <method>)[The method][The shared explanation.]"} -->
 ```typst
 #deixis-mark(of: <method>)[A related passage] shares the same explanation.
 See also @method.
@@ -84,6 +87,7 @@ to display return links; use `deixis-connect` for additional drawn edges.
 
 When the explanation is authored separately, declare the components directly:
 
+<!-- deixis-example: {"id": "example-5", "height": "180pt", "margin": "(left: 18pt, right: 130pt, y: 18pt)"} -->
 ```typst
 #deixis-mark(id: <detail>)[A passage]
 #deixis-margin-note-body(of: <detail>, width: 38mm, side: right)[One explanation.]
@@ -117,7 +121,7 @@ images, and pins in [regions and pins](regions.md).
 
 ## 5. Set A Consistent Appearance
 
-```typst
+```typst fragment
 #deixis-set(palette: "deixis")
 ```
 
@@ -134,12 +138,14 @@ component/type dictionaries when necessary. See [configuration](configuration.md
 
 For a margin/inset body, a route name is enough:
 
+<!-- deixis-example: {"id": "example-7", "height": "180pt", "margin": "(left: 18pt, right: 130pt, y: 18pt)"} -->
 ```typst
 #deixis-margin-note(connector: "curve")[A short explanation.]
 ```
 
 Structured options add heads or other controls as the drawing grows:
 
+<!-- deixis-example: {"id": "example-8", "height": "180pt", "margin": "(left: 18pt, right: 130pt, y: 18pt)"} -->
 ```typst
 #deixis-margin-note(connector: (route: "curve", heads: (body: "stealth")))[
   An explanation with an arrow.
@@ -160,6 +166,7 @@ numbering, or second list of object positions.
 
 For frequent annotations, opt in to the `short` module:
 
+<!-- deixis-example: {"id": "example-9", "setup": false} -->
 ```typst
 #import "@preview/deixis:0.2.0": short
 #import short: *
@@ -181,6 +188,7 @@ Wildcard imports deliberately shadow native `footnote` and `ref`. In math,
 `std.math.attach(...)` or `std.sym.arrowhead` there. Use `std.footnote` / `std.ref` for
 the native functions, or keep a namespace:
 
+<!-- deixis-example: {"id": "example-10", "setup": false} -->
 ```typst
 #import "@preview/deixis:0.2.0": short as dx
 #show: dx.setup-notes

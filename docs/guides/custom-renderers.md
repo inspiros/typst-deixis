@@ -1,13 +1,11 @@
-# Custom body renderers
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Custom Body Renderers
 
 For a border or background, use `container-func` and keep the built-in renderer.
 To replace the marker/body layout, supply `render-single`. A small complete
 renderer uses two helpers. Pass the record supplied to the renderer; semantic
 `deixis-query-notes` records contain summaries, not live renderer data:
 
+<!-- deixis-example: {"id": "custom-card", "height": "150pt"} -->
 ```typst
 #let card(note, ..args) = block(inset: 8pt, fill: gray.lighten(95%))[
   #deixis-generate-body-marker(note)
@@ -20,7 +18,7 @@ The [connected card example](../../examples/custom-renderer.typ) adds a native
 reference and a connector to the body's live start point. Ordinary note calls
 continue to use the built-in renderers without these helpers.
 
-## Destination and content have separate roles
+## Destination And Content Have Separate Roles
 
 `deixis-generate-body-marker(note)` publishes the native body destination and
 formats its marker. For a body without a visible marker, use
@@ -35,7 +33,7 @@ once where the body actually appears, rather than adding a second `note.body`.
 It is the same content path used by the built-in renderers. To transform the
 content inside a renderer, pass a copy with a replaced body:
 
-```typst
+```typst fragment
 #deixis-generate-body-content(note + (body: emph(note.body),))
 ```
 
@@ -44,7 +42,7 @@ page-footnote, block-footnote, or endnote body. A span is not a rectangle. Frame
 connections still need a supported adapter and its actual single-frame evidence;
 use `point: "start"` or `"end"` for a content boundary.
 
-## What each renderer supplies
+## What Each Renderer Supplies
 
 The semantic catalogue always keeps registered declarations. Painting does not
 add another annotation or change the counter owner.
@@ -75,7 +73,7 @@ Custom output that duplicates or omits span boundaries cannot supply a unique
 catalogue span or connection point. Page queries exclude incomplete/duplicate/reversed spans,
 while the unfiltered catalogue retains their declarations. No geometry is guessed from marker text.
 
-## Measurement, allocation, and callbacks
+## Measurement, Allocation, And Callbacks
 
 Helpers honor `note.disable-links`: destinations and live span metadata are
 omitted during detached measurement, while the body keeps its native layout.

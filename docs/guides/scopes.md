@@ -1,12 +1,10 @@
-# Block names, threads, and targets
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Block Names, Threads, And Targets
 
 Most calls need no scope options. Notes outside a `deixis-block` use the document
 scope; notes inside one use its local scope. `deixis-minipage` is an alias for the
 same block engine. Give a block a name only when another call needs to select it.
 
+<!-- deixis-example: {"id": "example-1"} -->
 ```typst
 #deixis-block(id: <chapter>)[
   A local note#deixis-footnote[Collected at this block's end.].
@@ -23,11 +21,12 @@ Typst label. Naming a block `<chapter>` alone does not make `@chapter` a referen
 to it. Pin scopes are also independent; see [pins](pins.md) and
 [annotation identities](identities.md).
 
-## Share a thread or just its counters
+## Share A Thread Or Just Its Counters
 
 The [small scoped-note example](../../examples/scoped-notes.typ) uses two blocks
 in one thread:
 
+<!-- deixis-example: {"id": "example-2"} -->
 ```typst
 #deixis-block(id: <first>, thread: <reading>)[
   One#deixis-footnote[First entry.].
@@ -60,7 +59,7 @@ For example, `sync-counters-with: "page"` shares document numbering while keepin
 the block's rendering domain. Series remain independent within that shared
 owner. See [counters and resets](counters.md).
 
-## Selecting a target
+## Selecting A Target
 
 | Target | Meaning |
 | --- | --- |
@@ -92,7 +91,7 @@ omitted. An explicit target changes the body's rendering owner while retaining
 the original's number, series, and counter owner. Declaration order does not
 override the adapter's placement rules; see [body ownership](ownership.md).
 
-## Layout limits
+## Layout Limits
 
 The [breakable-block guide](blocks.md) describes page frames, block-end footnotes,
 and immediate-placement limits. Anonymous parents support counter sharing after

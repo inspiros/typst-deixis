@@ -1,7 +1,4 @@
-# Body containers and their options
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Body Containers And Their Options
 
 The body renderer formats markers/content/backlinks. A container wraps that
 rendered content. Choose a name with `container-func`:
@@ -16,8 +13,11 @@ rendered content. Choose a name with `container-func`:
 
 Names work in local options and type/component settings:
 
+<!-- deixis-example: {"id": "container-presets", "height": "150pt", "prelude": "#set page(margin: (left: 18pt, right: 130pt, top: 18pt, bottom: 18pt))"} -->
 ```typst
 #deixis-set(container-func: (margin-note: "stripe", inset-note: "tinted"))
+#deixis-margin-note[Margin passage][A striped margin explanation.]
+#deixis-inset-note(width: 110pt, dy: 40pt)[Inset passage][A tinted callout.]
 ```
 
 The first three names select the existing `deixis-plain-container`,
@@ -31,6 +31,7 @@ stroke paints only the left edge, while an edge dictionary is used literally.
 The stripe's default corners are square. Put extra native options such as
 `inset` and `outset` in `container-args`:
 
+<!-- deixis-example: {"id": "rectangular-container", "height": "150pt"} -->
 ```typst
 #deixis-inset-note(
   container-func: "rect",
@@ -61,19 +62,21 @@ doubling or adding a left edge. Scalar colors also work when calling the alert
 container directly. Custom shapes/containers decide which native styles they
 support. See [native styles](configuration.md#native-values-and-incremental-updates).
 
-## Group and inline contracts
+## Group And Inline Contracts
 
 Native/aligned groups invoke the single-note renderer and container. The default
 endnote grid paints default aligned singles directly and bypasses their per-note
 containers; a series with a custom single renderer is stacked instead. Choose a
 stacked renderer when the container should appear:
 
+<!-- deixis-example: {"id": "stacked-containers", "prelude": "Text#deixis-endnote(container-func: \"tinted\")[A collected explanation.]"} -->
 ```typst
 #deixis-print-endnotes(render-group: deixis-native-render-group)
 ```
 
 The printer can replace its selected bodies' container options explicitly:
 
+<!-- deixis-example: {"id": "printer-padding", "prelude": "Text#deixis-endnote(container-func: \"rect\")[A collected explanation.]"} -->
 ```typst
 #deixis-print-endnotes(
   render-group: deixis-native-render-group,
@@ -106,7 +109,7 @@ collected bodies need a breakable container such as `block` with
 source indentation; explicit line/paragraph breaks survive. See
 [footnotes and long bodies](footnotes.md) for examples and native clipping limits.
 
-## Migration and diagnostics
+## Migration And Diagnostics
 
 Previously arbitrary named note arguments were forwarded to the container.
 Typos such as `backlnk: true` could disappear into a plain container. Unknown

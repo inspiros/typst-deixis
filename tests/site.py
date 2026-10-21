@@ -18,12 +18,31 @@ class Page(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.anchors = set()
         self.links = []
+        self.images = []
+        self.typst_blocks = 0
+        self.example_ids = []
+        self.headings = []
+        self.in_main = False
         self.feed(path.read_text())
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         self.anchors.update(attrs[key] for key in ('id', 'name') if key in attrs)
         self.links.extend(attrs[key] for key in ('href', 'src') if key in attrs)
+        if tag == 'img':
+            self.images.append(attrs)
+        if tag == 'code' and 'language-typst' in attrs.get('class', '').split():
+            self.typst_blocks += 1
+        if tag == 'div' and 'deixis-guide-example' in attrs.get('class', '').split():
+            self.example_ids.append(attrs.get('id'))
+        if tag == 'main':
+            self.in_main = True
+        if self.in_main and re.fullmatch(r'h[1-6]', tag):
+            self.headings.append(tag)
+
+    def handle_endtag(self, tag):
+        if tag == 'main':
+            self.in_main = False
 
 
 def main():
@@ -38,6 +57,33 @@ def main():
     for relative in internal:
         if (SITE / relative).exists():
             failures.append('Internal project material must not ship in the public guide: ' + relative)
+    # Cover every generated chapter, not only the new guide pages.
+    guide_index = json.loads((ROOT / 'docs/assets/guides/index.json').read_text())
+    expected_guides = {}
+    for record in guide_index['examples']:
+        expected_guides.setdefault(record['guide'], []).append(record)
+    for source, page in pages.items():
+        if source.name in ('404.html', 'toc.html'):
+            continue
+        label = source.relative_to(SITE).as_posix()
+        if not page.headings or page.headings[0] != 'h1':
+            failures.append(f'{label}: missing leading chapter heading')
+        if page.typst_blocks and not any(re.search(r'typst(?:-[a-z0-9]+)?\.js$', link) for link in page.links):
+            failures.append(f'{label}: Typst highlighting asset missing')
+        for image in page.images:
+            if not image.get('alt', '').strip():
+                failures.append(f'{label}: image has no text alternative')
+        if source.parent == SITE / 'docs/guides':
+            records = expected_guides.get(source.stem, [])
+            if page.example_ids != ['example-' + record['id'] for record in records]:
+                failures.append(f'{label}: source/output pair order or coverage changed')
+            for record in records:
+                preview_links = [f'../assets/guides/{asset}' for asset in record['assets']]
+                if any(link not in page.links for link in preview_links):
+                    failures.append(f'{label}: missing guide preview pages for {record["id"]}')
+                complete = SITE / 'docs/assets/guides' / (record['key'] + '.typ')
+                if not complete.is_file() or __import__('hashlib').sha256(complete.read_bytes()).hexdigest() != record['source_sha256']:
+                    failures.append(f'{label}: complete guide source differs from rendered input')
     count = 0
     for source, page in pages.items():
         for link in page.links:
@@ -100,7 +146,8 @@ def main():
                         failures.append('API export heading is missing: ' + name)
     output = ROOT / 'target/site-check.json'
     record = dict(html_pages=len(pages), local_links=count, search_entries=len(search), api_entries=entries,
-                  searchable_exports=len(catalog['exports']), failures=failures)
+                  searchable_exports=len(catalog['exports']), guide_examples=len(guide_index['examples']),
+                  guide_preview_pages=sum(len(record['assets']) for record in guide_index['examples']), failures=failures)
     output.write_text(json.dumps(record, indent=2) + '\n')
     if failures:
         raise SystemExit('\n'.join(failures))

@@ -1,8 +1,5 @@
 # Editorial Apparatus And Glossaries
 
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
-
 Use `series` for independent numbering and collections, and `data` for the fields
 your document needs. These recipes use the existing note and query APIs.
 
@@ -17,12 +14,15 @@ The [apparatus specimen](../examples/editorial-apparatus.typ) uses lettered sour
 readings and numbered editorial notes. Its custom single-note renderer adds the
 lemma from `data` before the explanation:
 
+<!-- deixis-example: {"id": "critical-apparatus"} -->
 ```typst
 #let apparatus(n, ..args) = block[
   #deixis-generate-body-marker(n)
   #emph(n.data.lemma)#h(0.3em)
   #deixis-generate-body-content(n)
 ]
+A reading#deixis-endnote(series: "sources", data: (lemma: "reading",),
+  render-single: apparatus)[The manuscript has “rendering”.]
 #deixis-print-endnotes(series: "sources",
   render-group: deixis-native-render-group)
 ```

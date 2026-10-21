@@ -22,6 +22,7 @@ Rerun the installer after a manifest version change.
 
 ## Try A Document
 
+<!-- deixis-example: {"id": "example-1"} -->
 ```typst
 #import "@preview/deixis:0.2.0": *
 #show: deixis-setup-notes

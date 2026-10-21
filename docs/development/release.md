@@ -16,6 +16,12 @@ only when explicitly requested.
   Commands and dependencies are in [CONTRIBUTING](../../CONTRIBUTING.md).
   Serialize runner invocations and retain each compiler's logs/results separately.
   Reject warnings, especially non-convergence, and inspect real PDF/SVG output.
+- Refresh guide previews with `python3 scripts/render-guide-examples.py` and
+  check freshness with `python3 scripts/render-guide-examples.py --check`.
+  Compile them on the minimum compiler with
+  `python3 scripts/render-guide-examples.py --verify --typst target/tools/typst-0.15.0/typst --work-dir target/guide-examples-0150`.
+  Inspect the source/output pairs on desktop and phone widths in light and dark
+  themes; fixed overlay canvases must contain their complete visible output.
 - Build the website with `python3 scripts/build-docs.py`; regenerate the skill
   reference with `python3 scripts/export-api.py --skill` and verify it with
   `python3 tests/skill.py`. Check README artwork with
@@ -23,6 +29,22 @@ only when explicitly requested.
 - Inspect copied package contents. The runtime package excludes documentation,
   examples, tests, scripts, agent instructions and local caches. The source tag
   should contain all intended source, assets, tests and public documentation.
+
+## Update Release Wording
+
+In the release commit, replace every "unreleased 0.2.0 checkout" statement with
+the released version. Find them with:
+
+```sh
+git grep -n -i "unreleased" -- ':!CHANGELOG.md'
+```
+
+They include the README notice and its "Install The Checkout" section (replace
+it with the Universe import), the docs index, site home badge, installation,
+getting-started and compatibility guides, migration headings, the manual
+introduction, AGENTS.md, CONTRIBUTING.md, the skill and the API-sheet generator
+(`scripts/export-api.py`). Rename `[Unreleased]` in the changelog to the version
+and date, then rebuild the manual, skill reference and website.
 
 ## Build The Downloadable Manual
 
@@ -58,6 +80,13 @@ package and writes files/hashes to `target/universe-candidate/inspection.json`.
 It does not verify remote URLs or create the tag. Once the tag exists, check
 those remote links, including linked images and fragments. Python unit tests
 cover missing/outside targets and README link rewriting.
+
+README links stay relative in the repository. The candidate rewrites only
+targets that are not shipped with the package to the tag; in-page anchors and
+bundled files such as `LICENSE` stay relative. Copy the candidate's package
+directory to `packages/preview/deixis/<version>/` on a new branch of a
+typst/packages fork, compile the examples against it with
+`--package-path <fork>/packages`, and open the pull request once the tag exists.
 
 Inspect a separate package copy with:
 

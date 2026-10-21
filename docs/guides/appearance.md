@@ -1,8 +1,5 @@
 # Annotation Appearance
 
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
-
 Factory marks and decorated bodies use a muted blue-gray accent (`#496579`),
 0.5pt borders and lightly tinted mark backgrounds. Passage and body text keep
 the document's text color. Margin bodies are plain by default; inset bodies use
@@ -12,7 +9,7 @@ a rectangular container. Connectors remain opt-in. Marker-to-body spacing is
 
 Use ordinary configuration for another accent:
 
-```typst
+```typst fragment
 #let accent = rgb("387C69")
 #deixis-set(
   stroke: 0.5pt + accent,
@@ -34,7 +31,7 @@ when you want to choose the index and style each component explicitly.
 The [default specimen](../../examples/default-appearance.typ) shows all current
 factory adapters. To reproduce the earlier red appearance:
 
-```typst
+```typst fragment
 #deixis-set(
   stroke: red + 0.5pt,
   fill: (inline-mark: red.transparentize(95%),
@@ -59,6 +56,7 @@ Plain margin/footnote containers add no padding. Rectangular/alert containers
 use a 5pt inset unless customized. To make a callout's padding scale with slide
 text, set it explicitly:
 
+<!-- deixis-example: {"id": "proportional-padding", "height": "150pt"} -->
 ```typst
 #deixis-inset-note(width: 130pt,
   container-args: (inset: 0.5em),
@@ -73,6 +71,7 @@ or multiline labels need their own reserved space. See
 
 ## Automatic Palettes
 
+<!-- deixis-example: {"id": "automatic-palette", "height": "150pt", "prelude": "#set page(margin: (left: 18pt, right: 130pt, top: 18pt, bottom: 18pt))"} -->
 ```typst
 #deixis-set(palette: "okabe-ito")
 #deixis-margin-note[First passage][First explanation.]
@@ -92,7 +91,7 @@ Deixis scope. The built-in names resolve to these colors, in order:
 
 To copy or extend a set, wrap its hex values in `rgb` and pass an array:
 
-```typst
+```typst fragment
 #deixis-set(palette: (rgb("3B6D9A"), rgb("387C69"), rgb("9A663F")))
 ```
 

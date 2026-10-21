@@ -1,7 +1,4 @@
-# Outlines and custom note views
-
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
+# Outlines And Custom Note Views
 
 An annotation has one original mark, any number of reused marks, and at most one
 body. An outline keeps **one entry per annotation**. Reuse contributes locations
@@ -9,6 +6,7 @@ to that entry instead of duplicating its explanation.
 
 For a ready-made list:
 
+<!-- deixis-example: {"id": "example-1", "prelude": "#deixis-endnote(id: <claim>)[The supporting evidence.]\n#deixis-mark(of: <claim>)[A related claim]\n#deixis-print-endnotes()\n"} -->
 ```typst
 #deixis-note-outline()
 ```
@@ -39,6 +37,7 @@ Other places that repeat a heading body, such as a running header, should use
 `deixis-plain`. It shows the passages and leaves the annotations where they were
 declared:
 
+<!-- deixis-example: {"id": "example-2", "height": "180pt", "postlude": "= A Heading With A #deixis-inline-mark(id: <term>)[Marked Term]\n#deixis-endnote-body(of: <term>)[An explanation.]\n#deixis-print-endnotes()\n#pagebreak()\nThe running header repeats the plain heading."} -->
 ```typst
 #set page(header: context {
   let previous = query(selector(heading).before(here()))
@@ -50,11 +49,12 @@ PDF bookmarks are plain text extracted by Typst. A marked passage inside a
 heading is drawn by deferred layout, so its words can be missing from the
 bookmark title; keep important bookmark text outside the mark.
 
-## Inclusion, selection, and grouping
+## Inclusion, Selection, And Grouping
 
 Paired annotations are included by default, even before an endnote is printed.
 Use `include-unpaired` to add marks without bodies or standalone bodies:
 
+<!-- deixis-example: {"id": "example-3", "prelude": "#deixis-endnote(id: <claim>)[The supporting evidence.]\n#deixis-mark(of: <claim>)[A related claim]\n#deixis-print-endnotes()\n"} -->
 ```typst
 #deixis-note-outline(include-unpaired: true)
 #deixis-note-outline(include-unpaired: "mark", group-by: "type")
@@ -76,7 +76,7 @@ a range. A selected annotation retains **all** its marks, including those outsid
 the range. Reference calls such as `@idea` are not marked passages and do not
 become entries in `marks`.
 
-## Structured records for other layouts
+## Structured Records For Other Layouts
 
 `deixis-query-notes` returns the same semantic records without drawing an outline.
 Its default catalogue is source-ordered; explicit page queries default to body
@@ -84,6 +84,7 @@ order and include standalone bodies. Use `order: "source"` to override.
 Call it in a native `context`, after setup. It accepts the outline's selection
 options and optional `page:` filtering over complete live body spans; presentation options such as `title` and `group-by` belong to the view.
 
+<!-- deixis-example: {"id": "example-4", "prelude": "#deixis-endnote(id: <claim>)[The supporting evidence.]\n#deixis-mark(of: <claim>)[A related claim]\n#deixis-print-endnotes()\n"} -->
 ```typst
 #context {
   let notes = deixis-query-notes(include-types: "endnote")
@@ -142,11 +143,12 @@ without a span. `deixis-generate-body-content` publishes the span; the existing
 body-meta/marker helpers publish the destination. See
 [custom renderers](custom-renderers.md) for navigation and declaration fallbacks.
 
-## One row per marked passage
+## One Row Per Marked Passage
 
 Flatten the marks and sort their source ordinals. This interleaves annotations
 correctly when their uses alternate, including reuse before the original:
 
+<!-- deixis-example: {"id": "example-5", "prelude": "#deixis-endnote(id: <claim>)[The supporting evidence.]\n#deixis-mark(of: <claim>)[A related claim]\n#deixis-print-endnotes()\n"} -->
 ```typst
 #context {
   let uses = deixis-query-notes().map(note =>
@@ -162,7 +164,7 @@ has its own destination and safe passage excerpt, while the explanation and
 assigned number stay on the annotation. To restrict an occurrence index by
 location, select its marks explicitly; note-level range filters select originals.
 
-## Custom excerpts and migration
+## Custom Excerpts And Migration
 
 `summary: note => [A description.]` customizes the default outline excerpt. It
 receives a query record plus the presentation's `badge`; use `note.summary` to

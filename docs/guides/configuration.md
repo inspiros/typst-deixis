@@ -1,8 +1,5 @@
 # Configuration And Renderer Callbacks
 
-Examples use the [standard import and setup](getting-started.md#1-start-with-native-footnotes).
-Excerpts with existing IDs or callback variables extend the surrounding example.
-
 `deixis-configure` and `deixis-set` are identical aliases. The optional
 [short API](getting-started.md#optional-short-names) uses
 `configure` and names the scoped container `note-block`, preserving native `block`.
@@ -10,6 +7,7 @@ Excerpts with existing IDs or callback variables extend the surrounding example.
 Start with direct options on a note. Use `deixis-set` for defaults shared by
 subsequent declarations, and put it inside a `deixis-block` to keep it local:
 
+<!-- deixis-example: {"id": "local-settings", "height": "190pt"} -->
 ```typst
 #deixis-set(stroke: blue)
 A point#deixis-footnote[An explanation.].
@@ -34,12 +32,12 @@ restore them. Leaving a `deixis-block` restores its parent's settings. A top-lev
 to its factory default. Use `none` only where that option supports it (for
 example, disabling a stroke). Empty dictionaries have the rules described below.
 
-## Type and component dictionaries
+## Type And Component Dictionaries
 
 Shared visual values such as stroke/fill/radius can select a note type in
 `deixis-set`, then a component within that type:
 
-```typst
+```typst fragment
 #deixis-set(
   stroke: (inline-mark: blue, inset-note: (body: teal, connector: gray), rest: red),
   radius: (mark: 2pt, body: 0pt),
@@ -63,7 +61,7 @@ Numbering is the exception: it identifies the note, so a wrapper's family key
 applies to the mark it creates. At each level, the family key precedes the mark
 type, which precedes `rest`:
 
-```typst
+```typst fragment
 #deixis-set(numbering: (footnote: "*", endnote: "i", inline-mark: "a", rest: "1"))
 ```
 
@@ -86,7 +84,7 @@ my-container)` work without returning an unresolved dictionary to the painter.
 The simpler `render-single: my-renderer` also works. Sidenotes use the
 `margin-note` type; see the preset details below.
 
-## Native values and incremental updates
+## Native Values And Incremental Updates
 
 A dictionary containing native value keys stays a value. In particular,
 `radius: (top-left: 3pt, bottom-right: 6pt)` supplies native corner values. Inline
@@ -96,6 +94,7 @@ box/parentheses end caps retain those outer corners and square their inner edges
 Rectangular regions, body containers, and inline box/parentheses/underline marks
 also accept native per-edge strokes:
 
+<!-- deixis-example: {"id": "two-borders", "height": "150pt"} -->
 ```typst
 #deixis-inset-note-body(layer: "flow", container-func: deixis-rect-container,
   stroke: (left: blue + 2pt, bottom: gray, rest: none),
@@ -113,7 +112,7 @@ only adjoining edges and corners are removed at page joins.
 For connectors, select a single link stroke and radius independently of the
 rectangular node styles:
 
-```typst
+```typst fragment
 #deixis-set(
   stroke: (nodes: (left: blue, rest: none), connector: gray + 0.7pt),
   radius: (nodes: (top: 4pt, bottom: 6pt), connector: 2pt),
@@ -132,7 +131,7 @@ Compatible dictionaries merge recursively across repeated settings updates, so
 separate component/type branches and native corner updates can be incremental.
 Changing representation replaces the old dictionary at that level:
 
-```typst
+```typst fragment
 #deixis-set(radius: (body: 3pt))
 #deixis-set(radius: (top-left: 6pt)) // Replaces the component map.
 #deixis-set(radius: (:)) // Clears it to an empty native radius.
@@ -163,6 +162,7 @@ when the body precedes its original. Changing defaults between declarations does
 not retroactively restyle earlier components. An inline body follows the same
 body-marker cascade as footnote, endnote, margin and inset bodies:
 
+<!-- deixis-example: {"id": "marker-callbacks"} -->
 ```typst
 #deixis-set(marker-style: (mark: it => super(it), body: it => strong(it)))
 #deixis-mark(id: <detail>)[A passage]
@@ -181,17 +181,19 @@ Independent connections have their own route defaults: straight outside
 `connector.route`. A `margin-note`/`inset-note` connector default configures note
 shorthand and does not replace that independent default. See [routing policies](document-routing.md).
 
-## Rendering extension points
+## Rendering Extension Points
 
 Use a container for a simple border/background around the built-in output. Use
 a single-note renderer to inspect annotation data or replace marker/body layout:
 
+<!-- deixis-example: {"id": "renderer-delegation"} -->
 ```typst
 #let my-renderer(note, ..args) = {
   // note.id, note.data, note.styles, and note.container-args are available.
   deixis-native-render-single(note, ..args.named())
 }
 #deixis-set(render-single: my-renderer)
+A point#deixis-footnote[Rendered through the delegated renderer.]
 ```
 
 Renderer callbacks should accept `..args`: adapters can supply `inner-width`,
@@ -226,7 +228,7 @@ to invoke containers with the default single renderer. Inline-decoration bodies 
 retain their native formatting path. Body containers, custom renderer forwarding,
 and these bypass rules are described in [containers](containers.md).
 
-## Sidenote presets
+## Sidenote Presets
 
 `deixis-sidenote` and `deixis-sidenote-body` are margin presets with
 `side: "outside"` and `mark-align-strictness: "loose"`. They share margin packing,
@@ -239,6 +241,7 @@ Preset values behave like native function `.with(...)` defaults: an explicit cal
 overrides them. The preset's `"loose"` value takes precedence over global alignment
 strictness; pass `mark-align-strictness: auto` to inherit settings deliberately:
 
+<!-- deixis-example: {"id": "strict-sidenote", "height": "150pt", "prelude": "#set page(margin: (left: 18pt, right: 130pt, top: 18pt, bottom: 18pt))"} -->
 ```typst
 #deixis-set(mark-align-strictness: (margin-note: "strict"))
 #deixis-sidenote(mark-align-strictness: auto)[Inherit strict alignment.]

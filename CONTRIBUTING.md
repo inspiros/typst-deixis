@@ -9,8 +9,9 @@ Repository instructions shared by coding agents are in [AGENTS.md](AGENTS.md).
 - Python 3.11+ and `python3 -m pip install -r requirements-dev.txt`.
 - Typst 0.15.0 or 0.15.1; verify with `typst --version`.
 - Poppler (`pdftotext`, `pdftoppm`) for painted text, bounds and visual inspection.
-- DejaVu Sans and DejaVu Sans Mono for the manual (for example, Debian/Ubuntu
+- DejaVu Serif, DejaVu Sans and DejaVu Sans Mono for the manual (for example, Debian/Ubuntu
   package `fonts-dejavu-core`).
+- Node.js for the local highlight.js integration test (otherwise skipped).
 - Typst package dependencies from the local cache or registry. With an empty
   cache, run `mkdir -p target && typst compile --root . scripts/fetch-packages.typ target/fetch.pdf`
   once first: download progress on stderr would otherwise fail the
@@ -78,12 +79,43 @@ compiler's logs/results separately and include the compiler version in reports.
 ```sh
 python3 scripts/render-manual-examples.py
 python3 scripts/render-manual-examples.py --check
+python3 scripts/render-guide-examples.py
+python3 scripts/render-guide-examples.py --check
+python3 scripts/render-guide-examples.py --verify --typst target/tools/typst-0.15.0/typst --work-dir target/guide-examples-0150
 python3 scripts/render-manual.py
 python3 scripts/render-manual.py --update-pdf
 ```
 
-Preview refreshes are needed after runtime or worked-example changes. The
-manual builder validates the PDF before replacing the checked-in copy; inspect
+Preview refreshes are needed after runtime or worked-example changes.
+Guide previews use an immediate JSON directive before a plain Typst fence:
+
+````md
+<!-- deixis-example: {"id":"short-note","height":"160pt"} -->
+```typst
+Text#deixis-footnote[An explanation.]
+```
+````
+
+IDs are stable and unique within each guide. Optional `width`, `height` and
+`margin` are Typst page values; `prelude` and `postlude` are supporting Typst
+source strings, and `setup: false` disables the default setup show rule. The
+renderer imports the isolated installed package, uses DejaVu Serif at 10pt on a
+360pt-wide page with 18pt margins, and rejects all compiler diagnostics. Choose a
+fixed height and adequate margins for overlays; inspect actual SVGs for clipping.
+The site pairs each fence with SVG pages on white paper and offers the complete
+source including setup. Mark configuration/signatures/partial excerpts with
+`typst fragment`; these stay code-only with a visible Fragment label. Every
+Typst guide fence must choose a directive or the fragment info string.
+
+The renderer publishes `docs/assets/guides/` only after every snippet succeeds.
+Its digest index covers complete generated source, runtime, renderer and assets;
+`--check` checks freshness without compiling. `--verify` compiles into target
+without replacing committed SVGs; use separate `--work-dir` paths for compiler
+logs and minimum-version results. The website build and `tests/docs.py` run the
+freshness check, including both CI workflows. Guide changes do not affect the
+PDF manual.
+
+The manual builder validates the PDF before replacing the checked-in copy; inspect
 its rendered pages too. User guides and examples describe supported behavior.
 Update source docstrings, guides and minimal examples when a public contract
 changes. Use Camel Case With

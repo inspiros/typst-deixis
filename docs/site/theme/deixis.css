@@ -224,3 +224,25 @@ body { font-family: var(--deixis-sans); }
   .content { padding: 0; }
   .content main { border: 0; padding: 0; box-shadow: none; }
 }
+/* Guide source/output pairs keep raw source controls and a white paper surface. */
+.content .deixis-example-label, .content .deixis-fragment-label {
+  font: 700 11px/1.5 var(--deixis-sans);
+  letter-spacing: .06em;
+  color: var(--deixis-muted);
+  margin: 0 0 8px;
+}
+.content .deixis-fragment-label { margin-top: 24px; }
+.content .deixis-fragment-label + pre { margin-top: 0; }
+.content .deixis-guide-example pre { margin-top: 0; margin-bottom: 8px; }
+.content .deixis-example-source > p:last-child { font: 12px/1.5 var(--deixis-sans); }
+.content .deixis-example-output p { margin-top: 0; }
+.content .deixis-example-output img { max-height: none; }
+.content main { overflow-wrap: break-word; }
+.content pre { overflow-wrap: normal; }
+@media (min-width: 1100px) {
+  .content:has(.deixis-guide-example) { max-width: 1200px; }
+}
+@media (max-width: 700px) {
+  .content main { padding: 24px 16px; }
+  .deixis-example { gap: 16px; }
+}

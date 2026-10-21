@@ -23,6 +23,8 @@ jobs:
       - name: Fetch Typst packages
         run: typst compile --root . scripts/fetch-packages.typ "$RUNNER_TEMP/fetch.pdf"
       - run: python -m unittest discover -s tests -p 'test_*.py'
+      - run: python scripts/render-guide-examples.py --check
+      - run: python scripts/render-guide-examples.py --verify --work-dir target/guide-examples-${{ matrix.version }}
       - run: python tests/docs.py
       - run: python scripts/render-readme.py --check
       - run: python tests/readme.py
