@@ -28,6 +28,13 @@ class UniverseReadmeTests(unittest.TestCase):
         self.assertIn('[Web](https://example.org/)', text)
         self.assertIn('[Code](not-a-file)', text)
 
+    def test_anchors_and_bundled_files_stay_relative(self):
+        text, links = MODULE.rewrite_readme(
+            '[Install](#install-the-checkout) [License](LICENSE)\n',
+            ROOT, 'https://github.com/inspiros/typst-deixis', 'v0.2.0')
+        self.assertEqual(text, '[Install](#install-the-checkout) [License](LICENSE)\n')
+        self.assertEqual(links, [])
+
     def test_missing_and_escaping_targets_fail(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / 'source'

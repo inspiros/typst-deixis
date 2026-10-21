@@ -18,6 +18,9 @@ from urllib.parse import quote, unquote, urlsplit, urlunsplit
 ROOT = Path(__file__).resolve().parents[1]
 
 
+BUNDLED = {'LICENSE', 'typst.toml'}
+
+
 def rewrite_readme(text, root, repository, ref):
     """Resolve local Markdown/HTML destinations against the source checkout."""
     repository = repository.rstrip('/')
@@ -29,12 +32,16 @@ def rewrite_readme(text, root, repository, ref):
 
     def destination(raw, image=False):
         parsed = urlsplit(raw.strip('<>'))
-        if parsed.scheme or parsed.netloc:
+        # External URLs and in-page anchors already work on Universe.
+        if parsed.scheme or parsed.netloc or not parsed.path:
             return raw
-        path = (root / unquote(parsed.path)).resolve() if parsed.path else root / 'README.md'
+        path = (root / unquote(parsed.path)).resolve()
         if not path.is_relative_to(root.resolve()) or not path.exists():
             raise ValueError(f'README target is missing or outside the checkout: {raw}')
         relative = path.relative_to(root.resolve()).as_posix()
+        # Files bundled with the package (such as LICENSE) stay relative.
+        if relative in BUNDLED:
+            return raw
         if image:
             base = repository.replace('github.com', 'raw.githubusercontent.com')
             url = f'{base}/{quote(ref, safe="")}/{quote(relative)}'
