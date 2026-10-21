@@ -61,10 +61,9 @@ manual cuts/indicators are optional and retain their existing settings.
 
 Automatic continuation points stay in a page-local interval: the accepted
 margin body's selected channel, or content width for other destinations.
-`connector.spill` can select content/page/custom bounds. Earlier overhaul
-snapshots used a common-width clamp and could move margin relays into text during
-fallback/repair. Opposite spill points no longer share a required x coordinate;
-use an exact split when that coordinate is deliberate. Marker ink/badge packing
+`connector.spill` can select content/page/custom bounds. Opposite spill points
+do not share a required x coordinate; use an exact split when that coordinate
+is deliberate. Marker ink/badge packing
 remain separate from these point bounds.
 
 The current checked bounds are 128 scene nodes, sixteen enabled visible fragments
@@ -153,7 +152,28 @@ flow content, without a note role. When explanations must be read beside their
 marks, prefer native footnotes or inline notes; endnotes read as a list where
 they are printed.
 
-## Migrate From 0.1.1 Or Earlier Overhaul Snapshots
+## Known Limits And Future Directions
+
+- **HTML export:** upstream export remains experimental. Deixis preserves note
+  bodies and navigation through a semantic fallback, while page geometry and
+  connectors are omitted. Broader HTML support depends on export maturity;
+  custom layouts and placed content retain the limits described above.
+- **Accessibility:** overlay bodies follow page-flow content in tagged PDFs and
+  lack a note role. Improving their reading order and semantic association is an
+  open direction; use native footnotes or inline notes when reading beside the
+  mark is essential.
+- **Margin collisions:** flow margins have no collision packing, and body layers
+  have no shared collision checks. More general packing remains future work;
+  overlay-margin packing already operates within existing frames.
+- **Shared margin planning:** document-wide planning could reduce repeated work,
+  but requires context-correct measurements and bounded feedback. A shared plan
+  is not part of the current contract; executable bodies cannot be cached safely.
+- **Convergence:** Typst's finite layout-pass budget bounds deep deferred scopes,
+  forward attachments and geometry-dependent callbacks. Page-local numbering and
+  HTML footnotes also depend on layout passes. Reducing feedback depth remains a
+  direction for improvement, without a guarantee for arbitrary recursive layouts.
+
+## Migrate From 0.1.1
 
 Install the checkout's `0.2.0` preview override and update imports first. The
 installer keeps the old `0.1.1` cache separate. See
@@ -163,7 +183,6 @@ installer keeps the old `0.1.1` cache separate. See
 | --- | --- |
 | `label: <n>` on a note | Use `id: <n>` for creation. There is no secondary body alias; update references to the original ID. |
 | A body/wrapper `id: <n>` intended to attach to an original | Use `of: <n>`. Body-only `id:` creates a standalone body; wrapper `id:` creates an original and body. |
-| `deixis-repeat-mark(<n>)[Passage]` in an earlier snapshot | Use `deixis-mark(of: <n>)[Passage]`; `mark-type:` covers all current mark forms. |
 | Attached body/wrapper relies on the caller's scope | It now inherits the original rendering instance. Set `target: 0` deliberately to select the caller's scope. |
 | `series:` or original-mark options on an attached body/wrapper | Put creation options on the original; local repeated-mark decoration belongs on the reused mark. |
 | Attached inline body inherits the original's marker callback | Its marker now follows local body options and body-declaration defaults, consistently with the other adapters. Pass `marker-style:` on the body to deliberately reuse a custom callback. |

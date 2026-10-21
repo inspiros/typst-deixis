@@ -131,6 +131,13 @@ be independent. Hidden numbered originals retain a slot, while unnumbered and
 omitted originals take none.
 Synchronized blocks share a stream; independent local blocks retain their owners.
 
+A `deixis-block` that breaks across pages still collects its bodies into one list
+at its end, so page-local markers repeat inside that list (1, 2, 1, 2), as they
+do for endnotes. For multi-page blocks, either send the notes to each page's
+footer with `deixis-footnote.with(target: "page")`, which then restart cleanly
+per page, or keep ordinary numbering inside the block. Threaded blocks share one
+stream: numbering continues across them on a page and restarts on the next.
+
 **The assigned counter is unchanged.** `note.count` and `deixis-note-counter`
 report the source-order assigned value and current counter respectively, including
 explicit updates; unnumbered originals retain `note.count: none`. `note.marker`

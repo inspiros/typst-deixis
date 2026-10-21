@@ -100,8 +100,7 @@ def normalize_directory_links(path):
                 parsed = parsed._replace(path=parsed.path[:-3] + '.html')
         return urlunsplit(parsed)
 
-    text = re.sub(r'<!-- (?:Maintainer evidence|Future API discussion):.*?-->', '', path.read_text(), flags=re.S)
-    path.write_text(transform_links(text, replace))
+    path.write_text(transform_links(path.read_text(), replace))
 
 
 def home_page():
@@ -218,6 +217,11 @@ def book_summary(api_nav, examples):
     for item in examples[1:]:
         chapter(next(iter(item)), next(iter(item.values())), 1)
     chapter('Editable Sources', 'examples/README.md', 1)
+    chapter('Contributing', 'CONTRIBUTING.md')
+    chapter('Architecture', 'docs/development/architecture.md', 1)
+    chapter('Release Preparation', 'docs/development/release.md', 1)
+    chapter('Coding Agent Guide', 'AGENTS.md', 1)
+    chapter('Changelog', 'CHANGELOG.md', 1)
     chapter('Agent Skill', 'skills/deixis/SKILL.md')
     for path in sorted((STAGE / 'skills/deixis/references').glob('*.md')):
         match = re.search(r'^# (.+)$', path.read_text(), re.M)
@@ -240,7 +244,7 @@ def main():
     if STAGE.exists():
         shutil.rmtree(STAGE)
     STAGE.mkdir(parents=True)
-    for folder in ('docs/guides', 'docs/examples', 'docs/assets', 'examples', 'assets', 'skills'):
+    for folder in ('docs/guides', 'docs/development', 'docs/examples', 'docs/assets', 'examples', 'assets', 'skills'):
         shutil.copytree(ROOT / folder, STAGE / folder, ignore=shutil.ignore_patterns('__pycache__', '*.pyc', 'README.md'))
     shutil.copyfile(ROOT / 'docs/README.md', STAGE / 'docs/README.md')
     shutil.copyfile(ROOT / 'docs/manual.pdf', STAGE / 'docs/manual.pdf')
@@ -248,7 +252,7 @@ def main():
     # Agent discovery metadata belongs to the portable skill, not its book page.
     skill_page = STAGE / 'skills/deixis/SKILL.md'
     skill_page.write_text(re.sub(r'\A---\n.*?\n---\n', '', skill_page.read_text(), flags=re.S).lstrip())
-    for name in ('LICENSE',):
+    for name in ('LICENSE', 'CONTRIBUTING.md', 'AGENTS.md', 'CHANGELOG.md'):
         shutil.copyfile(ROOT / name, STAGE / name)
     (STAGE / 'api').mkdir()
     (STAGE / 'gallery').mkdir()

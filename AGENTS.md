@@ -1,8 +1,8 @@
 # Working On Deixis
 
-Read [the reviewer brief](docs/maintainers/review.md), then
-[architecture](docs/maintainers/architecture.md) and the guide for the affected API.
-Current source, tests and task guides take precedence over archived proposals.
+Read [CONTRIBUTING](CONTRIBUTING.md), [architecture](docs/development/architecture.md),
+and the guide for the affected API. Current source, tests and public guides define
+the supported contract.
 
 - The checkout is unreleased 0.2.0; the minimum Typst version is 0.15.0.
   `src/lib.typ` is the public facade. Internal state/underscore helpers are private.
@@ -24,7 +24,8 @@ Current source, tests and task guides take precedence over archived proposals.
   `python3 scripts/render-manual-examples.py`. Regular manual builds go to
   `target/manual.pdf`; `--update-pdf` validates and replaces `docs/manual.pdf`.
 - Do not publish a package/release, create a tag, or replace gallery artwork
-  unless requested. See [release preparation](docs/maintainers/release.md).
+  unless requested. See [release preparation](docs/development/release.md).
 
 Portable commands and dependencies are in [CONTRIBUTING.md](CONTRIBUTING.md).
-Do not rely on another agent's local compiler binaries, ignored probes or logs.
+Use portable compiler commands and maintained fixtures; local probes and logs may
+not exist in another checkout.

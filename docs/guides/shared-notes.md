@@ -192,5 +192,3 @@ geometry, or move the shared body. See [independent connections](independent-con
 
 Body `connector` options remain the simple shorthand; independent edges select
 their own source occurrences.
-
-<!-- Maintainer evidence: [connection design](../maintainers/connection-design.md). -->

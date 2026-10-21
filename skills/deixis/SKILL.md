@@ -13,7 +13,7 @@ The published 0.1.1 API differs. Do not silently substitute that release.
 Use the public package facade. When working from the Deixis checkout, install
 a copied preview package with `python3 scripts/install.py --namespace preview`;
 add `--reinstall` to refresh that copy. A linked development install is also
-available with `--link`. Elsewhere, use the owner's supplied 0.2.0 package copy.
+available with `--link`. Elsewhere, use a supplied 0.2.0 package copy.
 For an isolated install without writing the user package directory, pass
 `--data-dir target/my-document/data` and give Typst
 `--package-path target/my-document/data/typst/packages`.

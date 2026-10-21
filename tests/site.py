@@ -28,8 +28,11 @@ def main():
     pages = {p.resolve(): Page(p) for p in SITE.rglob('*.html')}
     assert pages, 'Build the website before checking it.'
     failures = []
-    internal = ['docs/maintainers', 'tests', 'scripts', 'src']
-    internal += [name + extension for name in ('AGENTS', 'CLAUDE', 'CONTRIBUTING') for extension in ('.md', '.html')]
+    internal = ['tests', 'scripts', 'src', 'develop', 'target']
+    internal += ['CLAUDE' + extension for extension in ('.md', '.html')]
+    public_docs = {'guides', 'development', 'examples', 'assets', 'site'}
+    internal += [p.relative_to(SITE).as_posix() for p in (SITE / 'docs').iterdir()
+                 if p.is_dir() and p.name not in public_docs]
     for relative in internal:
         if (SITE / relative).exists():
             failures.append('Internal project material must not ship in the public guide: ' + relative)
@@ -66,11 +69,13 @@ def main():
         target = (SITE / unquote(parsed.path)).resolve()
         if target not in pages or (parsed.fragment and unquote(parsed.fragment) not in pages[target].anchors):
             failures.append('Broken search destination: ' + document['location'])
-    if any(location.startswith('docs/maintainers/') for location in locations):
-        failures.append('Maintainer notes must stay out of public documentation search.')
-    for source in (ROOT / 'docs/guides').glob('*.md'):
-        if 'docs/guides/' + source.stem + '.html' not in locations:
-            failures.append(f'Guide is not searchable: {source.name}')
+    public_sources = [*(ROOT / 'docs/guides').glob('*.md'),
+                      *(ROOT / 'docs/development').glob('*.md'),
+                      ROOT / 'CONTRIBUTING.md', ROOT / 'AGENTS.md', ROOT / 'CHANGELOG.md']
+    for source in public_sources:
+        location = source.relative_to(ROOT).with_suffix('.html').as_posix()
+        if location not in locations:
+            failures.append(f'Public page is not searchable: {source.relative_to(ROOT)}')
     catalog = json.loads((SITE / 'api/catalog.json').read_text())
     searchable = '\n'.join(d['title'] + ' ' + d['text'] for d in search)
     for name in catalog['exports']:

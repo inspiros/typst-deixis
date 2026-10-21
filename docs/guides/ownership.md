@@ -38,8 +38,6 @@ For example, place marks on page 1 and most bodies on page 2: the overlay margin
 page 1, the immediate margin/footnote/inline/inset bodies appear on page 2, and
 the endnote prints on page 3. Bodies are painted exactly once.
 
-<!-- Maintainer evidence: [body-ownership regression](../../tests/integration/body-ownership.typ). -->
-
 An inline body with `breakable: false` stays in one native inline/block frame at
 its declaration. Explicit connections can target that frame without changing
 its placement. The frame may move as a unit to fit native flow; it does not

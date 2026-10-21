@@ -152,7 +152,6 @@ preferred search's expansion allowance; there is no per-port-pair search loop.
 See [An Exit Along The Same Side](../../examples/sliding-ports.typ) for a compact
 example. Visibility candidates do not guarantee a globally shortest continuous
 attachment; they preserve the bounded candidate-graph contract.
-<!-- Maintainer evidence: [port selection audit](../maintainers/port-selection.md). -->
 Without avoidance nodes on the active page, ordinary native routing is preserved,
 including margin lanes, curves and mixed sections; `search` is `none`.
 

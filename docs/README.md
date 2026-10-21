@@ -89,6 +89,11 @@ source-derived defaults; the [agent skill](../skills/deixis/SKILL.md) includes
 checked document recipes for coding agents.
 
 Use [compatibility and migration](guides/compatibility.md) for supported behavior,
-remaining native/routing limits, and changes from 0.1.1 or earlier overhaul
-snapshots. Maintained editable sources live in [examples](../examples/).
+remaining native/routing limits, and changes from 0.1.1. Maintained editable sources live in [examples](../examples/).
 
+## Contributing
+
+For dependencies, checks, artwork and local website commands, see
+[CONTRIBUTING](../CONTRIBUTING.md). The [architecture](development/architecture.md)
+explains runtime contracts; [release preparation](development/release.md) lists
+packaging and manual checks.

@@ -228,7 +228,7 @@ public IDs.
 ## Migrating to unreleased 0.2
 
 For container, connector, pin and outline changes as well, see the consolidated
-[compatibility and migration guide](compatibility.md#migrate-from-011-or-earlier-overhaul-snapshots).
+[compatibility and migration guide](compatibility.md#migrate-from-011).
 
 | Previous call | New call |
 | --- | --- |

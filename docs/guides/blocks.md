@@ -106,7 +106,11 @@ Context-generated note IDs inside successive/nested blocks are supported by the
 scope-state fix. This does not remove Typst's finite pass limit for arbitrary
 context-generated registration/geometry chains. Prefer pre-layout host callbacks
 for [frame identities](touying-identities.md) when available.
-The anonymous-parent serial dependency found by the scope audit is now fixed:
-one synchronized child or several siblings no longer require a named parent
-after earlier collections. More deeply nested synchronized collections still
+One synchronized child or several siblings work under an anonymous parent,
+even after earlier collections. More deeply nested synchronized collections
 retain a pass limit; see [scope limits](scopes.md#layout-limits).
+
+With page-restart numbering, a block that breaks across pages lists its bodies
+once at its end, so markers from different pages repeat there. See
+[counters](counters.md#restart-footnote-markers-on-each-page) for the
+`target: "page"` alternative.

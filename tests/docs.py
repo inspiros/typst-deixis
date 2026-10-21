@@ -64,7 +64,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check-manual', action='store_true', help='Also check the release PDF/source hashes in docs/manual-build.json.')
     args = parser.parse_args()
-    sources = sorted((ROOT / 'docs').rglob('*.md')) + [ROOT / name for name in
+    sources = sorted((ROOT / 'docs').glob('*.md'))
+    for section in ('guides', 'development', 'examples', 'reference', 'site'):
+        sources += sorted((ROOT / 'docs' / section).rglob('*.md'))
+    sources += [ROOT / name for name in
               ('README.md', 'CHANGELOG.md', 'AGENTS.md', 'CLAUDE.md', 'CONTRIBUTING.md')]
     failures = []
     checked = 0

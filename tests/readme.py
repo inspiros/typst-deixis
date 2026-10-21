@@ -94,9 +94,9 @@ def main():
       reused: query(<deixis-mark-occurrence>).map(m => m.value.targets))'''
     reading = evaluate('examples/annotated-reading.typ', evidence)
     assert reading['bodies'] == 3 and reading['reused'] == [['assumption']]
-    shared = evaluate('docs/maintainers/artwork/hero-fragments.typ', evidence, 'kind=shared')
+    shared = evaluate('scripts/artwork/hero-fragments.typ', evidence, 'kind=shared')
     assert shared['bodies'] == 1 and shared['reused'] == [['idea']]
-    local = evaluate('docs/maintainers/artwork/hero-fragments.typ',
+    local = evaluate('scripts/artwork/hero-fragments.typ',
                      'query(<hero-local-evidence>).first().value', 'kind=local')
     assert len(local['owners']) == 1 and len(local['notes']) == 2
     assert all(n['owner'] == local['owners'][0] and n['layer'] == 'flow' for n in local['notes'])

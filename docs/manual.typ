@@ -45,8 +45,8 @@
   layout-pass budget; do not replace missing geometry with guessed bounds.
 - In custom renderers, emit destination/marker once and live body content once.
   Query summaries are safe; replaying raw executable body content is not.
-- For Touying, use the frame identity/reveal recipes. For migration from 0.1.1 or
-  older overhaul snapshots, read `docs/guides/compatibility.md`.
+- For Touying, use the frame identity/reveal recipes. For migration from 0.1.1,
+  read `docs/guides/compatibility.md`.
 
 Read the task-oriented index in `docs/README.md`. Source examples live in
 `examples/` and `docs/examples/`; the worked pairs name their editable sources.

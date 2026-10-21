@@ -5,9 +5,9 @@
     "paper=a4",
     "monochrome=false"
   ],
-  "source_sha256": "5dca33a7b4741c463604824b049cd46d0863bf653b6990255a2c124d634ef034",
-  "source_files": 163,
-  "pdf_sha256": "7ee6791be2c47ae92f4cdfec0361e4933dcf5d38c81e8f10e4d5a45f1dfe9255",
+  "source_sha256": "6de1ee8fff46d83c1745bc39ecba711f2e4dc3616e0dde597bee0267df18ced9",
+  "source_files": 156,
+  "pdf_sha256": "716b77bab5fc6cbc38994da1938e38279e2e5ebf28a36c1184c18d4ed036ad8b",
   "checks": {
     "exports": 61,
     "entries": 42,

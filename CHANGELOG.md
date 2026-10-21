@@ -2,8 +2,6 @@
 
 User-facing changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-The full [overhaul development journal](docs/maintainers/archive/changelog-through-2026-10-20.md)
-is preserved separately.
 
 ## [Unreleased]
 
@@ -53,6 +51,9 @@ from 0.1.1 or an earlier development snapshot.
 - Unnumbered notes: a resolved `numbering: none` takes no counter value, so
   `deixis-set(numbering: (margin-note: none, inset-note: none))` turns margin and
   inset notes into asides while footnotes keep counting 1, 2, 3.
+- Named body containers: `container-func: "stripe"` (accent rule over a tint) or
+  `"tinted"`, alongside `"plain"`, `"rect"` and `"alert"`; all follow the
+  note's accent and palette.
 - Named palettes: `deixis-set(palette: "okabe-ito")`, plus `"tol-bright"`,
   `"tol-muted"`, `"tableau"` and the house `"deixis"` set.
 

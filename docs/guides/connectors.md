@@ -992,5 +992,3 @@ search presets require `route: "orthogonal", radius: 0pt`. The
 [note example](../../examples/routed-notes.typ) keeps body placement independent.
 Bridges/jumps are not implemented. Immediate body packing and cross-layer
 collisions remain outside connector routing.
-
-<!-- Maintainer evidence: [design review](../maintainers/routing-crossings.md). -->

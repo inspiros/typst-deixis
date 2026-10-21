@@ -25,7 +25,7 @@ customizable. Public document APIs share one identity and scope model.
 
 This manual describes the *unreleased 0.2.0 checkout*, requiring *Typst 0.15.0+*.
 The downloadable `docs/manual.pdf` is built and checked from this source.
-For rebuild and release commands, see `docs/maintainers/release.md`.
+For rebuild and release commands, see `docs/development/release.md`.
 A compact reference to all public APIs follows this tour;
 the task-oriented guides in `docs/guides` cover advanced integration and limits.
 
@@ -43,7 +43,7 @@ python3 scripts/install.py --namespace preview --link --reinstall
 
 This makes `@preview/deixis:0.2.0` available to Typst CLI and VS Code/Tinymist.
 That version has not been published to Typst Universe. The local override keeps
-the old 0.1.1 cache separate; see `docs/maintainers/development.md` for alternatives.
+the old 0.1.1 cache separate; see `CONTRIBUTING.md` for alternatives.
 
 == Write A Note
 

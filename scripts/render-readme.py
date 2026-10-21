@@ -13,11 +13,11 @@ ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / 'assets/readme'
 OUTPUT = ROOT / 'target/readme'
 SOURCES = ['examples/annotated-reading.typ', 'examples/annotated-equation.typ',
-           'examples/editorial-review.typ', 'docs/maintainers/artwork/readme-hero.typ',
-           'docs/maintainers/artwork/review-comparison.typ',
+           'examples/editorial-review.typ', 'scripts/artwork/readme-hero.typ',
+           'scripts/artwork/review-comparison.typ',
            'assets/logos/deixis-logo-horizontal.svg', 'scripts/render-readme.py',
-           'docs/maintainers/artwork/hero-fragments.typ', 'examples/touying-reveals.typ',
-           'docs/maintainers/artwork/slides-comparison.typ']
+           'scripts/artwork/hero-fragments.typ', 'examples/touying-reveals.typ',
+           'scripts/artwork/slides-comparison.typ']
 FRAGMENTS = ('text', 'equation', 'shared', 'diagram', 'editorial', 'footnote', 'outline', 'local')
 NAMES = ('reading', 'equation', 'review-draft', 'review-final', 'hero', 'review',
          'slide-1', 'slide-2', 'slides') + tuple('hero-' + kind for kind in FRAGMENTS)

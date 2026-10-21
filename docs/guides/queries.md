@@ -91,7 +91,6 @@ page label, standard Typst provides:
 
 Apply it in context to mark/body destinations. Deduplicate by `dest.page()`, not
 formatted text: different physical pages can share a label after a reset.
-<!-- Future API discussion: [helper review](../maintainers/user-helpers.md). -->
 
 ## Type And Series Filters
 

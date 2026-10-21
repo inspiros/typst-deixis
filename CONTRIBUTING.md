@@ -1,7 +1,7 @@
 # Contributing And Reviewing
 
-Start with the [reviewer brief](docs/maintainers/review.md) for scope and risk
-areas, or the [user documentation](docs/README.md) for behavior and examples.
+Start with the [user documentation](docs/README.md) for behavior and examples,
+and [architecture](docs/development/architecture.md) for runtime contracts.
 Repository instructions shared by coding agents are in [AGENTS.md](AGENTS.md).
 
 ## Requirements
@@ -28,7 +28,11 @@ The full runner covers fixtures, expected diagnostics, examples and installed
 consumers. A filtered run keeps that source's behavioral variants; an empty
 selection fails. Run the two compiler versions **serially**, selecting each with
 `--typst /path/to/typst`, and preserve `target/tests/results.json` between runs.
-The runner installs its own copied package; a global install is unnecessary.
+The runner installs its own copied package under `target/tests/package-data`; a
+global install is unnecessary. Serialize all runner invocations in one checkout
+and save each compiler run's log and results separately. Reject every Typst
+warning, especially non-convergence; inspect real PDF/SVG output for layout and
+navigation changes.
 
 Within one invocation, sources are checked concurrently (`--jobs N`, default
 half the CPUs); the full suite takes a few minutes. While iterating, filter to
@@ -37,7 +41,32 @@ and run the full suite on both compilers before committing.
 
 For ordinary CLI/editor development, use
 `python3 scripts/install.py --namespace preview --link --reinstall`.
-This exposes `@preview/deixis:0.2.0` without replacing the old 0.1.1 cache.
+This exposes `@preview/deixis:0.2.0` without replacing the old 0.1.1 cache. Omit
+`--link` for a copied install; omit `--namespace` to use `local`. For an isolated
+copy, pass `--data-dir target/my-document/data` and compile with
+`--package-path target/my-document/data/typst/packages`. Rerun after manifest
+version changes; restart the editor language server if it retains an old import
+error.
+
+## Independent Routing Audits
+
+Run with each supported compiler on `PATH`:
+
+```sh
+python3 tests/scene_avoidance.py
+python3 tests/scene_ports.py
+python3 tests/scene_sliding.py
+python3 tests/route_group.py
+python3 tests/route_group_ports.py
+python3 tests/route_group_sockets.py
+python3 tests/relay_repair.py
+python3 tests/route_group_invariants.py
+python3 tests/route_group_margin.py
+python3 tests/route_group_index.py
+```
+
+These compare search and planning against independent references. Preserve each
+compiler's logs/results separately and include the compiler version in reports.
 
 ## Documentation And Packaging
 
@@ -50,10 +79,10 @@ python3 scripts/render-manual.py --update-pdf
 
 Preview refreshes are needed after runtime or worked-example changes. The
 manual builder validates the PDF before replacing the checked-in copy; inspect
-its rendered pages too. User guides and examples describe supported behavior;
-[archived engineering notes](docs/maintainers/archive/README.md) retain earlier
-proposals. [Development](docs/maintainers/development.md) lists the independent
-routing audits and details scope/layout constraints.
+its rendered pages too. User guides and examples describe supported behavior.
+Update source docstrings, guides and minimal examples when a public contract
+changes. Use Camel Case With
+Spaces for example headings; keep useful source/output pairs.
 
 Use `develop/` for disposable probes, `tests/` for maintained checks, `docs/` for
 documentation, and `target/` for generated output. Include a minimal reproducer,
@@ -62,21 +91,24 @@ Review findings should name a concrete trigger, consequence, source location
 and reproduction; distinguish defects from documented native limitations.
 
 Tagging, publication and release uploads are separate actions. Follow the
-[release checklist](docs/maintainers/release.md) when preparing a release.
+[release checklist](docs/development/release.md) when preparing a release.
 
 ## Local Website And Agent Skill
 
 ```sh
 mdbook --version  # Tested with mdBook 0.5.4
 python3 scripts/build-docs.py
+python3 -m http.server 8765 --bind 127.0.0.1 --directory target/site
 python3 scripts/export-api.py --skill
 python3 tests/skill.py
 ```
 
 The website build runs a local link/search-coverage check and writes
-`target/site/`; it does not deploy. See [website maintenance](docs/maintainers/website.md)
-for serving it locally. The [agent skill](skills/deixis/SKILL.md) targets the
-unreleased package; its check compiles every Typst snippet against an isolated
+`target/site/`; it does not deploy. Open `http://127.0.0.1:8765/` after starting
+the server and stop it when finished. Use the build script so generated navigation
+and API pages are present. `book.toml` configures the site; theme/search assets
+are bundled locally. Review desktop and phone layouts after presentation changes.
+The [agent skill](skills/deixis/SKILL.md) targets the unreleased package; its check compiles every Typst snippet against an isolated
 package copy and rejects warnings. Both commands accept `--typst` for the
 minimum-version check. Regenerate the API cheat sheet after public API changes.
 
@@ -91,10 +123,9 @@ python3 tests/readme.py
 
 The first command writes previews to `target/readme/`. Inspect the hero,
 equation, individual transparent fragments and draft/final PNGs there before
-updating `assets/readme/`. The fourteen illustrations are actual Deixis output;
-the hero/comparison sources in `docs/maintainers/artwork/` use bundled SVGs for
-immediate IDE preview. The
-eight hero fragments are independently compiled from `hero-fragments.typ` with
+updating `assets/readme/`. The illustrations are actual Deixis output;
+the hero/comparison sources in `scripts/artwork/` use bundled SVGs for
+immediate IDE preview. The eight hero fragments are independently compiled from `hero-fragments.typ` with
 `--input kind=text|equation|shared|diagram|editorial|footnote|outline|local`. The
 generator uses standard-library Python, Typst and the DejaVu Sans/Libertinus Serif
 fonts. It accepts `--typst` and rejects compiler warnings or extra specimen pages.
@@ -116,5 +147,5 @@ Each sample runs in a fresh process, serially with one compiler thread by defaul
 stop other test sweeps while measuring. Output includes copied input sources,
 raw timings, compiler/runtime/workload identities and median speedup ratios.
 `--compare-rendering` checks every page's pixels and internal PDF links using
-Poppler/pypdf. `--trace` adds separate unmeasured compiler traces. See
-[performance phase 2](docs/maintainers/performance-phase2.md) for results and limits.
+Poppler/pypdf. `--trace` adds separate unmeasured compiler traces. Compare results
+with the same compiler and workload; do not cache executable note bodies.

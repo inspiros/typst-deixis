@@ -53,5 +53,3 @@ block or omitting links is not a general convergence fix. A block footnote
 normalizes all valid layer requests to its native collection path.
 These are reduced-layout limits, not a guarantee for arbitrary nested native
 contexts. See the [block guide](blocks.md) for pagination and footer boundaries.
-
-<!-- Maintainer evidence: [engineering audit](../maintainers/deferred-scopes.md). -->

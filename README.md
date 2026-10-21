@@ -133,12 +133,12 @@ See [installation](docs/guides/installation.md) for editor setup and alternative
 
 The [PDF manual](docs/manual.pdf?raw=true) includes a guided introduction,
 23 worked examples with source beside output, and a reference for every public API.
-The local [mdBook website](docs/maintainers/website.md) shares those guides and
-examples, with searchable API pages generated from source. The
+The local mdBook website shares those guides and examples, with searchable API
+pages generated from source; see [CONTRIBUTING](CONTRIBUTING.md#local-website-and-agent-skill)
+for build and serving commands. The
 [Deixis agent skill](skills/deixis/SKILL.md) includes checked authoring recipes.
 
 For development, checks and artwork generation, see [CONTRIBUTING](CONTRIBUTING.md).
-For an independent review, start with the [reviewer brief](docs/maintainers/review.md).
 
 ## Acknowledgements
 

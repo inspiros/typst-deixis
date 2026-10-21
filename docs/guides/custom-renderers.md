@@ -98,5 +98,3 @@ Explicit `deixis-generate-backlinks(note)` generates the available buttons even
 when `note.backlink` is false. The built-in renderer decides whether to invoke it
 according to that policy. A custom renderer owns that choice; the helper itself
 does not add another destination or live span.
-
-<!-- Future API discussion: [helper review](../maintainers/user-helpers.md). -->
