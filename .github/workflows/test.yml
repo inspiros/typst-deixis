@@ -20,6 +20,8 @@ jobs:
           typst-version: ${{ matrix.version }}
       - run: sudo apt-get update && sudo apt-get install -y poppler-utils fonts-dejavu-core
       - run: python -m pip install -r requirements-dev.txt
+      - name: Fetch Typst packages
+        run: typst compile --root . scripts/fetch-packages.typ "$RUNNER_TEMP/fetch.pdf"
       - run: python -m unittest discover -s tests -p 'test_*.py'
       - run: python tests/docs.py
       - run: python scripts/render-readme.py --check

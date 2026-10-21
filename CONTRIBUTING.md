@@ -11,8 +11,10 @@ Repository instructions shared by coding agents are in [AGENTS.md](AGENTS.md).
 - Poppler (`pdftotext`, `pdftoppm`) for painted text, bounds and visual inspection.
 - DejaVu Sans and DejaVu Sans Mono for the manual (for example, Debian/Ubuntu
   package `fonts-dejavu-core`).
-- The first compile also needs Typst package dependencies from the local cache
-  or registry. CI records exact compiler versions in its matrix.
+- Typst package dependencies from the local cache or registry. With an empty
+  cache, run `mkdir -p target && typst compile --root . scripts/fetch-packages.typ target/fetch.pdf`
+  once first: download progress on stderr would otherwise fail the
+  warning-free checks. CI records exact compiler versions in its matrix.
 
 CI runs the full matrix when a `v*` tag is pushed, or on demand from the
 Actions tab; ordinary pushes do not trigger it, so run the checks below locally.
