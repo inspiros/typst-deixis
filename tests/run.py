@@ -2092,6 +2092,30 @@ def main():
                 sys.path.insert(0, str(ROOT / "tests"))  # Also under python -I.
                 from html_endnotes import check_html_endnotes
                 check_html_endnotes(base, source, out)
+            elif source.parent.name == "integration" and source.stem == "nested-mark-links":
+                expression = '{ import "/tests/integration/nested-mark-links.typ": verify; verify() }'
+                check_nested_mark_links(pdf, json.loads(typst("eval", "--in", source, "--format", "json", expression)))
+                # Exercise the four inline painter paths under each kind of
+                # deferred host; other nested mark constructors share the
+                # same host passes and are checked under the default printer.
+                cases = [(host, "margin", mode)
+                         for host in ("endnote-grid", "endnote-native", "endnote-chicago",
+                                      "margin", "inset", "inline", "footnote-flow",
+                                      "footnote-foreground", "footnote-background", "comment")
+                         for mode in ("box", "underline", "highlight", "none")]
+                cases += [("endnote-grid", kind, mode)
+                          for kind in ("inset", "footnote", "inline", "reuse")
+                          for mode in ("box", "underline", "highlight", "none")]
+                cases += [("endnote-grid", kind, "box") for kind in ("region", "phantom")]
+                cases += [("block", "inline", mode) for mode in ("box", "underline", "highlight", "none")]
+                for host, kind, mode in cases:
+                    if (host, kind, mode) == ("endnote-grid", "margin", "box"):
+                        continue
+                    inputs = ("--input", f"host={host}", "--input", f"kind={kind}", "--input", f"mode={mode}")
+                    target = out / f"nested-mark-links-{host}-{kind}-{mode}.pdf"
+                    typst("compile", *inputs, source, target)
+                    data = json.loads(typst("eval", *inputs, "--in", source, "--format", "json", expression))
+                    check_nested_mark_links(target, data)
             elif source.parent.name == "integration" and source.stem == "nested-endnote-notes":
                 # Every mark and body, including those first run by the printer, is a live link target.
                 expression = '{ import "/tests/integration/nested-endnote-notes.typ": verify; verify() }'
@@ -2595,6 +2619,62 @@ def pdf_words(pdf):
               "right": float(w.attrib["xMax"]), "y": float(w.attrib["yMin"]),
               "bottom": float(w.attrib["yMax"])} for w in p.findall(".//pdf:word", ns)]
             for p in ET.fromstring(xml).findall(".//pdf:page", ns)]
+
+
+def check_nested_mark_links(pdf, expected):
+    """Match painted nested markers to PDF source rectangles and destinations."""
+    from pypdf import PdfReader
+
+    reader = PdfReader(pdf)
+    pages = {page.indirect_reference.idnum: i + 1 for i, page in enumerate(reader.pages)}
+    links = []
+    for number, page in enumerate(reader.pages, start=1):
+        height = float(page.mediabox.height)
+        for ref in page.get("/Annots", []):
+            annotation = ref.get_object()
+            dest = annotation.get("/Dest", annotation.get("/A", {}).get("/D"))
+            if hasattr(dest, "get_object"):
+                dest = dest.get_object()
+            if not isinstance(dest, list):
+                continue
+            target_page = pages[dest[0].idnum]
+            target_height = float(reader.pages[target_page - 1].mediabox.height)
+            left, bottom, right, top = map(float, annotation["/Rect"])
+            links.append((number, (left, height - top, right, height - bottom),
+                          (target_page, float(dest[2]), target_height - float(dest[3]) + 10)))
+
+    painted = pdf_words(pdf)
+    case = (expected["host"], expected["kind"], expected["mode"])
+
+    def token(value):
+        words = [(page, word) for page, words in enumerate(painted, start=1)
+                 for word in words if word["text"] == value]
+        assert len(words) == 1, (case, "Expected one painted marker", value, words)
+        number, word = words[0]
+        box = reader.pages[number - 1].mediabox
+        assert 0 <= word["x"] < word["right"] <= float(box.width) and 0 <= word["y"] < word["bottom"] <= float(box.height), (case, value, "Marker lies outside its page", word)
+        return number, word
+
+    def points_to(actual, target):
+        return actual[0] == target["page"] and abs(actual[1] - target["x"]) < 1 and abs(actual[2] - target["y"]) < 1
+
+    def marker_link(value, target):
+        page, word = token(value)
+        # The center lies inside the painted glyph word, independently of any
+        # Typst link metadata or an unrelated annotation to the same target.
+        x, y = (word["x"] + word["right"]) / 2, (word["y"] + word["bottom"]) / 2
+        assert any(source == page and rect[0] <= x <= rect[2] and rect[1] <= y <= rect[3]
+                   and points_to(dest, target) for source, rect, dest in links), (case, value, "Missing PDF marker link", target)
+
+    destinations = expected["destinations"]
+    if expected["kind"] != "phantom":
+        marker_link("MARK", destinations["body"])
+    marker_link("BODY", destinations["mark"])
+    if expected["kind"] == "reuse":
+        marker_link("REUSE", destinations["body"])
+        body_page, body_word = token("BODY")
+        assert any(source == body_page and abs(rect[1] - body_word["y"]) < 25
+                   and points_to(dest, destinations["reuse"]) for source, rect, dest in links), (case, "Missing reused-mark backlink")
 
 
 def check_pdf_links(pdf, expected, minimum=6):
