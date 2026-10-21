@@ -14,8 +14,6 @@
 #let deixis-note-types = ("footnote", "endnote", "margin-note", "inset-note", "inline-note", "connection")
 #let deixis-note-components = ("mark", "body", "connector")
 
-#let _deixis-default-accent = rgb("496579")
-
 #let deixis-factory-defaults = (
   numbering: "1",
   // 1. Note Content Styling
@@ -68,7 +66,7 @@
 #let deixis-param-schema = (
   render-single: (function,),
   render-group: (function,),
-  container-func: (function,),
+  container-func: (function, str),
   body-style: (function,),
   marker-style: (function,),
   body-marker-style: (function, auto),
@@ -281,6 +279,8 @@
     _deixis-check-page-numbering(final-val)
   }
 
+  if param-key == "container-func" { final-val = _deixis-resolve-container(final-val) }
+
   // type & schema validation
   if param-key in deixis-param-schema {
     let allowed = deixis-param-schema.at(param-key)
@@ -313,11 +313,18 @@
 #let _deixis-resolve-component-styles(sys, note-type, component: auto, ..args) = {
   assert(args.pos().len() == 0)
   let resolved = (:)
+  let origins = (:)
   for (name, val) in args.named() {
-    let resolved-val = _deixis-resolve-typed-param(sys, val, name, note-type, component: component)
+    let resolution = _deixis-resolve-typed-param(sys, val, name, note-type,
+      component: component, with-origin: component == "body")
+    let resolved-val = if component == "body" { resolution.value } else { resolution }
+    if component == "body" { origins.insert(name, resolution.origin) }
     if name == "stroke" { resolved-val = _deixis-normalize-stroke(resolved-val) }
     resolved.insert(name, resolved-val)
   }
+  // Preset defaults must distinguish explicit none from factory values. The
+  // renderer removes this bookkeeping before passing native styles to callbacks.
+  if component == "body" { resolved.insert("_deixis-origins", origins) }
 
   return resolved
 }

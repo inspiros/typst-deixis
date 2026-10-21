@@ -42,7 +42,7 @@
 /// - fill (auto, color, none): The background fill color.
 /// - radius (auto, length, dictionary): The border radius.
 /// - render-single (auto, function): A custom render function for the inner layout of the body.
-/// - container-func (auto, function): A custom container wrapper for the endnote when printed.
+/// - container-func (auto, str, function): A custom container wrapper for the endnote when printed, or a preset name ("plain", "rect", "alert", "stripe", "tinted").
 /// - ..args (arguments): Additional arguments are rejected; put custom container options in `container-args`.
 ///
 /// -> content
@@ -91,7 +91,7 @@
   /// -> auto | function
   render-single: auto,
   /// A custom container wrapper for the body block.
-  /// -> auto | function
+  /// -> auto | str | function
   container-func: auto,
   /// Native/custom options forwarded only to the body container.
   /// -> dictionary
@@ -307,7 +307,7 @@
 /// - layer (auto, str): Rendering layer for the region mark. Choices: `"flow"` | `"foreground"` | `"background"`.
 /// - inline (bool): If `true`, force the region mark into an inline box.
 /// - backlink (auto, bool, str): Whether to generate a clickable backlink returning to the mark. Choices: `bool` | `"always"` | `"none"` | `"never"` | `"multiple"`.
-/// - container-func (auto, function): A custom container wrapper for the endnote when printed.
+/// - container-func (auto, str, function): A custom container wrapper for the endnote when printed, or a preset name ("plain", "rect", "alert", "stripe", "tinted").
 ///
 /// -> content
 #let deixis-endnote(
@@ -415,7 +415,7 @@
   /// -> auto | function
   render-single: auto,
   /// A custom container wrapper for the body block.
-  /// -> auto | function
+  /// -> auto | str | function
   container-func: auto,
   /// Native/custom options forwarded only to the body container.
   /// -> dictionary
@@ -571,7 +571,7 @@
 /// - indent (auto, length): Overrides the indentation applied to the note body.
 /// - render-single (auto, function): A custom rendering function `(note-data, ..args) => content` to override the local `render-single`.
 /// - render-group (auto, function): A custom rendering function `(notes-array, ..args) => content` to override the local `render-group`.
-/// - container-func (auto, function): Overrides the container for each printed body.
+/// - container-func (auto, str, function): Overrides the container for each printed body.
 ///
 /// -> content
 #let deixis-print-endnotes(
@@ -624,8 +624,8 @@
   /// A custom rendering function `(notes-array, ..args) => content` to override the local `render-group`.
   /// -> auto | function
   render-group: auto,
-  /// Overrides the container for each printed body.
-  /// -> auto | function
+  /// Overrides the container for each printed body: a preset name or a function.
+  /// -> auto | str | function
   container-func: auto,
   /// Native/custom options forwarded only to the body container.
   /// -> auto | dictionary
@@ -634,10 +634,13 @@
   _deixis-check-setup-state()
   if container-args != auto { _deixis-check-container-options(container-args) }
   for (key, value) in (body-style: body-style, render-single: render-single,
-    render-group: render-group, container-func: container-func) {
+    render-group: render-group) {
     assert(value == auto or type(value) == function,
       message: "deixis: Printer " + key + " override must be auto or a function.")
   }
+  assert(container-func == auto or type(container-func) in (str, function),
+    message: "deixis: Printer container-func override must be auto or a function, or a preset name.")
+  if type(container-func) == str { let _ = _deixis-resolve-container(container-func) }
   let series = _deixis-selection-filter(series, "series")
 
   _deixis-scope-target-hint(target)

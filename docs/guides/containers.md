@@ -1,12 +1,36 @@
 # Body containers and their options
 
 The body renderer formats markers/content/backlinks. A container wraps that
-rendered content. Choose one with `container-func`, and put its extra native or
-custom options in `container-args`:
+rendered content. Choose a name with `container-func`:
+
+| Name | Look | Typical Use |
+| --- | --- | --- |
+| `"plain"` | Unframed content | Footnotes and collected notes |
+| `"rect"` | Native rectangle | Framed inset callouts |
+| `"alert"` | Doubled left stroke | Inline callouts |
+| `"stripe"` | Left accent rule over a light accent tint, square corners | Margin and inset asides, callouts |
+| `"tinted"` | Light accent background, small radius and padding | Quiet inset callouts |
+
+Names work in local options and type/component settings:
+
+```typst
+#deixis-set(container-func: (margin-note: "stripe", inset-note: "tinted"))
+```
+
+The first three names select the existing `deixis-plain-container`,
+`deixis-rect-container` and `deixis-alert-container` functions. `"stripe"` and
+`"tinted"` are named presets without additional public functions. Their accent
+comes from the annotation's palette, then its resolved stroke paint, then the
+default accent. The tinted background uses 90% transparency and the stripe tint 94%; gradient strokes
+use their midpoint color, while tiling strokes fall back to the default accent. Explicit body
+`stroke`, `fill` and `radius` settings win, including `none`; a scalar stripe
+stroke paints only the left edge, while an edge dictionary is used literally.
+The stripe's default corners are square. Put extra native options such as
+`inset` and `outset` in `container-args`:
 
 ```typst
 #deixis-inset-note(
-  container-func: deixis-rect-container,
+  container-func: "rect",
   container-args: (inset: 6pt, outset: 2pt),
   stroke: (mark: blue, body: teal),
   width: 120pt,
@@ -71,7 +95,8 @@ default keeps the existing flow. See [inline body endpoints](independent-connect
 
 ## Long Bodies
 
-Native `rect` and the alert preset are unbreakable. Long page footnotes and
+The `"rect"`, `"alert"`, `"stripe"` and `"tinted"` presets use native `rect`
+and are unbreakable. `"plain"` preserves the body's native flow. Long page footnotes and
 collected bodies need a breakable container such as `block` with
 `container-args: (breakable: true, inset: 5pt)`. Native weak marker spacing folds
 source indentation; explicit line/paragraph breaks survive. See
@@ -88,6 +113,11 @@ Move custom/native container keys such as `inset`, `outset`, or a callback's
 options, component styles, and calls with no extra container options are unchanged.
 `container-func` remains configurable through `deixis-set`; `container-args` is
 an explicit per-body or printer option in this slice.
+
+Functions remain supported for custom containers, with signature
+`(body, ..args) => content`. For example, `container-func: block` with
+`container-args: (breakable: true, inset: 5pt)` keeps a long body breakable.
+Unknown preset names fail with a diagnostic listing the five valid names.
 
 See [configuration and callbacks](configuration.md) for component selection,
 incremental native/scoped dictionary updates, and callback arguments.

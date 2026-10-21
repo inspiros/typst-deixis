@@ -6,7 +6,7 @@
 #text(size: 19pt, weight: "bold")[Give The Body Some Room]
 
 This note has a native rectangle around its body#deixis-endnote(
-  container-func: deixis-rect-container,
+  container-func: "tinted",
   container-args: (inset: 7pt),
   stroke: (mark: none, body: rgb("27645e") + 0.8pt),
   fill: (mark: none, body: rgb("e8f2ef")),
@@ -15,7 +15,7 @@ This note has a native rectangle around its body#deixis-endnote(
 #deixis-print-endnotes(render-group: deixis-native-render-group)
 
 ```typst
-container-func: deixis-rect-container,
+container-func: "tinted",
 container-args: (inset: 7pt),
 ```
 

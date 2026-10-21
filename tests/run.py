@@ -173,6 +173,7 @@ def main():
         "attachment-mark-options": "original-mark option(s)",
         "phantom-arguments": "Unknown phantom mark argument(s)",
         "comment-of": "deixis-comment creates an original",
+        "container-name": 'deixis: Unknown container name "unknown". Valid names: plain, rect, alert, stripe, tinted.',
         "attachment-series": "attached bodies inherit their original's series",
         "body-series": "body series must be auto or a string",
         "collection-filter": "must be",

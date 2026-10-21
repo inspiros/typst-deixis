@@ -38,6 +38,8 @@
 /// Containers
 /// --------------------
 
+#let _deixis-default-accent = rgb("496579")
+
 /// A simple container that renders the note body as a plain block.
 /// - body (content): The rendered note content.
 /// - ..args (arguments): Ignored formatting arguments.
@@ -77,6 +79,68 @@
     outset: args.at("outset", default: 0pt),
     body,
   )
+}
+
+// Named-only frames use native rect, retaining the same atomic layout as the
+// existing rect/alert presets. Explicit native options replace their defaults.
+#let _deixis-stripe-container(body, ..args) = rect(
+  ..((width: 100%, inset: 5pt, radius: 0pt, fill: _deixis-default-accent.transparentize(94%),
+    stroke: (left: 2pt + _deixis-default-accent, rest: none)) + args.named()), body)
+
+#let _deixis-tinted-container(body, ..args) = rect(
+  ..((width: 100%, inset: 5pt, radius: 0.2em, stroke: none,
+    fill: _deixis-default-accent.transparentize(90%)) + args.named()), body)
+
+#let _deixis-containers = (
+  plain: deixis-plain-container,
+  rect: deixis-rect-container,
+  alert: deixis-alert-container,
+  stripe: _deixis-stripe-container,
+  tinted: _deixis-tinted-container,
+)
+
+/// Resolve container-func names after type/component selection. Keep the
+/// named-only presets private; existing names preserve function identity.
+#let _deixis-resolve-container(value) = {
+  if type(value) != str { return value }
+  assert(value in _deixis-containers,
+    message: "deixis: Unknown container name " + repr(value)
+      + ". Valid names: " + _deixis-containers.keys().join(", ") + ".")
+  _deixis-containers.at(value)
+}
+
+// Resolve printer overrides too, and keep private style provenance out of the
+// callback's native styles. Defaults never replace an explicit none or radius.
+#let _deixis-container-data(data) = {
+  let container = _deixis-resolve-container(data.at("container-func", default: deixis-plain-container))
+  let styles = data.at("styles", default: (:))
+  let origins = styles.remove("_deixis-origins", default: (:))
+  if container in (_deixis-stripe-container, _deixis-tinted-container) {
+    let factory(key) = origins.at(key, default: if key in styles { "local" } else { "factory" }) == "factory"
+    let stroke = styles.at("stroke", default: none)
+    let paint = if _deixis-edge-stroke(stroke) {
+      stroke.values().find(s => s not in (none, auto))
+    } else { stroke }
+    let paint = if paint in (none, auto) { _deixis-default-accent }
+      else { _deixis-normalize-stroke(paint).paint }
+    let accent = data.at("accent", default: none)
+    if accent == none { accent = paint }
+    if accent == auto { accent = _deixis-default-accent }
+    // Stripe is a callout: an accent rule over a lighter tint. Tinted keeps
+    // only the tint. Native stroke paints can be gradients or tilings too.
+    let tint = if type(accent) == gradient { accent.sample(50%) }
+      else if type(accent) == color { accent } else { _deixis-default-accent }
+    if container == _deixis-stripe-container {
+      if factory("stroke") { styles.insert("stroke", (left: 2pt + accent, rest: none)) }
+      else if not _deixis-edge-stroke(stroke) { styles.insert("stroke", (left: stroke, rest: none)) }
+      if factory("radius") { styles.insert("radius", 0pt) }
+      if factory("fill") { styles.insert("fill", tint.transparentize(94%)) }
+    } else {
+      if factory("stroke") { styles.insert("stroke", none) }
+      if factory("fill") { styles.insert("fill", tint.transparentize(90%)) }
+    }
+  }
+  data + (container-func: container, styles: styles)
 }
 
 /// --------------------
@@ -293,7 +357,7 @@
   let container = data.at("container-func", default: deixis-plain-container)
   let body = body-style(_deixis-html-body-content(data))
   // Built-in containers only draw frames. Custom containers own their output.
-  if container in (deixis-plain-container, deixis-rect-container, deixis-alert-container) { body }
+  if container in _deixis-containers.values() { body }
   else { container(body, ..(data.at("styles", default: (:)) + data.at("container-args", default: (:)))) }
 }
 
@@ -327,6 +391,7 @@
 ///
 /// -> content
 #let deixis-native-render-single(data, inner-width: auto, ..args) = {
+  let data = _deixis-container-data(data)
   if _std-target() == "html" { return _deixis-html-render-single(data) }
   let body-style = data.at("body-style", default: it => it)
   let container = data.at("container-func", default: deixis-plain-container)
@@ -348,6 +413,7 @@
   max-marker-gap: auto,
   ..args,
 ) = {
+  let data = _deixis-container-data(data)
   if _std-target() == "html" { return _deixis-html-render-single(data) }
   let body-style = data.at("body-style", default: it => it)
 
@@ -390,6 +456,7 @@
 }
 
 #let _deixis-render-single(data, renderer: auto, ..args) = {
+  let data = _deixis-container-data(data)
   let data = if data.at("disable-links", default: false) { data + (measure-backlinks: true) } else { data }
   let renderer = if renderer == auto { data.at("render-single", default: deixis-native-render-single) } else { renderer }
   let inherited = data.at("render-context", default: none)

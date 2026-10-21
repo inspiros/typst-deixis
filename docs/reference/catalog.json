@@ -714,8 +714,8 @@
           "body",
           "..args"
         ],
-        "call": "deixis-alert-container(body, stroke: teal, inset: 6pt)",
-        "note": "rect-container has native rect parameters. Alert doubles scalar border thickness on the left; native edge maps remain literal. Configure via container-func and container-args.",
+        "call": "deixis-inset-note(container-func: \"tinted\", container-args: (inset: 6pt))[Body]",
+        "note": "container-func accepts names plain, rect, alert, stripe and tinted, or a custom function. The first three select these existing exports; stripe and tinted are named-only accent presets. Explicit stroke/fill/radius and container-args override preset defaults. rect-container has native rect parameters. Alert doubles scalar border thickness on the left; native edge maps remain literal.",
         "returns": "content",
         "extension": true,
         "guide": "containers.md"

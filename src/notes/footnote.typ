@@ -151,7 +151,7 @@
 /// - fill (auto, color, none): The background fill color.
 /// - radius (auto, length, dictionary): The border radius.
 /// - render-single (auto, function): A custom render function for the inner layout of the body.
-/// - container-func (auto, function): A custom container wrapper for the body block.
+/// - container-func (auto, str, function): A custom container wrapper for the body block, or a preset name ("plain", "rect", "alert", "stripe", "tinted").
 /// - ..args (arguments): Additional arguments are rejected; put custom container options in `container-args`.
 ///
 /// -> content
@@ -204,7 +204,7 @@
   /// -> auto | function
   render-single: auto,
   /// A custom container wrapper for the body block.
-  /// -> auto | function
+  /// -> auto | str | function
   container-func: auto,
   /// Native/custom options forwarded only to the body container.
   /// -> dictionary
@@ -427,7 +427,7 @@
 /// - inline (bool): If `true`, force the region mark into an inline box.
 /// - backlink (auto, bool, str): Whether to generate a clickable backlink returning to the mark. Choices: `bool` | `"always"` | `"none"` | `"never"` | `"multiple"`.
 /// - render-single (auto, function): A custom render function for the inner layout of the body.
-/// - container-func (auto, function): A custom container wrapper for the body block.
+/// - container-func (auto, str, function): A custom container wrapper for the body block, or a preset name ("plain", "rect", "alert", "stripe", "tinted").
 ///
 /// -> content
 #let deixis-footnote(
@@ -530,7 +530,7 @@
   /// -> auto | function
   render-single: auto,
   /// A custom container wrapper for the body block.
-  /// -> auto | function
+  /// -> auto | str | function
   container-func: auto,
   /// Native/custom options forwarded only to the body container.
   /// -> dictionary

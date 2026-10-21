@@ -44,7 +44,7 @@
 /// - anchor-pin (none, str, dictionary, array): Pin names or structured targets; selected matches supply bounds and the first selected pin determines the overlay page.
 /// - layer (auto, str): The rendering layer context. Choices: `"flow"` | `"foreground"` | `"background"`.
 /// - render-single (auto, function): A custom render function for the inner layout of the body.
-/// - container-func (auto, function): A custom container wrapper for the body block.
+/// - container-func (auto, str, function): A custom container wrapper for the body block, or a preset name ("plain", "rect", "alert", "stripe", "tinted").
 /// - ..args (arguments): Additional arguments are rejected; put custom container options in `container-args`.
 ///
 /// -> content
@@ -171,7 +171,7 @@
   /// -> auto | function
   render-single: auto,
   /// A custom container wrapper for the body block.
-  /// -> auto | function
+  /// -> auto | str | function
   container-func: auto,
   /// Native/custom options forwarded only to the body container.
   /// -> dictionary
@@ -549,7 +549,7 @@
 /// - anchor-pin (none, str, dictionary, array): Pin names or structured targets selecting anchor bounds.
 /// - layer (auto, str, dictionary): Rendering layer for the region mark and/or the body. Choices: `"flow"` | `"foreground"` | `"background"`.
 /// - render-single (auto, function): A custom render function for the inner layout of the body.
-/// - container-func (auto, function): A custom container wrapper for the body block.
+/// - container-func (auto, str, function): A custom container wrapper for the body block, or a preset name ("plain", "rect", "alert", "stripe", "tinted").
 ///
 /// -> content
 #let deixis-inset-note(
@@ -702,7 +702,7 @@
   /// -> auto | function
   render-single: auto,
   /// A custom container wrapper for the body block.
-  /// -> auto | function
+  /// -> auto | str | function
   container-func: auto,
   /// Native/custom options forwarded only to the body container.
   /// -> dictionary

@@ -418,7 +418,7 @@ Setup: **free**.
 
 Selected parameters: `body (required)`; `..args (required)`.
 
-rect-container has native rect parameters. Alert doubles scalar border thickness on the left; native edge maps remain literal. Configure via container-func and container-args.
+container-func accepts names plain, rect, alert, stripe and tinted, or a custom function. The first three select these existing exports; stripe and tinted are named-only accent presets. Explicit stroke/fill/radius and container-args override preset defaults. rect-container has native rect parameters. Alert doubles scalar border thickness on the left; native edge maps remain literal.
 
 ### `deixis-rect-region` / `deixis-ellipse-region`
 
