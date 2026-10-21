@@ -14,6 +14,9 @@ Repository instructions shared by coding agents are in [AGENTS.md](AGENTS.md).
 - The first compile also needs Typst package dependencies from the local cache
   or registry. CI records exact compiler versions in its matrix.
 
+CI runs the full matrix when a `v*` tag is pushed, or on demand from the
+Actions tab; ordinary pushes do not trigger it, so run the checks below locally.
+
 ## Common Checks
 
 ```sh

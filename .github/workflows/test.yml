@@ -1,5 +1,9 @@
 name: Tests
-on: [push, pull_request]
+# Run the full matrix for release tags, or on demand from the Actions tab.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
 jobs:
   typst:
     runs-on: ubuntu-latest
