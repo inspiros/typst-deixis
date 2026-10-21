@@ -1,6 +1,7 @@
 # Deixis
 
 [![Typst Universe](https://img.shields.io/badge/Typst_Universe-deixis-239DAE?logo=typst)](https://typst.app/universe/package/deixis)
+[![Tests](https://github.com/inspiros/typst-deixis/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/inspiros/typst-deixis/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 <img src="assets/readme/hero.svg" width="1100" alt="Deixis — Point to What Matters: a colorful collage of highlights, an equation callout, shared notes, diagram connections, an editorial comment, a native footnote, a note outline, and a table with its own local notes.">
@@ -31,9 +32,8 @@ Simple wrappers create the mark and explanation together. Choose native
 footnotes, margin notes, inset callouts, inline explanations, or collected
 endnotes. Connections and custom styling are optional.
 
-For shorter calls, [import the optional `short` module](docs/guides/getting-started.md#optional-short-names)
-and use `footnote`, `configure` and `note-block`, or qualified names such as
-`dx.footnote`. Native `block` stays available.
+For shorter calls, [write with short names](#write-with-short-names) such as
+`footnote` and `margin-note`.
 
 ## One Explanation, Several Passages
 
@@ -106,6 +106,26 @@ slide setting and let the theme own the page layers.
 
 [Editable slides](examples/touying-reveals.typ) ·
 [Touying integration](docs/guides/rendering.md#presentation-frameworks)
+
+## Write With Short Names
+
+The opt-in `short` module offers every public function without the `deixis-`
+prefix. They are the same functions, with the same options:
+
+```typst
+#import "@preview/deixis:0.2.0": short
+#import short: *
+#show: setup-notes
+#configure(stroke: teal)
+
+A useful result#footnote[A short explanation.]
+#note-block[A local table#footnote[Collected at the end of its block.]]
+```
+
+`configure` is `deixis-set`, and `note-block` is `deixis-block`, so native
+`set` and `block` keep working. A wildcard import shadows native `footnote` and
+`ref`; reach them through `std`, or import `short as dx` and write `dx.footnote`.
+See [short names](docs/guides/getting-started.md#optional-short-names).
 
 ## Install The Checkout
 
