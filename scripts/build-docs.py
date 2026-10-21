@@ -216,9 +216,9 @@ def guide_examples():
                      '```typst', record['code'].rstrip(), '```', '',
                      f'[Complete source and preview setup](../assets/guides/{key}.typ)', '',
                      '</div>', '<div class="deixis-example-output">', '',
-                     '<p class="deixis-example-label">Output · Select To Enlarge</p>', '']
+                     '<p class="deixis-example-label">Output · Click to zoom</p>', '']
             for number, asset in enumerate(previews[key]['assets'], 1):
-                lines += [f'[![{alt}, page {number}](../assets/guides/{asset})](../assets/guides/{asset})', '']
+                lines += [f'![{alt}, page {number}](../assets/guides/{asset})', '']
             lines += ['</div>', '</div>', '']
             text = text[:record['start']] + '\n'.join(lines) + text[record['end']:]
         # Fragments are deliberately code-only, with a visible explanation.

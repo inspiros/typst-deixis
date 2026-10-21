@@ -14,8 +14,8 @@ preferred-dark-theme = "navy"
 no-section-label = true
 git-repository-url = "https://github.com/inspiros/typst-deixis"
 theme = "docs/site/theme"
-additional-css = ["docs/site/theme/deixis.css"]
-additional-js = ["docs/site/theme/typst.js"]
+additional-css = ["docs/site/theme/deixis.css", "docs/site/theme/image-zoom.css"]
+additional-js = ["docs/site/theme/typst.js", "docs/site/theme/image-zoom.js"]
 
 [output.html.fold]
 enable = true

@@ -1,0 +1,49 @@
+/* Only enhanced images acquire controls; their original boxes stay unchanged. */
+.deixis-zoomable { cursor: zoom-in; }
+.deixis-zoomable:focus-visible {
+  outline: 3px solid var(--links);
+  outline-offset: 4px;
+}
+.deixis-image-zoom {
+  box-sizing: border-box;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 64px 16px 16px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  overflow: auto;
+  overscroll-behavior: contain;
+  cursor: zoom-out;
+}
+.deixis-image-zoom::backdrop { background: rgb(12 22 30 / 94%); }
+.deixis-image-zoom > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Typst SVGs have transparent paper and dark ink in every site theme. */
+  background: #fff;
+}
+.deixis-image-zoom-close {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid #fff;
+  border-radius: 3px;
+  background: #fff;
+  color: #172b38;
+  font: 600 16px/1.4 var(--deixis-sans, system-ui, sans-serif);
+  cursor: pointer;
+}
+.deixis-image-zoom-close:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+@media print {
+  .deixis-image-zoom { display: none; }
+}

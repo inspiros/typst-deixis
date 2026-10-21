@@ -5,7 +5,7 @@ from html.parser import HTMLParser
 import json
 from pathlib import Path
 import re
-from urllib.parse import unquote, urlsplit
+from urllib.parse import unquote, urljoin, urlsplit
 import os
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,6 +19,8 @@ class Page(HTMLParser):
         self.anchors = set()
         self.links = []
         self.images = []
+        self.content_images = []
+        self.image_links = []
         self.typst_blocks = 0
         self.example_ids = []
         self.headings = []
@@ -29,8 +31,12 @@ class Page(HTMLParser):
         attrs = dict(attrs)
         self.anchors.update(attrs[key] for key in ('id', 'name') if key in attrs)
         self.links.extend(attrs[key] for key in ('href', 'src') if key in attrs)
+        if tag == 'a':
+            self.image_links.append(attrs.get('href'))
         if tag == 'img':
             self.images.append(attrs)
+            if self.in_main:
+                self.content_images.append((attrs, tuple(self.image_links)))
         if tag == 'code' and 'language-typst' in attrs.get('class', '').split():
             self.typst_blocks += 1
         if tag == 'div' and 'deixis-guide-example' in attrs.get('class', '').split():
@@ -41,6 +47,8 @@ class Page(HTMLParser):
             self.headings.append(tag)
 
     def handle_endtag(self, tag):
+        if tag == 'a' and self.image_links:
+            self.image_links.pop()
         if tag == 'main':
             self.in_main = False
 
@@ -70,6 +78,18 @@ def main():
             failures.append(f'{label}: missing leading chapter heading')
         if page.typst_blocks and not any(re.search(r'typst(?:-[a-z0-9]+)?\.js$', link) for link in page.links):
             failures.append(f'{label}: Typst highlighting asset missing')
+        for asset in ('image-zoom.js', 'image-zoom.css'):
+            if not any(re.search(r'image-zoom(?:-[a-z0-9]+)?\.' + asset.rsplit('.', 1)[1] + r'$',
+                                 urlsplit(link).path) for link in page.links):
+                failures.append(f'{label}: image zoom asset missing: {asset}')
+        base_url = 'https://deixis.invalid' + SITE_URL + label
+        def image_target(link):
+            parsed = urlsplit(urljoin(base_url, link))
+            return parsed.scheme, parsed.netloc, unquote(parsed.path)
+        for image, ancestors in page.content_images:
+            if any(link and image_target(link) == image_target(image.get('src', ''))
+                   for link in ancestors):
+                failures.append(f'{label}: content image links to its own file: {image.get("src")}')
         for image in page.images:
             if not image.get('alt', '').strip():
                 failures.append(f'{label}: image has no text alternative')
@@ -84,6 +104,13 @@ def main():
                 complete = SITE / 'docs/assets/guides' / (record['key'] + '.typ')
                 if not complete.is_file() or __import__('hashlib').sha256(complete.read_bytes()).hexdigest() != record['source_sha256']:
                     failures.append(f'{label}: complete guide source differs from rendered input')
+    gallery = pages.get((SITE / 'gallery/index.html').resolve())
+    for example in json.loads((ROOT / 'docs/examples/catalog.json').read_text()):
+        image_src = f'../docs/assets/examples/{example["id"]}-1.svg'
+        destination = example['id'] + '.html'
+        if gallery is None or not any(image.get('src') == image_src and destination in ancestors
+                                      for image, ancestors in gallery.content_images):
+            failures.append(f'gallery/index.html: image card must navigate to {destination}')
     count = 0
     for source, page in pages.items():
         for link in page.links:
