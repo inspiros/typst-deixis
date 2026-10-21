@@ -209,7 +209,9 @@ own rendering ownership. Long endnotes use native document flow, and
 
 Printer style and renderer overrides apply to its selected bodies.
 `render-group` controls the collected layout. Stacked renderers invoke each
-body's `render-single` and `container-func`; the default grid paints cells directly.
+body's `render-single` and `container-func`. The default grid paints aligned
+singles directly; a series containing a custom single renderer is stacked
+natively with the configured gap.
 See [collected layouts](collected-notes.md) for callback, spacing, and pagination
 contracts.
 The [small grouped-endnotes example](../../examples/endnote-groups.typ) shows

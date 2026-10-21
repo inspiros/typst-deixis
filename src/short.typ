@@ -16,6 +16,7 @@
 #import "notes/margin.typ": deixis-margin-note as margin-note, deixis-margin-note-body as margin-note-body, deixis-sidenote as sidenote, deixis-sidenote-body as sidenote-body, deixis-comment as comment
 #import "notes/inset.typ": deixis-inset-note as inset-note, deixis-inset-note-body as inset-note-body
 #import "render/body.typ": deixis-plain-container as plain-container, deixis-rect-container as rect-container, deixis-alert-container as alert-container, deixis-rect-region as rect-region, deixis-ellipse-region as ellipse-region, deixis-generate-backlinks as generate-backlinks, deixis-generate-body-meta as generate-body-meta, deixis-generate-body-marker as generate-body-marker, deixis-generate-body-content as generate-body-content, deixis-native-render-single as native-render-single, deixis-aligned-render-single as aligned-render-single, deixis-native-render-group as native-render-group, deixis-aligned-render-group as aligned-render-group, deixis-grid-render-group as grid-render-group
+#import "render/chicago.typ": deixis-chicago-render-single as chicago-render-single
 #import "reference.typ": deixis-ref as ref
 #import "outline.typ": deixis-note-outline as note-outline, deixis-plain as plain
 #import "query.typ": deixis-query-notes as query-notes

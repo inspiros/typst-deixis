@@ -51,6 +51,10 @@ from 0.1.1 or an earlier development snapshot.
 - Unnumbered notes: a resolved `numbering: none` takes no counter value, so
   `deixis-set(numbering: (margin-note: none, inset-note: none))` turns margin and
   inset notes into asides while footnotes keep counting 1, 2, 3.
+- `deixis-chicago-render-single` for Chicago Notes & Bibliography endnotes:
+  `deixis-print-endnotes(render-single: deixis-chicago-render-single)`. Based on
+  a contribution by bluelightspirit (#2). The grid group renderer now stacks
+  notes that use a custom single renderer.
 - Named body containers: `container-func: "stripe"` (accent rule over a tint) or
   `"tinted"`, alongside `"plain"`, `"rect"` and `"alert"`; all follow the
   note's accent and palette.
@@ -90,7 +94,7 @@ from 0.1.1 or an earlier development snapshot.
   showcases replace the legacy gallery.
 - Experimental HTML export keeps every note body with linked markers and
   backlinks; margin, inset and comment bodies follow the document as one list,
-  while connectors and other page paint are omitted.
+  while connectors and other page paint are omitted (#1).
 
 ### Changed
 

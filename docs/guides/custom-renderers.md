@@ -97,8 +97,10 @@ mistaken for a missing native entry. See [rendering](rendering.md#footnote-owner
 For return links, add `deixis-generate-backlinks(note)` at the intended location,
 or delegate to a built-in renderer to retain its policy and formatting. A custom
 renderer owns its own container, marker arrangement, and backlink composition.
-The default grid group and inline-decoration bodies use their own formatting
-paths; see [configuration](configuration.md#rendering-extension-points).
+The default grid group stacks a series when any note uses a custom single
+renderer. With only default aligned single renderers, it paints cells directly
+and bypasses containers. Inline-decoration bodies retain their own formatting
+path; see [configuration](configuration.md#rendering-extension-points).
 
 Explicit `deixis-generate-backlinks(note)` generates the available buttons even
 when `note.backlink` is false. The built-in renderer decides whether to invoke it

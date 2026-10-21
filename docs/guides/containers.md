@@ -61,7 +61,8 @@ support. See [native styles](configuration.md#native-values-and-incremental-upda
 ## Group and inline contracts
 
 Native/aligned groups invoke the single-note renderer and container. The default
-endnote grid paints cells directly and bypasses per-note containers. Choose a
+endnote grid paints default aligned singles directly and bypasses their per-note
+containers; a series with a custom single renderer is stacked instead. Choose a
 stacked renderer when the container should appear:
 
 ```typst

@@ -121,7 +121,7 @@
       let c-body-style = _deixis-resolve-typed-param(sys, auto, "body-style", "endnote")
       let c-backlink = _deixis-resolve-typed-param(sys, backlink, "backlink", "endnote")
 
-      let c-indent = _deixis-resolve-typed-param(sys, auto, "indent", "endnote")
+      let c-indent = _deixis-resolve-typed-param(sys, auto, "indent", "endnote", with-origin: true)
       let c-gap = _deixis-resolve-typed-param(sys, auto, "gap", "endnote")
       let c-marker-gap = _deixis-resolve-typed-param(sys, auto, "marker-gap", "endnote")
       let c-clearance = _deixis-resolve-typed-param(sys, auto, "clearance", "endnote")
@@ -151,7 +151,8 @@
         body-marker-style: auto,
         body-style: c-body-style,
         backlink: c-backlink,
-        indent: c-indent,
+        indent: c-indent.value,
+        indent-origin: c-indent.origin,
         gap: c-gap,
         marker-gap: c-marker-gap,
         clearance: c-clearance,
@@ -218,7 +219,7 @@
       let c-body-style = _deixis-resolve-typed-param(sys, auto, "body-style", "endnote")
       let c-backlink = _deixis-resolve-typed-param(sys, backlink, "backlink", "endnote")
 
-      let c-indent = _deixis-resolve-typed-param(sys, auto, "indent", "endnote")
+      let c-indent = _deixis-resolve-typed-param(sys, auto, "indent", "endnote", with-origin: true)
       let c-gap = _deixis-resolve-typed-param(sys, auto, "gap", "endnote")
       let c-marker-gap = _deixis-resolve-typed-param(sys, auto, "marker-gap", "endnote")
       let c-clearance = _deixis-resolve-typed-param(sys, auto, "clearance", "endnote")
@@ -248,7 +249,8 @@
         body-marker-style: body-marker-style,
         body-style: c-body-style,
         backlink: c-backlink,
-        indent: c-indent,
+        indent: c-indent.value,
+        indent-origin: c-indent.origin,
         gap: c-gap,
         marker-gap: c-marker-gap,
         clearance: c-clearance,
@@ -704,7 +706,10 @@
       }
       if body-style != auto { overrides.insert("body-style", body-style) }
       if backlink != auto { overrides.insert("backlink", backlink) }
-      if indent != auto { overrides.insert("indent", indent) }
+      if indent != auto {
+        overrides.insert("indent", indent)
+        overrides.insert("indent-origin", "local")
+      }
       if marker-gap != auto { overrides.insert("marker-gap", marker-gap) }
       if render-single != auto { overrides.insert("render-single", render-single) }
       if container-func != auto { overrides.insert("container-func", container-func) }

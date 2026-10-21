@@ -215,9 +215,11 @@ Endnote printer single/group renderer, container, and body-style overrides accep
 override also retains component selection and validates the resolved callback.
 Omitting printer overrides preserves the callbacks captured by each body.
 
-The default endnote grid paints cells directly, bypassing single renderers and
-containers; choose `deixis-native-render-group` or `deixis-aligned-render-group`
-when those hooks should run. Inline-decoration bodies (`inline: true`) also
+The default endnote grid paints cells directly for default aligned single
+renderers. If a series contains another single renderer, it stacks that series
+natively and invokes its single renderers. A container override alone keeps the
+grid path; choose `deixis-native-render-group` or `deixis-aligned-render-group`
+to invoke containers with the default single renderer. Inline-decoration bodies (`inline: true`) also
 retain their native formatting path. Body containers, custom renderer forwarding,
 and these bypass rules are described in [containers](containers.md).
 

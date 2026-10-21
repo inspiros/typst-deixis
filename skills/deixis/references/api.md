@@ -390,6 +390,16 @@ Selected parameters: `data (required)`; `inner-width = auto`.
 
 Use supplied data unchanged when delegating. Aligned additionally accepts max-marker-width/max-marker-gap. The container and body-style come from the body record.
 
+### `deixis-chicago-render-single`
+
+Chicago endnotes with a first-line indent and a full-size linked marker followed by a period.
+
+Setup: **conditional**.
+
+Selected parameters: `data (required)`; `inner-width = auto`.
+
+Defaults to a 0.5in first-line indent unless an explicit indent setting or printer override applies. Preserves inherited paragraph settings, backlinks, styles and containers. Unnumbered notes omit the marker and period. The default group stacks custom single renderers with the configured gap.
+
 ### `deixis-native-render-group` / `deixis-aligned-render-group` / `deixis-grid-render-group`
 
 Stack bodies, align stacked markers, or lay markers/content directly in two grid columns.
@@ -398,7 +408,7 @@ Setup: **conditional**.
 
 Selected parameters: `notes-data (required)`; `gap = auto`.
 
-Native/aligned groups delegate to each single renderer. Grid bypasses single renderers and containers. Empty groups produce no content. Supplied records may contain live document behavior.
+Native/aligned groups delegate to each single renderer. Grid paints default aligned records directly; a series with another single renderer is stacked natively. Containers alone do not change the grid path. Empty groups produce no content. Supplied records may contain live document behavior.
 
 ### `deixis-generate-body-meta` / `deixis-generate-body-marker` / `deixis-generate-body-content` / `deixis-generate-backlinks`
 

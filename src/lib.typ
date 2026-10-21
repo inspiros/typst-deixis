@@ -15,6 +15,7 @@
 #import "notes/margin.typ": deixis-margin-note, deixis-margin-note-body, deixis-sidenote, deixis-sidenote-body, deixis-comment
 #import "notes/inset.typ": deixis-inset-note, deixis-inset-note-body
 #import "render/body.typ": deixis-plain-container, deixis-rect-container, deixis-alert-container, deixis-rect-region, deixis-ellipse-region, deixis-generate-backlinks, deixis-generate-body-meta, deixis-generate-body-marker, deixis-generate-body-content, deixis-native-render-single, deixis-aligned-render-single, deixis-native-render-group, deixis-aligned-render-group, deixis-grid-render-group
+#import "render/chicago.typ": deixis-chicago-render-single
 #import "reference.typ": deixis-ref
 #import "outline.typ": deixis-note-outline, deixis-plain
 #import "query.typ": deixis-query-notes

@@ -669,6 +669,22 @@
       },
       {
         "names": [
+          "deixis-chicago-render-single"
+        ],
+        "setup": "conditional",
+        "summary": "Chicago endnotes with a first-line indent and a full-size linked marker followed by a period.",
+        "args": [
+          "data",
+          "inner-width"
+        ],
+        "call": "deixis-print-endnotes(render-single: deixis-chicago-render-single)",
+        "note": "Defaults to a 0.5in first-line indent unless an explicit indent setting or printer override applies. Preserves inherited paragraph settings, backlinks, styles and containers. Unnumbered notes omit the marker and period. The default group stacks custom single renderers with the configured gap.",
+        "returns": "content",
+        "extension": true,
+        "guide": "collected-notes.md"
+      },
+      {
+        "names": [
           "deixis-native-render-group",
           "deixis-aligned-render-group",
           "deixis-grid-render-group"
@@ -680,7 +696,7 @@
           "gap"
         ],
         "call": "deixis-native-render-group(notes, ..args.named())",
-        "note": "Native/aligned groups delegate to each single renderer. Grid bypasses single renderers and containers. Empty groups produce no content. Supplied records may contain live document behavior.",
+        "note": "Native/aligned groups delegate to each single renderer. Grid paints default aligned records directly; a series with another single renderer is stacked natively. Containers alone do not change the grid path. Empty groups produce no content. Supplied records may contain live document behavior.",
         "returns": "content",
         "extension": true,
         "guide": "collected-notes.md"

@@ -24,16 +24,18 @@ captured.
 | `deixis-native-render-group` | Stacked single renderers with independent marker widths |
 | Custom function | Receives the selected note records and the `gap` argument |
 
-The grid paints cells directly and bypasses each note's `render-single` and
-`container-func`. Select a stacked renderer when using custom single renderers
-or containers:
+The grid paints cells directly for the default aligned single renderer. If any
+note in a series uses another single renderer, the grid stacks the whole series
+with `deixis-native-render-group`, preserving each renderer and the configured
+`gap`. For a custom container with the default single renderer, select a stacked
+renderer:
 
 ```typst
 #deixis-print-endnotes(render-group: deixis-native-render-group)
 ```
 
-An explicit printer `render-single` or `container-func` affects layouts that
-invoke those callbacks. Supplying either alone does not replace the default grid.
+An explicit printer `render-single` therefore works with the default group.
+A `container-func` alone does not replace the default grid.
 
 Groups preserve the first-seen series order and source order within each series.
 With `render-group: auto`, the first note in **each series** supplies that series'
@@ -41,6 +43,33 @@ group renderer. An explicit printer renderer applies to all its series. Within
 one series, choose a common group policy or collect separate subsets explicitly.
 A custom group function can delegate to a built-in renderer after modifying the
 records, or use native layout such as columns.
+
+## Chicago Endnotes
+
+Use the Chicago single renderer with the ordinary printer:
+
+```typst
+#deixis-print-endnotes(render-single: deixis-chicago-render-single)
+```
+
+To select it throughout the document, configure endnotes before declaring them:
+
+```typst
+#deixis-set(render-single: (endnote: deixis-chicago-render-single))
+```
+
+Each note starts with a first-line indent of `0.5in`, a full-size linked marker
+and a period. Continuation lines return to the margin. An explicit `indent` setting or printer override
+replaces the default; unnumbered notes have no marker or period. The renderer
+preserves the declaration's paragraph settings, including leading and spacing,
+and retains configured backlinks, body styling and containers. Set the document's
+own paragraph leading for single-spaced notes; the renderer does not force a
+line height. The printer's `gap` controls space between notes, and its separator
+and clearance options continue to apply.
+
+See [the Chicago endnotes example](../../examples/chicago-endnotes.typ) for a
+short humanities text with Chicago-style citations. Citation wording and
+bibliographic details remain ordinary note content.
 
 ## Spacing
 

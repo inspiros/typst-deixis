@@ -563,12 +563,19 @@
 /// Render a group of notes by putting them into a `grid` layout.
 ///
 /// ```info
-/// Unlike other group renderers, this function does not forward call to individual `render-single` of each note.
+/// Factory single renderers use aligned marker/body cells. A group containing
+/// a custom single renderer delegates to native stacking, preserving each
+/// note's renderer, container and gap.
 /// ```
 ///
 /// -> content
 #let deixis-grid-render-group(notes-data, gap: auto, ..args) = {
   if notes-data.len() == 0 { return [] }
+  // The grid owns marker/body cells only for the factory aligned renderer.
+  // Custom singles own their complete layout; keep mixed groups in source order.
+  if notes-data.any(data => data.at("render-single", default: deixis-aligned-render-single) != deixis-aligned-render-single) {
+    return deixis-native-render-group(notes-data, gap: gap, ..args.named())
+  }
   if _std-target() == "html" { return _deixis-html-render-group(notes-data, renderer: _deixis-html-render-single) }
   let gap = if gap == auto {
     let gaps = notes-data.slice(1).map(data => _deixis-note-length(data, data.at("gap", default: 0.5em)))
