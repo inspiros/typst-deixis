@@ -234,7 +234,7 @@ Deixis state updates. Such declarations retain live ordering and Typst's finite
 layout-pass limit. Private internal keys are opaque; select annotations through
 public IDs.
 
-## Migrating To Unreleased 0.2
+## Migrating To 0.2
 
 For container, connector, pin and outline changes as well, see the consolidated
 [compatibility and migration guide](compatibility.md#migrate-from-011).
@@ -250,7 +250,7 @@ For container, connector, pin and outline changes as well, see the consolidated
 When a mark had one ID and its body had a different label, use the original ID
 throughout and update references/connections that selected the old alias. The
 removed repeat name and positional identity shorthand have no compatibility
-aliases in this unreleased API.
+aliases in the 0.2 API.
 
 Remove `series:` and mark-only options from attached calls; put them on the
 original mark, or on a separate reused mark for local decoration. Older attached

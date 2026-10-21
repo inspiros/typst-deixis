@@ -1,22 +1,18 @@
 ---
 name: deixis
-description: Create or edit Typst documents using the unreleased Deixis 0.2.0 API for notes, highlights, shared explanations, and connectors, including Touying integration. Use for Deixis annotations rather than generic Typst typesetting.
+description: Create or edit Typst documents using the Deixis 0.2.0 API for notes, highlights, shared explanations, and connectors, including Touying integration. Use for Deixis annotations rather than generic Typst typesetting.
 ---
 
 # Deixis Documents
 
-This skill targets the **unreleased 0.2.0 API**, requiring **Typst 0.15.0+**.
-The published 0.1.1 API differs. Do not silently substitute that release.
+This skill targets the **Deixis 0.2.0 API**, requiring **Typst 0.15.0+**.
+The 0.1.1 API differs. Do not silently substitute that release.
 
 ## Start A Document
 
-Use the public package facade. When working from the Deixis checkout, install
-a copied preview package with `python3 scripts/install.py --namespace preview`;
-add `--reinstall` to refresh that copy. A linked development install is also
-available with `--link`. Elsewhere, use a supplied 0.2.0 package copy.
-For an isolated install without writing the user package directory, pass
-`--data-dir target/my-document/data` and give Typst
-`--package-path target/my-document/data/typst/packages`.
+Use the public package facade with `#import "@preview/deixis:0.2.0": *`.
+Typst downloads the package from Typst Universe automatically. For contributor
+installs from a checkout, see [CONTRIBUTING](../../CONTRIBUTING.md).
 
 Set page geometry and native layers before installing the show rule:
 
@@ -144,6 +140,6 @@ Unsupported frame target: use `breakable: false` for one inline body frame, or a
 live start/end point for a paginated body. Native hiding suppresses painting but
 retains semantic numbering; it is not a draft/final omission switch.
 
-Compile against the supplied 0.2.0 package and reject warnings, especially
+Compile against Deixis 0.2.0 and reject warnings, especially
 non-convergence. Inspect rendered pages for clipping, readable placement and
 working navigation; a successful compile alone cannot establish those facts.

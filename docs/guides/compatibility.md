@@ -1,7 +1,7 @@
 # Compatibility, Limits And Migration
 
-This guide describes the supported contract of the **unreleased 0.2.0 checkout**.
-The published `@preview/deixis:0.1.1` has a different API. Deixis requires
+This guide describes the supported contract of **Deixis 0.2.0**.
+The previous release, `@preview/deixis:0.1.1`, has a different API. Deixis requires
 Typst **0.15.0 or newer** and supports Touying 0.6.3 and 0.8.0.
 The supported behavior and remaining boundaries are described below.
 
@@ -132,8 +132,8 @@ html`, Deixis keeps every annotation body and its navigation, and drops geometry
   edges, region shapes, pins, connectors and other page paint are omitted
   without diagnostics.
 
-See the [HTML endnote example](../../examples/html-endnotes.typ). After installing
-the unreleased 0.2.0 checkout, compile it with:
+See the [HTML endnote example](../../examples/html-endnotes.typ). With
+Typst 0.15.0+, compile it with:
 
 ```sh
 typst compile --features html --format html examples/html-endnotes.typ target/html-endnotes.html
@@ -187,8 +187,8 @@ they are printed.
 
 ## Migrate From 0.1.1
 
-Install the checkout's `0.2.0` preview override and update imports first. The
-installer keeps the old `0.1.1` cache separate. See
+Update imports to `#import "@preview/deixis:0.2.0": *` first. Typst downloads
+the package from Typst Universe automatically. See the
 [installation guide](installation.md).
 
 | Previous usage | 0.2 contract |
@@ -220,13 +220,13 @@ installer keeps the old `0.1.1` cache separate. See
 There are no compatibility aliases for removed `label:` or repeat-only calls.
 Unknown IDs, duplicate originals/bodies and unresolved `of:` targets diagnose
 rather than silently selecting a different object. Details and examples live in
-[identity migration](identities.md#migrating-to-unreleased-02),
+[identity migration](identities.md#migrating-to-02),
 [containers](containers.md#migration-and-diagnostics), [pins](pins.md), and
 [outlines](outlines.md).
 
-The current API is supported within these limits but remains **unreleased**.
+The 0.2.0 API is supported within these limits.
 The [illustrated manual](../manual.pdf), guides, and agent skill describe this
-checkout. When updating from another version, check the migration table above
+release. When updating from another version, check the migration table above
 and keep the imported package version consistent with the examples.
 
 ## Factory Appearance Changes

@@ -14,8 +14,7 @@ slides.
 [Get started](docs/guides/getting-started.md) · [Website](https://inspiros.github.io/typst-deixis/) · [Read the guide](docs/README.md) ·
 [PDF manual](docs/manual.pdf?raw=true) · [Browse examples](examples/)
 
-> **Unreleased 0.2.0:** requires **Typst 0.15.0+**. Universe currently serves **0.1.1**. [Install the checkout](#install-the-checkout)
-> before trying these examples.
+Requires **Typst 0.15.0+**.
 
 ## Start With A Note
 
@@ -128,17 +127,16 @@ A useful result#footnote[A short explanation.]
 `short as dx` to keep names separate and write `dx.footnote`.
 See [short names](docs/guides/getting-started.md#optional-short-names).
 
-## Install The Checkout
+## Install
 
-```sh
-git clone --branch overhaul-0.2.0 https://github.com/inspiros/typst-deixis
-cd typst-deixis
-python3 scripts/install.py --namespace preview --link --reinstall
+Requires **Typst 0.15.0+**. Import Deixis from Typst Universe:
+
+```typst
+#import "@preview/deixis:0.2.0": *
 ```
 
-This installs 0.2.0 for Typst CLI and VS Code/Tinymist while
-keeping the old `0.1.1` cache separate. Omit `--link` for a copied installation.
-See [installation](docs/guides/installation.md) for editor setup and alternatives.
+Typst downloads the package automatically. Upgrading from 0.1.1? See the
+[compatibility and migration guide](docs/guides/compatibility.md#migrate-from-011).
 
 ## Go Further
 

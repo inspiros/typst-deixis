@@ -3,13 +3,13 @@
 <img src="../assets/logos/deixis-logo-horizontal.svg" width="260" alt="Deixis">
 
 Annotate a passage, share its explanation, or connect objects in your own drawing.
-These guides describe the **unreleased 0.2.0 checkout** for **Typst 0.15.0+**.
-[Install the local preview override](guides/installation.md) before compiling
-its `@preview/deixis:0.2.0` examples.
+These guides describe **Deixis 0.2.0** for **Typst 0.15.0+**.
+Import `@preview/deixis:0.2.0` from Typst Universe; Typst downloads it
+automatically. See [installation](guides/installation.md) for editor setup.
 
 ## Start Here
 
-- [Installation](guides/installation.md): install the checkout and configure your editor.
+- [Installation](guides/installation.md): import the package and configure your editor.
 - [Getting started](guides/getting-started.md): add a first note, share it, and choose its appearance.
 
 Guide snippets continue a document with the package import and setup from
@@ -80,7 +80,7 @@ and [small portals](../examples/portal-continuations.typ).
 
 | I Want To… | Read | Try |
 | --- | --- | --- |
-| Install the checkout or configure my editor | [Installation](guides/installation.md) | [First Notes](../examples/first-notes.typ) |
+| Install Deixis or configure my editor | [Installation](guides/installation.md) | [First Notes](../examples/first-notes.typ) |
 | Add my first notes | [Getting started](guides/getting-started.md) | [First Notes](../examples/first-notes.typ) |
 | Remove editorial notes from a final copy | [Review comments](guides/review-comments.md) | [Review Comments](../examples/review-comments.typ) |
 | Share one explanation among passages | [Identities](guides/identities.md) · [Shared notes](guides/shared-notes.md) | [Shared Notes](../examples/shared-notes.typ) |

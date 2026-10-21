@@ -47,7 +47,7 @@ and run the full suite on both compilers before committing.
 
 For ordinary CLI/editor development, use
 `python3 scripts/install.py --namespace preview --link --reinstall`.
-This exposes `@preview/deixis:0.2.0` without replacing the old 0.1.1 cache. Omit
+This overrides the published `@preview/deixis:0.2.0` with your checkout. Omit
 `--link` for a copied install; omit `--namespace` to use `local`. For an isolated
 copy, pass `--data-dir target/my-document/data` and compile with
 `--package-path target/my-document/data/typst/packages`. Rerun after manifest
@@ -148,7 +148,7 @@ published 404 page needs. Open `http://127.0.0.1:8765/` after starting
 the server and stop it when finished. Use the build script so generated navigation
 and API pages are present. `book.toml` configures the site; theme/search assets
 are bundled locally. Review desktop and phone layouts after presentation changes.
-The [agent skill](skills/deixis/SKILL.md) targets the unreleased package; its check compiles every Typst snippet against an isolated
+The [agent skill](skills/deixis/SKILL.md) targets Deixis 0.2.0; its check compiles every Typst snippet against an isolated
 package copy and rejects warnings. Both commands accept `--typst` for the
 minimum-version check. Regenerate the API cheat sheet after public API changes.
 

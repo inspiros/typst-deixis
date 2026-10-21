@@ -85,8 +85,8 @@ Custom painters receive the active layer in `request.route.document.layer`
 head sizes, port gaps, and route radii therefore use the declaration's font size.
 See [the small example](../../examples/connector-layers.typ).
 
-This changes the unreleased 0.2 margin behavior: a background/flow margin body no
-longer implicitly selects the connection's layer. Set `connector.layer` explicitly
+In 0.2, a background/flow margin body does not
+implicitly select the connection's layer. Set `connector.layer` explicitly
 when a line should sit behind page content. Inset connections can now choose a
 background too. Body placement, footer reservations, and collision groups are
 unchanged. Direct margin-layout hooks used without Deixis setup still paint
@@ -321,7 +321,7 @@ dots. Automatic candidate policies retain useful differences:
 
 The available controls have one convention; automatic routing remains sensitive
 to the adapter. Choosing a side explicitly uses the shared sliding rule. Use
-`(side: left, at: 50%)` for a fixed midpoint. In unreleased 0.2, this is a tightening
+`(side: left, at: 50%)` for a fixed midpoint. In 0.2, this is a tightening
 of explicit `at: auto` behavior: older adapters could keep a midpoint instead.
 
 Node bounds remain independent of restricted ports. Selecting top ports does not

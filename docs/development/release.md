@@ -1,6 +1,6 @@
 # Release Preparation
 
-The checkout targets unreleased 0.2.0 and Typst 0.15.0+. Local builds do not
+The current version is 0.2.0, requiring Typst 0.15.0+. Local builds do not
 create tags, upload release assets or publish packages. Perform those actions
 only when explicitly requested.
 
@@ -8,7 +8,7 @@ only when explicitly requested.
 
 - Resolve release-blocking defects and choose the final version. Keep
   `typst.toml`, imports, migration notes, skill and manual status consistent;
-  change unreleased wording only when preparing the actual release.
+  update pre-release status wording when preparing the actual release.
 - Review [CHANGELOG](../../CHANGELOG.md) for user-facing changes and
   [compatibility](../guides/compatibility.md) for supported limits.
 - Run the Python/documentation checks, full compiler runner with installed
@@ -32,19 +32,19 @@ only when explicitly requested.
 
 ## Update Release Wording
 
-In the release commit, replace every "unreleased 0.2.0 checkout" statement with
-the released version. Find them with:
+In the release commit, replace pre-release status statements with the released
+version. Find them with this case-insensitive status search:
 
 ```sh
-git grep -n -i "unreleased" -- ':!CHANGELOG.md'
+git grep -n -i 'un[r]eleased' -- ':!CHANGELOG.md'
 ```
 
-They include the README notice and its "Install The Checkout" section (replace
-it with the Universe import), the docs index, site home badge, installation,
+Check the README notice and Install section (use the Universe import),
+the docs index, site home badge, installation,
 getting-started and compatibility guides, migration headings, the manual
 introduction, AGENTS.md, CONTRIBUTING.md, the skill and the API-sheet generator
-(`scripts/export-api.py`). Rename `[Unreleased]` in the changelog to the version
-and date, then rebuild the manual, skill reference and website.
+(`scripts/export-api.py`). Name the changelog section with the version and date,
+then rebuild the manual, skill reference and website.
 
 ## Build The Downloadable Manual
 

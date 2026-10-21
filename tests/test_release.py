@@ -30,9 +30,9 @@ class UniverseReadmeTests(unittest.TestCase):
 
     def test_anchors_and_bundled_files_stay_relative(self):
         text, links = MODULE.rewrite_readme(
-            '[Install](#install-the-checkout) [License](LICENSE)\n',
+            '[Install](#install) [License](LICENSE)\n',
             ROOT, 'https://github.com/inspiros/typst-deixis', 'v0.2.0')
-        self.assertEqual(text, '[Install](#install-the-checkout) [License](LICENSE)\n')
+        self.assertEqual(text, '[Install](#install) [License](LICENSE)\n')
         self.assertEqual(links, [])
 
     def test_missing_and_escaping_targets_fail(self):

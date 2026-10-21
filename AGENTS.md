@@ -4,7 +4,7 @@ Read [CONTRIBUTING](CONTRIBUTING.md), [architecture](docs/development/architectu
 and the guide for the affected API. Current source, tests and public guides define
 the supported contract.
 
-- The checkout is unreleased 0.2.0; the minimum Typst version is 0.15.0.
+- The current version is 0.2.0; the minimum Typst version is 0.15.0.
   `src/lib.typ` is the public facade. Internal state/underscore helpers are private.
 - Prefer bugs and compact, consistent APIs before new features or optimizations.
   Preserve simple wrapper calls alongside advanced configuration.

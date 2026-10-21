@@ -4,16 +4,9 @@ Deixis separates a marked passage from its explanation. A simple note wrapper
 creates both; a public name lets several passages share the same explanation.
 Connections can be added when they help the reader follow that relationship.
 
-This guide describes the **unreleased 0.2.0 checkout**, with **Typst 0.15.0+**.
-Install its local preview override first:
-
-```sh
-python3 scripts/install.py --namespace preview --link --reinstall
-```
-
-Run this from the repository. The examples import `@preview/deixis:0.2.0`;
-that version is not yet on Typst Universe. The override is visible to Typst CLI
-and Tinymist. See [installation](installation.md) for alternatives.
+This guide uses **Deixis 0.2.0**, requiring **Typst 0.15.0+**.
+Import `@preview/deixis:0.2.0` as shown below; Typst downloads it from
+Typst Universe automatically. See [installation](installation.md) for editor setup.
 
 ## 1. Start With Native Footnotes
 

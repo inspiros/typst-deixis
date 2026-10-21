@@ -3,7 +3,7 @@
 User-facing changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.2.0] - 2026-10-21
 
 The 0.2.0 overhaul requires **Typst 0.15.0+**. See the
 [compatibility and migration guide](docs/guides/compatibility.md) before updating

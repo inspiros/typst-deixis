@@ -23,7 +23,7 @@ The package runtime needs no external drawing library. It includes native routes
 and arrowheads, while containers, body renderers, and connector painters remain
 customizable. Public document APIs share one identity and scope model.
 
-This manual describes the *unreleased 0.2.0 checkout*, requiring *Typst 0.15.0+*.
+This manual describes *Deixis 0.2.0*, requiring *Typst 0.15.0+*.
 The downloadable `docs/manual.pdf` is built and checked from this source.
 For rebuild and release commands, see `docs/development/release.md`.
 A compact reference to all public APIs follows this tour;
@@ -33,17 +33,16 @@ the task-oriented guides in `docs/guides` cover advanced integration and limits.
 
 = First Steps
 
-== Install The Checkout
+== Install
 
-From the repository, install the development package locally:
+Import Deixis from Typst Universe:
 
-```sh
-python3 scripts/install.py --namespace preview --link --reinstall
+```source
+#import "@preview/deixis:0.2.0": *
 ```
 
-This makes `@preview/deixis:0.2.0` available to Typst CLI and VS Code/Tinymist.
-That version has not been published to Typst Universe. The local override keeps
-the old 0.1.1 cache separate; see `CONTRIBUTING.md` for alternatives.
+Typst downloads the package automatically. When upgrading from 0.1.1, read
+`docs/guides/compatibility.md` for migration guidance.
 
 == Write A Note
 

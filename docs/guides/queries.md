@@ -171,7 +171,7 @@ change its scope selection while leaving the original's source position, counter
 owner, series, and number intact. Synchronizing counters also keeps rendering
 scopes independent. See [body ownership](ownership.md).
 
-## Unreleased 0.2 Changes
+## 0.2 Changes
 
 `deixis-page-notes` has been removed. Use
 `deixis-query-notes(page: here().page())`; `note-type:` becomes `include-types:`,

@@ -17,7 +17,7 @@
   #v(1fr)
   #line(length: 100%, stroke: 0.6pt + accent)
   #v(0.5em)
-  #badge("DEVELOPMENT " + version) #badge("TYPST 0.15.0+")
+  #badge("DEIXIS " + version) #badge("TYPST 0.15.0+")
   #v(0.7em)
   A visual guide with worked examples and a compact API reference.\
   Detailed recipes and complete record contracts live in `docs/guides`.
@@ -50,7 +50,7 @@
 
 Read the task-oriented index in `docs/README.md`. Source examples live in
 `examples/` and `docs/examples/`; the worked pairs name their editable sources.
-This checkout is unreleased: install its 0.2.0 preview override to compile the
-examples. Build this source with `python3 scripts/render-manual.py`.
+The examples import `@preview/deixis:0.2.0` from Typst Universe; Typst downloads
+it automatically. Build this source with `python3 scripts/render-manual.py`.
 
 Bug reports and source: #link(manifest.package.repository).

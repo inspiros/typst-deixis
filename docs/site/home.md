@@ -10,16 +10,16 @@ Keep the main argument readable, with explanations where they belong.
 Deixis brings footnotes, margin notes, passage highlights, and connections to
 Typst documents and presentation slides.
 
-<p class="deixis-edition"><span class="deixis-badge">Unreleased 0.2.0</span> <span class="deixis-badge free">Typst 0.15.0+</span></p>
+<p class="deixis-edition"><span class="deixis-badge">Deixis 0.2.0</span> <span class="deixis-badge free">Typst 0.15.0+</span></p>
 
 <div class="deixis-actions">
 <a class="deixis-button" href="../guides/getting-started.md">Start Reading</a>
 <a class="deixis-button secondary" href="../manual.pdf">Download The Manual</a>
 </div>
 
-This guide describes the **unreleased 0.2.0 checkout**. Follow
-[installation](../guides/installation.md) before trying its examples;
-Typst Universe currently serves 0.1.1.
+Deixis **0.2.0** is available on Typst Universe. Import
+`@preview/deixis:0.2.0`; Typst downloads it automatically. See
+[installation](../guides/installation.md) for editor setup.
 
 </div>
 

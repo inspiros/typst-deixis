@@ -174,7 +174,7 @@ body by its ID. For titles or tags supplied alongside creation, use
 note.data.at("title", default: note.summary)`. Data has no implicit effect on the
 default excerpt. See also [safe summaries](../../examples/note-summaries.typ).
 
-In unreleased 0.2:
+In 0.2:
 
 - `include-celibates` is replaced by `include-unpaired`, with a focused migration
   diagnostic. Replace `"both"`/`"none"` with `true`/`false`; plural/array aliases
@@ -186,4 +186,4 @@ In unreleased 0.2:
   The original is still selected by `note.marks.find(mark => mark.original)`.
 - The former `deixis-page-notes` is consolidated into `deixis-query-notes`.
   Page headers and custom catalogues share safe records; live renderer callbacks
-  still receive their own complete renderer data. See [query migration](queries.md#unreleased-02-changes).
+  still receive their own complete renderer data. See [query migration](queries.md#02-changes).
