@@ -100,6 +100,11 @@ excluded from the installed runtime package.
 
 ## Publish When Requested
 
+Pushing a `v*` tag runs the Tests and Docs workflows. The Docs deploy job uses
+the `github-pages` environment, whose default rule allows only the default
+branch: under Settings → Environments → `github-pages`, add a deployment tag rule
+for `v*` (keep `master` for manual runs), or start Docs manually from `master`.
+
 Create the chosen source tag/release only after the checks above. Attach the
 same verified `docs/manual.pdf` as `manual.pdf`; optionally attach its build
 record. The versioned asset URL is
