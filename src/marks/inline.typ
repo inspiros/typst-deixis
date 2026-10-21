@@ -386,6 +386,7 @@
       })
     })
 
+    context _deixis-setup-guard()
     context {
       let sys = deixis-system.get()
 

@@ -20,13 +20,12 @@ from 0.1.1.
   `deixis-show-refs` private. Choose `render-group`, supply a `body-style`
   callback, and let `deixis-setup-notes` install the reference bridge.
 - Remove `internal-id:` from `deixis-place-anchored`; use public `pin:` targets.
-  Inset adapters retain private original-ID placement.
 - Remove `deixis-highlight-rect-region` / `deixis-highlight-ellipse-region`.
   Use region marks with `stroke: none`; add `region-shape: deixis-ellipse-region`
   for an elliptical highlight.
 
 - Use `id:` to create an annotation and `of:` to attach its body or reuse its
-  mark. Removed `label:`, `deixis-repeat-mark`, and positional reuse targets.
+  mark. Removed `label:` and positional reuse targets.
   The original owns numbering; the body adapter owns placement and formatting.
 - Import only the public package facade. Internal modules, state and underscore
   helpers are private.

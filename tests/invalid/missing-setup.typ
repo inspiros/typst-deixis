@@ -12,4 +12,9 @@
 #if feature == "query" { context deixis-query-notes() }
 #if feature == "connect" { deixis-connect(from: (pin: <a>), to: (pin: <b>)) }
 #if feature == "scene" { context deixis-routing-scene(nodes: ((pin: <anchor>),)) }
+// Anonymous decorations and named phantoms paint nothing without setup; they
+// must report it rather than silently dropping the passage.
+#if feature == "anonymous-mark" [Before #deixis-mark[Marked] After]
+#if feature == "anonymous-region" [Before #deixis-region-mark(inline: true)[Marked] After]
+#if feature == "named-phantom" [Before #deixis-phantom-mark(id: <note>) After]
 

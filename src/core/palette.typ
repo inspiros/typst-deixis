@@ -1,4 +1,5 @@
 #import "state.typ": deixis-system
+#import "targets.typ": _deixis-setup-guard
 
 // Discrete annotation accents. Published sets keep their canonical order;
 // the house set starts with the documentation's original three accents.
@@ -75,7 +76,8 @@
   // growing registry changes between layout passes and would move `here()`.
   let settings = sys
   let _ = settings.remove("registry", default: none)
-  [#metadata((sys: settings, paint: paint))<deixis-palette-output>]
+  // Only setup paints this output; without it, report instead of dropping the passage.
+  [#_deixis-setup-guard()#metadata((sys: settings, paint: paint))<deixis-palette-output>]
 }
 
 // Anonymous decoration within a note body extends that annotation's accent.

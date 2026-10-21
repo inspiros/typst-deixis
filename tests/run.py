@@ -256,7 +256,8 @@ def main():
                 elif source.stem == "missing-setup":
                     inputs = [("--input", f"feature={feature}") for feature in
                               ("pin", "attach", "mark", "body", "wrapper", "printer", "repeat",
-                               "scope", "counter", "query", "connect", "scene")]
+                               "scope", "counter", "query", "connect", "scene",
+                               "anonymous-mark", "anonymous-region", "named-phantom")]
                 elif source.stem == "helper-page":
                     inputs = [("--input", f"consumer={consumer}", "--input", f"sample={sample}")
                               for consumer in ("query",)
