@@ -3,6 +3,18 @@
 User-facing changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Documentation
+
+- Document a shorter Touying setup: wrap the theme once with
+  `deixis-setup-notes.with(page-overlays: false)` and reset numbering through
+  `config-common(page-preamble: deixis-update-note-counter(0))`, so plain
+  `#slide[...]` works. It renders identically to the per-slide `setting:`
+  recipe on Touying 0.6.3 and 0.8.0; that recipe remains documented for
+  per-slide control. The guides note the setup order, why `subslide-preamble`
+  does not fit, and themes such as aqua that replace the page background.
+
 ## [0.2.0] - 2026-10-21
 
 The 0.2.0 overhaul requires **Typst 0.15.0+**. See the

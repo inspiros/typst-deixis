@@ -99,8 +99,8 @@ The comparison renders the same source twice, with `--input final=false` and
 
 Annotations follow [Touying](https://typst.app/universe/package/touying) reveals.
 A highlight, its connector and callout, or a page footnote appears with the
-content it explains, while earlier notes stay on screen. Install setup in the
-slide setting and let the theme own the page layers.
+content it explains, while earlier notes stay on screen. Wrap the theme with
+setup once and let the theme own the page layers.
 
 [Editable slides](examples/touying-reveals.typ) ·
 [Touying integration](docs/guides/rendering.md#presentation-frameworks)

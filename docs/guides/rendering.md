@@ -78,39 +78,64 @@ options, host-owned/scoped styles and a small example.
 
 A theme that owns page settings can install the overlay content itself. This
 avoids changing page styles halfway through a physical slide, which can create
-extra pages. For Touying, configure page layers through the theme and initialize
-annotations in the slide setting:
+extra pages. For Touying, set up annotations around the theme, configure page
+layers through the theme, and reset numbering in its page preamble:
 
 <!-- deixis-example: {"id": "example-2", "setup": false} -->
 ```typst
 #import "@preview/touying:0.8.0": *
 #import themes.simple: simple-theme, slide
 #import "@preview/deixis:0.2.0": *
-#show: simple-theme.with(aspect-ratio: "16-9", config-page(
-  background: deixis-page-overlay(layer: "background"),
-  foreground: deixis-page-overlay(),
-))
-#let annotations(body) = deixis-setup-notes(page-overlays: false, [
-  #deixis-update-note-counter(0)
-  #body
-])
-#slide(setting: annotations)[
+#show: deixis-setup-notes.with(page-overlays: false)
+#show: simple-theme.with(
+  aspect-ratio: "16-9",
+  config-common(page-preamble: deixis-update-note-counter(0)),
+  config-page(
+    background: deixis-page-overlay(layer: "background"),
+    foreground: deixis-page-overlay(),
+  ),
+)
+#slide[
   Text#deixis-footnote[A slide footnote.]
   #pause
   Revealed content.
 ]
 ```
 
-This resets the default series for each rendered frame. Use wrapper-created IDs;
-repeated explicit IDs across animation frames still denote duplicate definitions.
-For shared marks or separate `id:`/`of:` components, use the
-[frame-local label recipe](touying-identities.md) through Touying's pre-layout
-callback. It also supports exact cross-frame references without changing the
-document-wide default.
-This setup supports Touying 0.6.3 and 0.8.0. Host themes can compose additional
-content around the overlay hook in their own page layers.
-See [counter resets](counters.md) for heading rules, stream/scope selection,
-and the distinction between a frame boundary and natural pagination.
+The preamble resets the default series for each rendered frame. Use
+wrapper-created IDs; repeated explicit IDs across animation frames still denote
+duplicate definitions. For shared marks or separate `id:`/`of:` components, use
+the [frame-local label recipe](touying-identities.md) through Touying's
+pre-layout callback. It also supports exact cross-frame references without
+changing the document-wide default.
+This setup supports Touying 0.6.3 and 0.8.0. Mind three details:
+
+- Put `deixis-setup-notes` before the theme rule so it wraps every slide. After
+  the theme rule, notes fail with a missing-setup error.
+- Use `page-preamble`, not `subslide-preamble`: themes such as `simple` and
+  `dewdrop` replace the subslide preamble with their own heading.
+- Themes that set their own page background replace the configured background
+  layer on those slides. For example, aqua's title, outline and section slides
+  draw `config-store(background: ...)`; include
+  `deixis-page-overlay(layer: "background")` in that function when such slides
+  carry background-layer annotations. Host themes can likewise compose other
+  content around the overlay hook in their own page layers.
+
+Per-slide control remains available through a slide setting, for example when a
+custom theme replaces `page-preamble` or only some slides should restart
+numbering. Then leave out the global setup rule and the preamble:
+
+```typst fragment
+#let annotations(body) = deixis-setup-notes(page-overlays: false, [
+  #deixis-update-note-counter(0)
+  #body
+])
+#slide(setting: annotations)[...]
+```
+
+Both forms render identical frames. See [counter resets](counters.md) for
+heading rules, stream/scope selection, and the distinction between a frame
+boundary and natural pagination.
 
 Default `pause`/`uncover` hide deferred annotations together with their
 declarations. Covered footnotes do not reserve footer space; region drawings,

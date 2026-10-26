@@ -2,9 +2,9 @@
 #import themes.simple: simple-theme, slide
 #import "../../src/lib.typ": *
 #let policy = sys.inputs.at("policy", default: "native")
+#show: deixis-setup-notes.with(page-overlays: false)
 #show: simple-theme.with(aspect-ratio: "16-9", config-page(
   background: deixis-page-overlay(layer: "background"), foreground: deixis-page-overlay()))
-#let annotations(body) = deixis-setup-notes(page-overlays: false, body)
 #let marker(r) = {
   let other = (r.counterpart)()
   if other == none { return [] }
@@ -18,13 +18,13 @@
   let edge = if policy == "native" { edge } else { deixis-routing(policy: policy, edge) }
   if self.subslide == 1 { edge } else { hide(edge) }
 }
-#slide(setting: annotations)[
+#slide[
   #deixis-pin(<a>, padding: 0pt)
   #touying-fn-wrapper(declaration)
   Source
   #pause
 ]
-#slide(setting: annotations)[
+#slide[
   #place(top + left, dx: 250pt, dy: 70pt, deixis-pin(<b>, padding: 0pt))
   Target
 ]

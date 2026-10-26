@@ -1,9 +1,9 @@
 #import ("@preview/touying:" + sys.inputs.at("touying-version", default: "0.8.0")): *
 #import themes.simple: simple-theme, slide
 #import "../../src/lib.typ": *
+#show: deixis-setup-notes.with(page-overlays: false)
 #show: simple-theme.with(aspect-ratio: "16-9", config-page(
   background: deixis-page-overlay(layer: "background"), foreground: deixis-page-overlay()))
-#let annotations(body) = deixis-setup-notes(page-overlays: false, body)
 #let drawing(self: none) = {
   let scope = "frame-" + str(self.subslide)
   let target(name) = (name: name, scope: scope)
@@ -25,7 +25,7 @@
     place(top + left, dx: 30pt, dy: 100pt, deixis-render-connector(deixis-prepare-connector(r, stroke: blue + 1pt)))
   }
 }
-#slide(setting: annotations)[
+#slide[
   #touying-fn-wrapper(drawing)
   #pause
 ]

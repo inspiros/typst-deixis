@@ -77,8 +77,11 @@ needs evidence#deixis-footnote[A source retained in the final copy.].
 
 ## Touying Reveal
 
-Let the theme own both page hooks and install setup with `page-overlays: false`
-inside the slide setting. Content after the pause reveals with its annotation;
+Let the theme own both page hooks. Install setup with `page-overlays: false`
+before the theme rule, and restart numbering per frame in Touying's
+`page-preamble` (not `subslide-preamble`, which themes replace). For per-slide
+control, `#slide(setting: body => deixis-setup-notes(page-overlays: false, body))`
+also works without the global rule. Content after the pause reveals with its annotation;
 the hidden frame retains its semantic counter. Avoid reusing a public ID across
 subslides directly. If shared named notes are needed, construct frame-local
 labels in a pre-layout Touying callback using its subslide value, then use the
@@ -88,16 +91,17 @@ same label for each declaration/consumer on that frame.
 #import "@preview/touying:0.8.0": *
 #import themes.simple: simple-theme, slide
 #import "@preview/deixis:0.2.0": *
-#show: simple-theme.with(aspect-ratio: "16-9", config-page(
-  background: deixis-page-overlay(layer: "background"),
-  foreground: deixis-page-overlay(),
-))
-#let annotations(body) = deixis-setup-notes(page-overlays: false, [
-  #deixis-update-note-counter(0)
-  #body
-])
+#show: deixis-setup-notes.with(page-overlays: false)
+#show: simple-theme.with(
+  aspect-ratio: "16-9",
+  config-common(page-preamble: deixis-update-note-counter(0)),
+  config-page(
+    background: deixis-page-overlay(layer: "background"),
+    foreground: deixis-page-overlay(),
+  ),
+)
 
-#slide(setting: annotations)[
+#slide[
   = Explain An Idea In Stages
   The first idea is visible immediately.
   #pause

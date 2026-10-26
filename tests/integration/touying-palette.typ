@@ -2,9 +2,9 @@
 #import themes.simple: simple-theme, slide
 #import "../../src/lib.typ": *
 #import "../../src/core/state.typ": deixis-system
+#show: deixis-setup-notes.with(page-overlays: false)
 #show: simple-theme.with(aspect-ratio: "16-9", config-page(margin: (left: 50pt, right: 120pt, y: 30pt),
   background: deixis-page-overlay(layer: "background"), foreground: deixis-page-overlay()))
-#let annotations(body) = deixis-setup-notes(page-overlays: false, body)
 #let drawing(self: none) = {
   // A slide's authored palette setting restarts for each native subslide.
   deixis-set(palette: (blue, orange))
@@ -14,7 +14,7 @@
   v(25pt)
   deixis-inset-note(id: "shown-" + str(self.subslide), width: 100pt, dx: 140pt, dy: 20pt)[Second][A visible body.]
 }
-#slide(setting: annotations)[
+#slide[
   #touying-fn-wrapper(drawing)
   #pause
 ]

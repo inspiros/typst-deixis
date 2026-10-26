@@ -7,17 +7,14 @@
 #let mode = sys.inputs.at("mode", default: "pause")
 #let cover = sys.inputs.at("cover", default: "hide")
 #let edge-layer = if layer == "flow" { "foreground" } else { layer }
+#show: deixis-setup-notes.with(page-overlays: false)
 #show: simple-theme.with(aspect-ratio: "16-9",
+  config-common(page-preamble: [#deixis-update-note-counter(0)#deixis-set(render-group: (endnote: deixis-native-render-group))]),
   if cover == "tint" { config-methods(cover: utils.method-wrapper(text.with(fill: gray))) } else { (:) },
   config-page(
   margin: (x: 95pt, y: 30pt),
   background: deixis-page-overlay(layer: "background"), foreground: deixis-page-overlay(),
 ))
-#let annotations(body) = deixis-setup-notes(page-overlays: false, [
-  #deixis-update-note-counter(0)
-  #deixis-set(render-group: (endnote: deixis-native-render-group))
-  #body
-])
 #let swatch(color) = rect(width: 7pt, height: 7pt, fill: color, stroke: none)
 #let render(data, ..args) = {
   if not data.at("disable-links", default: false) {
@@ -65,7 +62,7 @@
     }
   }
 }
-#slide(setting: annotations)[
+#slide[
   Visible introduction.#std.footnote[NativeIntro]
   #if kind == "repeat-region" {
     counter("visibility-owner").step()

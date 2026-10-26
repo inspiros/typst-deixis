@@ -900,7 +900,7 @@
       "guide": "rendering",
       "id": "example-2",
       "key": "rendering--example-2",
-      "source_sha256": "7a279ad38880f21acb5885132a8e3806683afe4d439add425fe227386085a6d9",
+      "source_sha256": "d59ab998641cde9b34747530ea6655baa75bc4794fbbe9a5f14ab42d50308e89",
       "assets": {
         "rendering--example-2-1.svg": "c5a21dd8ce35f1d656a84896e6072c8e7a4ad8f94ad205815f499ca9f8c47165",
         "rendering--example-2-2.svg": "60f6545402b4081c9747ee0e5f4a043499ef70f84feec99797f5e80d2ec2a5d3"
@@ -1056,7 +1056,7 @@
       "guide": "touying-identities",
       "id": "example-1",
       "key": "touying-identities--example-1",
-      "source_sha256": "942c3b674e9bfc702e4fe1817fcdc65ba7e6fe5d3b875d77b7144286a19b7c39",
+      "source_sha256": "b893137254dd79cde64009b36f848775293b3575ee6b87b153c48ba9b4e5433a",
       "assets": {
         "touying-identities--example-1-1.svg": "518161d2e3a85ee31f6ee4ae539e9beddf195d97778a8c66ef7e530cb79e78f7",
         "touying-identities--example-1-2.svg": "ebca2f47b16a5a03a2dd4c554a2ec57ccfe36dd2f1cf39fdd8ca5b7b9e4a9e3e"
@@ -1075,7 +1075,7 @@
       "guide": "visibility",
       "id": "example-1",
       "key": "visibility--example-1",
-      "source_sha256": "e17c1c7735cf84091afda64a2e97fdfb67b86f4603e9e089a40838710463db7a",
+      "source_sha256": "39b7348ddd1856e6bdc36c3597dd2a9d308ba93109c2e0d2c8b3fd365c7cc271",
       "assets": {
         "visibility--example-1-1.svg": "10b5a7f4d21e423b62ddaea2c5ec996e3354300fae38ec548811e4d5d8dc3914",
         "visibility--example-1-2.svg": "8605622462c9cf282be6b058185feb00e7ce76ffd7e77f5bb232b00875e11308"
@@ -1085,7 +1085,7 @@
       "guide": "visibility",
       "id": "example-2",
       "key": "visibility--example-2",
-      "source_sha256": "a26bfbf1cf30e6066a5f9a867aeed6e6fd73b5dc8dfb638177fe204197ad76fe",
+      "source_sha256": "6bf401d85fb7940a15417a7828638dd96d3bc6d1031787ac1ae583ea8328a849",
       "assets": {
         "visibility--example-2-1.svg": "47df8d350c78d4da29446d2a3d6f9a32e676706687df55a23c0d751242e7852d",
         "visibility--example-2-2.svg": "312cb8b615643cc5cb4cda85aaa69fb45a20ee0dfb85a8eca949d61bf01ae3c2"

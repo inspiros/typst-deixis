@@ -2,16 +2,19 @@
 #import themes.simple: simple-theme, slide
 #import "@preview/deixis:0.2.0": *
 
-#show: simple-theme.with(aspect-ratio: "16-9", config-colors(primary: rgb("235c70")), config-page(
-  background: deixis-page-overlay(layer: "background"),
-  foreground: deixis-page-overlay(),
-))
-#let annotations(body) = deixis-setup-notes(page-overlays: false, [
-  #deixis-update-note-counter(0)
-  #body
-])
+// Set up notes around the theme; reset numbering on every rendered frame.
+#show: deixis-setup-notes.with(page-overlays: false)
+#show: simple-theme.with(
+  aspect-ratio: "16-9",
+  config-colors(primary: rgb("235c70")),
+  config-common(page-preamble: deixis-update-note-counter(0)),
+  config-page(
+    background: deixis-page-overlay(layer: "background"),
+    foreground: deixis-page-overlay(),
+  ),
+)
 
-#slide(setting: annotations)[
+#slide[
   #text(size: 25pt, weight: "bold", fill: rgb("235c70"))[Reveal The Explanation With The Idea]
   #v(0.7em)
   Notes can stay on screen.#deixis-footnote[This note is present in both frames.]

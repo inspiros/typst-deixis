@@ -21,14 +21,11 @@
 }
 #let connector = (route: "straight-line", render: edge)
 
-#show: simple-theme.with(aspect-ratio: "16-9", config-page(
+#show: deixis-setup-notes.with(page-overlays: false)
+#show: simple-theme.with(aspect-ratio: "16-9",
+  config-common(page-preamble: [#frames.step()#deixis-update-note-counter(0)]), config-page(
   background: deixis-page-overlay(layer: "background"), foreground: deixis-page-overlay(),
 ))
-#let annotations(body) = deixis-setup-notes(page-overlays: false, [
-  #frames.step()
-  #deixis-update-note-counter(0)
-  #body
-])
 #let frame-content(self: none) = {
   let n = self.subslide
   let id = frame-id(<shared>, n)
@@ -124,7 +121,7 @@
     ))))<test-result>]
   }
 }
-#slide(setting: annotations)[
+#slide[
   #set text(size: 10pt)
   Native control#std.footnote[NativeOne].
   #touying-fn-wrapper(frame-content)

@@ -1,10 +1,10 @@
 #import ("@preview/touying:" + sys.inputs.at("touying-version", default: "0.8.0")): *
 #import themes.simple: simple-theme, slide
 #import "../../src/lib.typ": *
+#show: deixis-setup-notes.with(page-overlays: false)
 #show: simple-theme.with(aspect-ratio: "16-9", config-page(
   background: deixis-page-overlay(layer: "background"), foreground: deixis-page-overlay(),
 ))
-#let annotations(body) = deixis-setup-notes(page-overlays: false, body)
 #let route-kind = sys.inputs.at("route", default: "polyline")
 #if sys.inputs.at("route-settings", default: "off") == "on" {
   route-kind = (kind: route-kind, tension: 2)
@@ -39,7 +39,7 @@
   // Touying callbacks own their generated content's visibility.
   if name == "upper" and frame == 1 { hide(edge) } else { edge }
 }
-#slide(setting: annotations)[
+#slide[
   #touying-fn-wrapper(drawing.with("lower"))
   #pause
   #touying-fn-wrapper(drawing.with("upper"))

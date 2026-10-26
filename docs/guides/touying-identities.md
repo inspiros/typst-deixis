@@ -10,7 +10,7 @@ compute an ordinary native label from a logical slide key, the subslide number,
 and the local note name. Touying supplies `self.subslide` before layout through
 its callback API:
 
-<!-- deixis-example: {"id": "example-1", "setup": false, "prelude": "#import \"@preview/touying:0.8.0\": *\n#import themes.simple: simple-theme, slide\n#import \"@preview/deixis:0.2.0\": *\n#show: simple-theme.with(aspect-ratio: \"16-9\", config-page(\n  background: deixis-page-overlay(layer: \"background\"),\n  foreground: deixis-page-overlay(),\n))\n#let annotations(body) = deixis-setup-notes(page-overlays: false, [\n  #deixis-update-note-counter(0)\n  #body\n])\n"} -->
+<!-- deixis-example: {"id": "example-1", "setup": false, "prelude": "#import \"@preview/touying:0.8.0\": *\n#import themes.simple: simple-theme, slide\n#import \"@preview/deixis:0.2.0\": *\n#show: deixis-setup-notes.with(page-overlays: false)\n#show: simple-theme.with(\n  aspect-ratio: \"16-9\",\n  config-common(page-preamble: deixis-update-note-counter(0)),\n  config-page(\n    background: deixis-page-overlay(layer: \"background\"),\n    foreground: deixis-page-overlay(),\n  ),\n)\n"} -->
 ```typst
 // Author helpers; these are not additional Deixis functions.
 #let frame-id(name, frame) = label(repr(("shared-slide", frame, str(name))))
@@ -26,7 +26,7 @@ its callback API:
 }
 
 // Use the setup from the rendering guide.
-#slide(setting: annotations)[
+#slide[
   #touying-fn-wrapper(note)
   #pause
   The second passage now shares this frame's note.
@@ -87,7 +87,7 @@ hide callback output, as above; keep ordinary `pause` markers visible to Touying
 parser outside opaque `context` blocks.
 
 Identity does not change numbering or placement. Keep the usual per-frame
-`deixis-update-note-counter(0)` in the slide setting when numbers should restart.
+`deixis-update-note-counter(0)` in the page preamble when numbers should restart.
 Block/minipage scopes and shared counter threads retain their existing meaning;
 they do not automatically namespace note IDs. A thread can continue numbering
 while each frame has distinct annotations.

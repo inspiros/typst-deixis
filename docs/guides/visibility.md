@@ -7,9 +7,9 @@ annotation identities and counter values.
 With the [Touying setup](rendering.md#presentation-frameworks), ordinary `pause`
 and `uncover` work around complete annotations:
 
-<!-- deixis-example: {"id": "example-1", "setup": false, "prelude": "#import \"@preview/touying:0.8.0\": *\n#import themes.simple: simple-theme, slide\n#import \"@preview/deixis:0.2.0\": *\n#show: simple-theme.with(aspect-ratio: \"16-9\", config-page(\n  background: deixis-page-overlay(layer: \"background\"),\n  foreground: deixis-page-overlay(),\n))\n#let annotations(body) = deixis-setup-notes(page-overlays: false, [\n  #deixis-update-note-counter(0)\n  #body\n])\n"} -->
+<!-- deixis-example: {"id": "example-1", "setup": false, "prelude": "#import \"@preview/touying:0.8.0\": *\n#import themes.simple: simple-theme, slide\n#import \"@preview/deixis:0.2.0\": *\n#show: deixis-setup-notes.with(page-overlays: false)\n#show: simple-theme.with(\n  aspect-ratio: \"16-9\",\n  config-common(page-preamble: deixis-update-note-counter(0)),\n  config-page(\n    background: deixis-page-overlay(layer: \"background\"),\n    foreground: deixis-page-overlay(),\n  ),\n)\n"} -->
 ```typst
-#slide(setting: annotations)[
+#slide[
   First idea.
   #pause
   Second idea#deixis-footnote[Its note appears with its mark.]
@@ -51,7 +51,7 @@ native execution and print-once ownership.
 Use Touying `only` when the complete annotation should be absent from other
 frames, including its declaration and counter increment:
 
-<!-- deixis-example: {"id": "example-2", "setup": false, "prelude": "#import \"@preview/touying:0.8.0\": *\n#import themes.simple: simple-theme, slide\n#import \"@preview/deixis:0.2.0\": *\n#show: simple-theme.with(aspect-ratio: \"16-9\", config-page(\n  background: deixis-page-overlay(layer: \"background\"),\n  foreground: deixis-page-overlay(),\n))\n#let annotations(body) = deixis-setup-notes(page-overlays: false, [\n  #deixis-update-note-counter(0)\n  #body\n])\n#slide(setting: annotations)[\n  First frame.\n  #pause\n", "postlude": "]"} -->
+<!-- deixis-example: {"id": "example-2", "setup": false, "prelude": "#import \"@preview/touying:0.8.0\": *\n#import themes.simple: simple-theme, slide\n#import \"@preview/deixis:0.2.0\": *\n#show: deixis-setup-notes.with(page-overlays: false)\n#show: simple-theme.with(\n  aspect-ratio: \"16-9\",\n  config-common(page-preamble: deixis-update-note-counter(0)),\n  config-page(\n    background: deixis-page-overlay(layer: \"background\"),\n    foreground: deixis-page-overlay(),\n  ),\n)\n#slide[\n  First frame.\n  #pause\n", "postlude": "]"} -->
 ```typst
 #only("2-")[Text#deixis-footnote[Present from frame two onward.]]
 ```

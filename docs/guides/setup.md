@@ -104,7 +104,7 @@ restoration of native page properties when a nested setup ends. Use the host-own
 pattern for that case rather than relying on nested setup to restore captured
 state.
 
-For Touying, install these hooks through the theme's `config-page` and use
-`deixis-setup-notes(page-overlays: false, body)` in the slide setting. That avoids
-changing native page styles halfway through a slide. The
+For Touying, install these hooks through the theme's `config-page` and wrap the
+theme with `deixis-setup-notes.with(page-overlays: false)`. That avoids changing
+native page styles halfway through a slide. The
 [presentation guide](rendering.md#presentation-frameworks) includes the recipe.

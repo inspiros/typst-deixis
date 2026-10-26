@@ -6,10 +6,11 @@
 #let live = state("contextual-scope-live", ())
 #let kind = sys.inputs.at("kind", default: "inset")
 #let nested = sys.inputs.at("nested", default: "off") == "on"
-#show: simple-theme.with(aspect-ratio: "16-9", config-page(
+#show: deixis-setup-notes.with(page-overlays: false)
+#show: simple-theme.with(aspect-ratio: "16-9",
+  config-common(page-preamble: frames.step()), config-page(
   background: deixis-page-overlay(layer: "background"), foreground: deixis-page-overlay(),
 ))
-#let annotations(body) = deixis-setup-notes(page-overlays: false, [#frames.step()#body])
 #let note() = context {
   let frame = frames.get().first()
   let id = label("contextual-frame-" + str(frame))
@@ -20,7 +21,7 @@
   else { deixis-inset-note-body(of: id, layer: "foreground", width: 90pt, dx: 100pt, dy: 30pt, body) }
   deixis-mark(id: id)[Original]
 }
-#slide(setting: annotations)[
+#slide[
   #deixis-block(inset: (x: 70pt, y: 8pt), stroke: blue)[
     #if nested { deixis-block(inset: (x: 8pt, y: 4pt), note()) } else { note() }
   ]

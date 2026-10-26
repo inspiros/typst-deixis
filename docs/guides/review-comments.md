@@ -85,6 +85,6 @@ notes keep their identity, counter value, and layout footprint. Omission removes
 the annotation while preserving the passage. Native outlines and `deixis-plain`
 still replay only the passage; they do not create another annotation.
 
-The same omission policy works inside a Touying slide setting. Omit `id:` on
+The same omission policy works on Touying slides. Omit `id:` on
 wrappers, or use the [frame-local identity recipe](touying-identities.md)
 for shared named comments across repeated subslides.

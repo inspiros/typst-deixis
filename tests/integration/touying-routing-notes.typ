@@ -3,9 +3,9 @@
 #import "../../src/lib.typ": *
 #let policy = sys.inputs.at("policy", default: "separate")
 #let kind = sys.inputs.at("kind", default: "inset")
+#show: deixis-setup-notes.with(page-overlays: false)
 #show: simple-theme.with(aspect-ratio: "16-9", config-page(margin: (left: 50pt, right: 100pt, y: 30pt),
   background: deixis-page-overlay(layer: "background"), foreground: deixis-page-overlay()))
-#let annotations(body) = deixis-setup-notes(page-overlays: false, body)
 #let drawing(self: none) = deixis-routing(policy: policy, {
   let paint(name, r) = {
     assert.eq(r.route.at("search", default: none) != none, policy != "manual")
@@ -28,7 +28,7 @@
   }
   if self.subslide == 1 { hide(note) } else { note }
 })
-#slide(setting: annotations)[
+#slide[
   #touying-fn-wrapper(drawing)
   #pause
 ]

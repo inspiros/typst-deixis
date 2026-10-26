@@ -1,9 +1,9 @@
 #import ("@preview/touying:" + sys.inputs.at("touying-version", default: "0.8.0")): *
 #import themes.simple: simple-theme, slide
 #import "../../src/lib.typ": *
+#show: deixis-setup-notes.with(page-overlays: false)
 #show: simple-theme.with(aspect-ratio: "16-9", config-page(
   background: deixis-page-overlay(layer: "background"), foreground: deixis-page-overlay()))
-#let annotations(body) = deixis-setup-notes(page-overlays: false, body)
 #let drawing(self: none) = deixis-routing({
   // Same public IDs in both subslides; physical page owns each live instance.
   deixis-connect(from: (node: <a>), to: (node: <b>), connector: (heads: "triangle"))
@@ -13,7 +13,7 @@
     deixis-attach(behavior: "avoid", rect(width: 50pt, height: 100pt, fill: luma(230))))
   if self.subslide == 1 { hide(obstacle) } else { obstacle }
 })
-#slide(setting: annotations)[
+#slide[
   #touying-fn-wrapper(drawing)
   #pause
 ]

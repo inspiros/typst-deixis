@@ -5,7 +5,8 @@
   background: deixis-page-overlay(layer: "background"), foreground: deixis-page-overlay(),
 ))
 
-// Apply after the theme configures each physical slide's page layers.
+// The per-slide setting alternative to the global recipe. Apply after the theme
+// configures each physical slide's page layers.
 #let annotations(body) = deixis-setup-notes(page-overlays: false, [
   #deixis-update-note-counter(0)
   #body

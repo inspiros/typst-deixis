@@ -167,8 +167,8 @@ layout passes; deeply nested contextual notes or pathological boundary changes
 can still exceed Typst's convergence limit. Compiler warnings must be treated as
 failures. Test long documents with the intended fonts, symbol pattern and page
 size. Ordinary assigned numbering remains the default. Touying restarts per
-physical frame; the existing slide-setting recipe remains available for
-explicit host-controlled counter resets.
+physical frame; its page-preamble recipe remains available for explicit
+host-controlled counter resets.
 
 ## Restart At A Heading
 
@@ -204,16 +204,19 @@ numbering, put the update and heading together in a small wrapper instead.
 
 ## Slides And Explicit Page Boundaries
 
-For Touying, reset at the start of the slide's setting function, before its
-body. The [presentation integration](rendering.md#presentation-frameworks)
-shows the full setup and host-owned page overlays. Select each stream explicitly:
+For Touying, reset in the theme's page preamble, which runs before each
+rendered frame's body. The [presentation integration](rendering.md#presentation-frameworks)
+shows the full setup, host-owned page overlays, and a per-slide setting
+alternative. Select each stream explicitly:
 
 ```typst fragment
-#let annotations(body) = deixis-setup-notes(page-overlays: false, [
-  #deixis-update-note-counter(0, target: "page", series: "default")
-  #body
-])
-#slide(setting: annotations)[...]
+#show: deixis-setup-notes.with(page-overlays: false)
+#show: simple-theme.with(
+  config-common(page-preamble: deixis-update-note-counter(
+    0, target: "page", series: "default")),
+  // Page layers as in the rendering guide.
+)
+#slide[...]
 ```
 
 Each rendered animation frame starts at one, so persistent notes keep the same
@@ -225,8 +228,9 @@ For a page boundary you create yourself, put `#pagebreak()` followed by
 `#deixis-update-note-counter(0, target: "page", series: "notes")` before its
 originals. An ordinary page break or an update of native `counter(page)` alone
 does not reset note numbering. This recipe does not cover pages formed by natural
-pagination. Page headers and overlays run in native rendering order and are not
-a general substitute for a reset at an original's boundary.
+pagination. Touying emits its preamble with each frame's header, before the
+frame body; other page headers and overlays run in native rendering order and are
+not a general substitute for a reset at an original's boundary.
 
 ## Resets Inside Live Bodies
 
